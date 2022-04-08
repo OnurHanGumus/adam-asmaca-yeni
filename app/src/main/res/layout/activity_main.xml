@@ -22,10 +22,14 @@
         android:layout_height="64dp">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/tahminTxt"
+            android:id="@+id/harfTahminTxt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Herhangi bir harf giriniz." />
+            android:hint="Herhangi bir harf giriniz."
+            android:digits="abcçdefgğhıijklmnoöpqrsştuüvwxyz"
+            android:inputType="text"
+            android:maxLength="1"
+            />
 
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -35,15 +39,21 @@
         android:layout_height="64dp">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/text2"
+            android:id="@+id/kelimeTahminTxt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Herhangi bir harf giriniz." />
+            android:hint="Tahminde bulun." />
 
 
     </com.google.android.material.textfield.TextInputLayout>
 
-
+    <ImageView
+        android:id="@+id/adamImg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:adjustViewBounds="true"
+        app:srcCompat="@drawable/adam0" />
 
 
 </LinearLayout>
