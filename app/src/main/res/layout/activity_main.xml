@@ -14,35 +14,56 @@
         android:text="kelime"
         android:textSize="25sp"
         android:gravity="center"
+        android:textColor="@color/tahta_kahve"
 
 
         />
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="64dp">
+        android:layout_height="64dp"
+        app:hintTextColor="@color/tahta_kahve"
+        app:boxStrokeColor="@color/tahta_kahve"
+        android:textColorHint="@color/tahta_yesili"
+
+        >
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/harfTahminTxt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Herhangi bir harf giriniz."
+            android:hint="Harf tahmin et."
             android:digits="abcçdefgğhıijklmnoöpqrsştuüvwxyz"
             android:inputType="text"
             android:maxLength="1"
+            android:textAlignment="center"
+            android:textColor="@color/tahta_kahve"
+
+
+
             />
+
 
 
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="64dp">
+        android:layout_height="64dp"
+        app:hintTextColor="@color/tahta_kahve"
+        app:boxStrokeColor="@color/tahta_kahve"
+        android:textColorHint="@color/tahta_yesili"
 
+        >
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/kelimeTahminTxt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Tahminde bulun." />
+            android:hint="Kelimeyi tahmin et."
+            android:textAlignment="center"
+            android:textColor="@color/tahta_kahve"
+
+
+            />
 
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -51,7 +72,6 @@
         android:id="@+id/adamImg"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop"
         android:adjustViewBounds="true"
         app:srcCompat="@drawable/adam0" />
 

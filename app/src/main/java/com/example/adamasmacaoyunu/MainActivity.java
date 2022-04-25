@@ -2,6 +2,7 @@ package com.example.adamasmacaoyunu;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -21,31 +22,33 @@ public class MainActivity extends AppCompatActivity {
     TextView kelimeTxt;
     ImageView adamImg;
 
-    String deger;
-    //String gosterilecekDeger = "";
-    StringBuilder gosterilecekDeger;
-    char[] karakterDizisi;
+    String ayrac;
+
+    String bulunacakKelime;
+    StringBuilder oyuncuyaGosterilecekMetin;
+    char[] bulunacakKelimeKarakterDizisi;
 
     boolean harfeSahipMi = false;
     int maxHataToleransi = 6;
     int mevcutHata = 0;
 
+    int puan = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initComponents();
-
-        gosterilecekDeger = new StringBuilder("");
         registerEventHandlers();
-        BasligiDegistir();
-        degerUret();
-        karakterDizisiniYapilandir();
-        degeriAnalizEt();
-        degeriGizle();
-        degeriOyuncuyaGoster();
+        ayrac = getResources().getString(R.string.ayrac);
 
+        oyuncuyaGosterilecekMetin = new StringBuilder(""); // _ _ _ _ _ _
+        puaniGuncelle(0);
+        bulunacakKelimeyiUret();
+        karakterDizisiniBoyutlandir();
+        karakterDizisineDegerleriAta();
+        oyuncuyaGosterilecekMetniGizle();
+        oyuncuyaGosterilecekMetniOyuncuyaGoster();
     }
 
     void initComponents(){
@@ -54,8 +57,6 @@ public class MainActivity extends AppCompatActivity {
         kelimeTxt = findViewById(R.id.kelimeTxt);
         kelimeTahminTxt = findViewById(R.id.kelimeTahminTxt);
         adamImg = findViewById(R.id.adamImg);
-
-
     }
 
     void registerEventHandlers() {
@@ -63,7 +64,6 @@ public class MainActivity extends AppCompatActivity {
         harfTahminTxt.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
@@ -71,9 +71,10 @@ public class MainActivity extends AppCompatActivity {
                 if (count == 0){
                     return;
                 }
-                harfeSahipMi(harfTahminTxt.getText().toString());
-                kazanildiMi();
-                kelimeTxt.setText(gosterilecekDeger);
+                bulunacakKelimeGirilenHarfeSahipMi(harfTahminTxt.getText().toString());
+                bilindiMi();
+                harfTahminTxt.setText("");
+                oyuncuyaGosterilecekMetniOyuncuyaGoster();
             }
 
             @Override
@@ -86,81 +87,77 @@ public class MainActivity extends AppCompatActivity {
         kelimeTahminTxt.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
-
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
             }
-
             @Override
             public void afterTextChanged(Editable s) {
                 girilenKelimeDogruMu();
-                kelimeTxt.setText(gosterilecekDeger);
-
-
+                oyuncuyaGosterilecekMetniOyuncuyaGoster();
             }
         });
     }
-    public void degerUret(){
+    public void bulunacakKelimeyiUret(){
         Random random = new Random();
         int index = random.nextInt(5);
         Log.w("uyarı", Integer.toString(index));
-        deger = "sakarya";
+        bulunacakKelime = "istanbul";
 
     }
-    public void karakterDizisiniYapilandir(){
-        karakterDizisi = new char[deger.length()];
+    public void karakterDizisiniBoyutlandir(){
+        bulunacakKelimeKarakterDizisi = new char[bulunacakKelime.length()];
     }
 
-    public void degeriAnalizEt(){
-        for (int i = 0; i < deger.length(); i++) {
-            karakterDizisi[i] = deger.charAt(i);
+    public void karakterDizisineDegerleriAta(){
+        for (int i = 0; i < bulunacakKelime.length(); i++) {
+            bulunacakKelimeKarakterDizisi[i] = bulunacakKelime.charAt(i);
         }
-       Log.d("selam", Character.toString(karakterDizisi[0]));
+       Log.d("selam", Character.toString(bulunacakKelimeKarakterDizisi[0]));
     }
 
-    public void degeriGizle(){
-        for (int i = 0; i < deger.length(); i++) {
-            //gosterilecekDeger = gosterilecekDeger + " _";
-            gosterilecekDeger.append("_ ");
+    public void oyuncuyaGosterilecekMetniGizle(){
+        oyuncuyaGosterilecekMetin.delete(0, oyuncuyaGosterilecekMetin.length());
+        for (int i = 0; i < bulunacakKelime.length(); i++) {
+            oyuncuyaGosterilecekMetin.append(ayrac + " ");
         }
-
-
     }
 
-    public void degeriOyuncuyaGoster(){
-        kelimeTxt.setText(gosterilecekDeger);
+    public void oyuncuyaGosterilecekMetniOyuncuyaGoster(){
+        kelimeTxt.setText(oyuncuyaGosterilecekMetin);
     }
 
-    public void harfeSahipMi(String gelen){
-        Log.d("sahipMi",gelen);
-        for (int i = 0; i < deger.length(); i++) {
-            if (gelen.equals(Character.toString(karakterDizisi[i]))){
-                gosterilecekDeger = gosterilecekDeger.replace(i*2, i*2+1, Character.toString(karakterDizisi[i]));
+    public void bulunacakKelimeGirilenHarfeSahipMi(String girilenHarf){
+        Log.d("sahipMi",girilenHarf);
+        for (int i = 0; i < bulunacakKelime.length(); i++) {
+            if (girilenHarf.equals(Character.toString(bulunacakKelimeKarakterDizisi[i]))){
+                oyuncuyaGosterilecekMetin = oyuncuyaGosterilecekMetin.replace(i*2, i*2+1, Character.toString(bulunacakKelimeKarakterDizisi[i]));
                 harfeSahipMi = true;
             }
         }
-        Log.w("deneme", gosterilecekDeger.toString());
+        Log.w("deneme", oyuncuyaGosterilecekMetin.toString());
         if (harfeSahipMi == false){
             yanlisHarf();
         }
         harfeSahipMi = false;
     }
     public void girilenKelimeDogruMu(){
-        if (deger.equalsIgnoreCase(kelimeTahminTxt.getText().toString())){
-            for (int i = 0; i < deger.length(); i++) {
-                gosterilecekDeger = gosterilecekDeger.replace(i*2, i*2+1, Character.toString(karakterDizisi[i]));
+        if (bulunacakKelime.equalsIgnoreCase(kelimeTahminTxt.getText().toString())){
+            for (int i = 0; i < bulunacakKelime.length(); i++) {
+                oyuncuyaGosterilecekMetin = oyuncuyaGosterilecekMetin.replace(i*2, i*2+1, Character.toString(bulunacakKelimeKarakterDizisi[i]));
             }
-            kazandildi();
+            bilindi();
         }
 
     }
+
     public void yanlisHarf(){
         mevcutHata++;
+        resmiIlerlet();
+    }
+    public void resmiIlerlet(){
         if (mevcutHata == 0){
-            adamImg.setImageResource(R.drawable.adam0);
+            adamImg.setImageResource(R.drawable.adam1);
 
         }
         else if(mevcutHata == 1){
@@ -189,29 +186,55 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (mevcutHata == maxHataToleransi){
-            kaybedildi();
+            bilinemedi();
         }
     }
 
-    public void kaybedildi(){
+    public void bilinemedi(){
         Toast.makeText(this, "Kaybettiniz.", Toast.LENGTH_SHORT).show();
-        this.setTitle("Kaybettiniz");
+        sonucAktivitesineGec();
     }
-    public void kazanildiMi(){
+    public void bilindiMi(){
 
-        int altcizgiKalmisMi = gosterilecekDeger.indexOf("_");
+        int altcizgiKalmisMi = oyuncuyaGosterilecekMetin.indexOf(ayrac);
         if (altcizgiKalmisMi == -1){
-            kazandildi();
+            bilindi();
         }
 
     }
-    public void kazandildi(){
-        Toast.makeText(this, "Kazandınız.", Toast.LENGTH_SHORT).show();
-        this.setTitle("Kazandınız");
+    public void bilindi(){
+        //Toast.makeText(this, "Kazandınız.", Toast.LENGTH_SHORT).show();
+        //this.setTitle("Kazandınız");
+        puaniGuncelle(5);
+        sonrakiSeviye();
     }
 
-    public void BasligiDegistir(){
+    public void puaniGuncelle(int eklenecekPuan){
+        puan += eklenecekPuan;
+        this.setTitle("Puan: " + puan);
+    }
 
-        this.setTitle("Adam Asmaca");
+    //----------------sonraki----------------
+    public  void sonrakiSeviye(){
+        mevcutHata = 0;
+        resmiIlerlet();
+        sonrakiSoru();
+        karakterDizisiniBoyutlandir();
+        karakterDizisineDegerleriAta();
+        oyuncuyaGosterilecekMetniGizle();
+        oyuncuyaGosterilecekMetniOyuncuyaGoster();
+    }
+
+    public void sonrakiSoru(){
+        bulunacakKelime = "sakarya";
+
+    }
+
+    public void sonucAktivitesineGec(){
+        Intent intent = new Intent(MainActivity.this, SonucActivity.class);
+        String mesaj = getTitle().toString().substring(6);
+        Log.i("tag", "mesaj:"+mesaj);
+        intent.putExtra("puan", mesaj);
+        startActivity(intent);
     }
 }
