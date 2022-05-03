@@ -1,5 +1,6 @@
 package com.example.adamasmacaoyunu;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -11,8 +12,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
@@ -20,11 +29,13 @@ public class MainActivity extends AppCompatActivity {
     TextInputEditText harfTahminTxt;
     TextInputEditText kelimeTahminTxt;
     TextView kelimeTxt;
+    TextView yanlisHarflerTxt;
     ImageView adamImg;
 
     String ayrac;
 
     String bulunacakKelime;
+    String firebasedenAlinanKelime = "s";
     StringBuilder oyuncuyaGosterilecekMetin;
     char[] bulunacakKelimeKarakterDizisi;
 
@@ -32,19 +43,36 @@ public class MainActivity extends AppCompatActivity {
     int maxHataToleransi = 6;
     int mevcutHata = 0;
 
+    ArrayList<Character>yanlisHarfler;
+
     int puan = 0;
 
+    FirebaseDatabase database;
+    DatabaseReference myRef;
+
+    static {
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FirebaseApp.initializeApp(this);
+
         setContentView(R.layout.activity_main);
         initComponents();
+        initComponentsFirebase();
         registerEventHandlers();
         ayrac = getResources().getString(R.string.ayrac);
-
         oyuncuyaGosterilecekMetin = new StringBuilder(""); // _ _ _ _ _ _
+
         puaniGuncelle(0);
         bulunacakKelimeyiUret();
+
+
+    }
+    public void programaDevamEt(){
+        harfTahminTxt.setEnabled(true);
+        kelimeTahminTxt.setEnabled(true);
         karakterDizisiniBoyutlandir();
         karakterDizisineDegerleriAta();
         oyuncuyaGosterilecekMetniGizle();
@@ -52,11 +80,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void initComponents(){
-
+        yanlisHarfler = new ArrayList<Character>();
         harfTahminTxt = findViewById(R.id.harfTahminTxt);
         kelimeTxt = findViewById(R.id.kelimeTxt);
         kelimeTahminTxt = findViewById(R.id.kelimeTahminTxt);
         adamImg = findViewById(R.id.adamImg);
+        yanlisHarflerTxt = findViewById(R.id.yanlisHarfler);
+
+    }
+    void initComponentsFirebase(){
+
+        database = FirebaseDatabase.getInstance();
+
+        myRef = database.getReference("0");
+
+
+
     }
 
     void registerEventHandlers() {
@@ -100,9 +139,36 @@ public class MainActivity extends AppCompatActivity {
     }
     public void bulunacakKelimeyiUret(){
         Random random = new Random();
-        int index = random.nextInt(5);
-        Log.w("uyarı", Integer.toString(index));
-        bulunacakKelime = "istanbul";
+        int index = random.nextInt(81 - 0) + 0;
+        Log.w("uyarı", String.valueOf(index));
+        harfTahminTxt.setEnabled(false);
+        kelimeTahminTxt.setEnabled(false);
+        firebaseUzerindenRandomDegerIleKelimeAl(index);
+
+
+    }
+    public void firebaseUzerindenRandomDegerIleKelimeAl(int random){
+
+        myRef.child(String.valueOf(random)).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (!task.isSuccessful()) {
+                    Log.e("firebase", "Error getting data", task.getException());
+                    firebasedenAlinanKelime = "bulunamadi";
+
+
+                }
+                else {
+                    firebasedenAlinanKelime = String.valueOf(task.getResult().getValue());
+                    firebasedenAlinanKelime = firebasedenAlinanKelime.toLowerCase(Locale.ROOT);
+                    bulunacakKelime = firebasedenAlinanKelime;
+                    Log.d("firebase", bulunacakKelime);
+                    programaDevamEt();
+
+                }
+            }
+        });
+
 
     }
     public void karakterDizisiniBoyutlandir(){
@@ -125,10 +191,12 @@ public class MainActivity extends AppCompatActivity {
 
     public void oyuncuyaGosterilecekMetniOyuncuyaGoster(){
         kelimeTxt.setText(oyuncuyaGosterilecekMetin);
+
+        yanlisHarflerTxt.setText(yanlisHarfler.toString());
     }
 
     public void bulunacakKelimeGirilenHarfeSahipMi(String girilenHarf){
-        Log.d("sahipMi",girilenHarf);
+        girilenHarf = harfiBicimlendir(girilenHarf);
         for (int i = 0; i < bulunacakKelime.length(); i++) {
             if (girilenHarf.equals(Character.toString(bulunacakKelimeKarakterDizisi[i]))){
                 oyuncuyaGosterilecekMetin = oyuncuyaGosterilecekMetin.replace(i*2, i*2+1, Character.toString(bulunacakKelimeKarakterDizisi[i]));
@@ -137,9 +205,23 @@ public class MainActivity extends AppCompatActivity {
         }
         Log.w("deneme", oyuncuyaGosterilecekMetin.toString());
         if (harfeSahipMi == false){
-            yanlisHarf();
+            yanlisHarf(girilenHarf);
         }
         harfeSahipMi = false;
+    }
+
+    public String harfiBicimlendir(String girilenHarf){
+        Log.d("sahipMi",girilenHarf);
+        if (girilenHarf.equals("İ")){
+            girilenHarf = "i";
+        }
+        else if (girilenHarf.equals("I")){
+            girilenHarf = "ı";
+
+        }
+        girilenHarf = girilenHarf.toLowerCase(Locale.ROOT);
+        Log.d("sahipMi",girilenHarf);
+        return girilenHarf;
     }
     public void girilenKelimeDogruMu(){
         if (bulunacakKelime.equalsIgnoreCase(kelimeTahminTxt.getText().toString())){
@@ -151,13 +233,19 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void yanlisHarf(){
+    public void yanlisHarf(String girilenHarf){
+        Character girilenChar = girilenHarf.charAt(0);
+        if (!yanlisHarfler.contains(girilenChar))
+            yanlisHarfler.add(girilenHarf.charAt(0));
+
+        Log.i("firebase", yanlisHarfler.toString());
+
         mevcutHata++;
         resmiIlerlet();
     }
     public void resmiIlerlet(){
         if (mevcutHata == 0){
-            adamImg.setImageResource(R.drawable.adam1);
+            adamImg.setImageResource(R.drawable.adam0);
 
         }
         else if(mevcutHata == 1){
@@ -203,8 +291,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
     public void bilindi(){
-        //Toast.makeText(this, "Kazandınız.", Toast.LENGTH_SHORT).show();
-        //this.setTitle("Kazandınız");
+        kelimeTahminTxt.setText("");
         puaniGuncelle(5);
         sonrakiSeviye();
     }
@@ -217,16 +304,14 @@ public class MainActivity extends AppCompatActivity {
     //----------------sonraki----------------
     public  void sonrakiSeviye(){
         mevcutHata = 0;
+        yanlisHarfler.clear();
         resmiIlerlet();
         sonrakiSoru();
-        karakterDizisiniBoyutlandir();
-        karakterDizisineDegerleriAta();
-        oyuncuyaGosterilecekMetniGizle();
-        oyuncuyaGosterilecekMetniOyuncuyaGoster();
+
     }
 
     public void sonrakiSoru(){
-        bulunacakKelime = "sakarya";
+        bulunacakKelimeyiUret();
 
     }
 
@@ -235,6 +320,7 @@ public class MainActivity extends AppCompatActivity {
         String mesaj = getTitle().toString().substring(6);
         Log.i("tag", "mesaj:"+mesaj);
         intent.putExtra("puan", mesaj);
+        intent.putExtra("bulunacakKelime", bulunacakKelime);
         startActivity(intent);
     }
 }

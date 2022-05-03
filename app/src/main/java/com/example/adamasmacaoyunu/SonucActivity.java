@@ -9,15 +9,18 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.prefs.Preferences;
 
 public class SonucActivity extends AppCompatActivity {
-    public TextView puanTxt, puanDurumuTxt;
+    public TextView puanTxt, puanDurumuTxt, bulunacakKelimeTxt;
     public Button tekrarOynaBtn, cikisBtn;
+    ImageView sonucResim;
     Intent intent;
     int puan;
+    String bulunacakKelime;
     String mesajYuksekPuan = "Yüksek Puan!";
     String mesajYuksekDegil = "Puanınız.\nYüksek Puanınız: ";
 
@@ -34,12 +37,16 @@ public class SonucActivity extends AppCompatActivity {
     public void initComponents(){
         puanTxt = findViewById(R.id.puanTxt);
         puanDurumuTxt = findViewById(R.id.puanDurumuTxt);
+        bulunacakKelimeTxt = findViewById(R.id.bulunacakKelimeTxt);
         tekrarOynaBtn = findViewById(R.id.tektatOynaBtn);
         cikisBtn = findViewById(R.id.cikisBtn);
+        sonucResim = findViewById(R.id.sonucResim);
         sharedPreferences = getSharedPreferences("veriler", MODE_PRIVATE);
 
         intent = getIntent();
         puan = Integer.parseInt(intent.getStringExtra("puan"));
+        bulunacakKelime = intent.getStringExtra("bulunacakKelime");
+        bulunacakKelimeTxt.setText(bulunacakKelime);
         Log.i("tag", "mesaj:"+ puan);
 
     }
@@ -65,13 +72,17 @@ public class SonucActivity extends AppCompatActivity {
         puanTxt.setText(String.valueOf(puan));
         if (puan >  sharedPreferences.getInt("yuksekPuan",0))
         {
+            sonucResim.setImageResource(R.drawable.adam_ozgur);
             puanDurumuTxt.setText(mesajYuksekPuan);
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putInt("yuksekPuan", puan);
             editor.apply();
         }
-        else
+        else{
+            sonucResim.setImageResource(R.drawable.adam6);
             puanDurumuTxt.setText(mesajYuksekDegil + "\n" + sharedPreferences.getInt("yuksekPuan",0));
+
+        }
 
     }
 

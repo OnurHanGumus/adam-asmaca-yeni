@@ -9,5 +9,8 @@
     <color name="white">#FFFFFFFF</color>
     <color name="kahve">#754600</color>
     <color name="tahta_yesili">#188b56</color>
+    <color name="tahta_yesili_var">#138550</color>
+    <color name="tahta_kahve_var">#773801</color>
     <color name="tahta_kahve">#7f3b00</color>
+
 </resources>
