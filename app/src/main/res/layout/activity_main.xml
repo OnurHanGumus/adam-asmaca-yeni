@@ -9,6 +9,8 @@
     style="@style/Theme.AdamAsmacaOyunu"
     >
 
+
+
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/kelimeTxt"
         android:layout_width="match_parent"
@@ -16,6 +18,7 @@
         android:text="kelime getiriliyor"
         android:textSize="25sp"
         android:gravity="center"
+
         />
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
@@ -30,6 +33,8 @@
             android:inputType="text"
             android:maxLength="1"
             android:textAlignment="center"
+            android:contentDescription="harf tahmin et."
+
             />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -48,6 +53,8 @@
             android:layout_height="wrap_content"
             android:hint="Kelimeyi tahmin et."
             android:textAlignment="center"
+            android:contentDescription="kelimeyi tahmin et."
+
             />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -71,7 +78,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:adjustViewBounds="true"
-        app:srcCompat="@drawable/adam0" />
+        app:srcCompat="@drawable/adam0"
+
+        android:contentDescription=""/>
 
 
 </LinearLayout>

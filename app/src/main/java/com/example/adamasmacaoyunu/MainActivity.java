@@ -2,7 +2,9 @@ package com.example.adamasmacaoyunu;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.splashscreen.SplashScreen;
 
+import android.app.Application;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -51,10 +53,11 @@ public class MainActivity extends AppCompatActivity {
     DatabaseReference myRef;
 
     static {
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true); //veriyi depolamaya yarar.
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        SplashScreen.installSplashScreen(this);
         super.onCreate(savedInstanceState);
         FirebaseApp.initializeApp(this);
 
@@ -70,7 +73,11 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
+
+
     public void programaDevamEt(){
+        setContentDescriptions();
         harfTahminTxt.setEnabled(true);
         kelimeTahminTxt.setEnabled(true);
         karakterDizisiniBoyutlandir();
@@ -129,11 +136,15 @@ public class MainActivity extends AppCompatActivity {
             }
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                    girilenKelimeDogruMu();
+                    oyuncuyaGosterilecekMetniOyuncuyaGoster();
+
+
             }
             @Override
             public void afterTextChanged(Editable s) {
-                girilenKelimeDogruMu();
-                oyuncuyaGosterilecekMetniOyuncuyaGoster();
+
             }
         });
     }
@@ -193,6 +204,9 @@ public class MainActivity extends AppCompatActivity {
         kelimeTxt.setText(oyuncuyaGosterilecekMetin);
 
         yanlisHarflerTxt.setText(yanlisHarfler.toString());
+
+        setContentDescriptions();
+
     }
 
     public void bulunacakKelimeGirilenHarfeSahipMi(String girilenHarf){
@@ -224,7 +238,7 @@ public class MainActivity extends AppCompatActivity {
         return girilenHarf;
     }
     public void girilenKelimeDogruMu(){
-        if (bulunacakKelime.equalsIgnoreCase(kelimeTahminTxt.getText().toString())){
+        if ( kelimeTahminTxt.getText().toString().equalsIgnoreCase(bulunacakKelime)){
             for (int i = 0; i < bulunacakKelime.length(); i++) {
                 oyuncuyaGosterilecekMetin = oyuncuyaGosterilecekMetin.replace(i*2, i*2+1, Character.toString(bulunacakKelimeKarakterDizisi[i]));
             }
@@ -322,5 +336,18 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("puan", mesaj);
         intent.putExtra("bulunacakKelime", bulunacakKelime);
         startActivity(intent);
+    }
+
+    public void setContentDescriptions(){
+        adamImg.setContentDescription("Mevcut hata " + String.valueOf(mevcutHata));
+        yanlisHarflerTxt.setContentDescription("Kelimede bulunmayan harfler " + yanlisHarfler.toString());
+        Log.d("firebase", yanlisHarfler.toString());
+    }
+
+    @Override
+    protected void onNightModeChanged(int mode) {
+        super.onNightModeChanged(mode);
+
+
     }
 }
