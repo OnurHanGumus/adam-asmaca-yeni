@@ -106,12 +106,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void registerEventHandlers() {
-
         harfTahminTxt.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
-
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (count == 0){
@@ -122,14 +120,10 @@ public class MainActivity extends AppCompatActivity {
                 harfTahminTxt.setText("");
                 oyuncuyaGosterilecekMetniOyuncuyaGoster();
             }
-
             @Override
             public void afterTextChanged(Editable s) {
-
-
             }
         });
-
         kelimeTahminTxt.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -139,12 +133,9 @@ public class MainActivity extends AppCompatActivity {
 
                     girilenKelimeDogruMu();
                     oyuncuyaGosterilecekMetniOyuncuyaGoster();
-
-
             }
             @Override
             public void afterTextChanged(Editable s) {
-
             }
         });
     }
@@ -225,7 +216,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public String harfiBicimlendir(String girilenHarf){
-        Log.d("sahipMi",girilenHarf);
         if (girilenHarf.equals("İ")){
             girilenHarf = "i";
         }
@@ -234,7 +224,6 @@ public class MainActivity extends AppCompatActivity {
 
         }
         girilenHarf = girilenHarf.toLowerCase(Locale.ROOT);
-        Log.d("sahipMi",girilenHarf);
         return girilenHarf;
     }
     public void girilenKelimeDogruMu(){
@@ -342,12 +331,5 @@ public class MainActivity extends AppCompatActivity {
         adamImg.setContentDescription("Mevcut hata " + String.valueOf(mevcutHata));
         yanlisHarflerTxt.setContentDescription("Kelimede bulunmayan harfler " + yanlisHarfler.toString());
         Log.d("firebase", yanlisHarfler.toString());
-    }
-
-    @Override
-    protected void onNightModeChanged(int mode) {
-        super.onNightModeChanged(mode);
-
-
     }
 }

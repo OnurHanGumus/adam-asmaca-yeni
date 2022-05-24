@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="kelimeTxtSize">25sp</dimen>
+    <dimen name="sonucEkraniPuanTxt">70sp</dimen>
+    <dimen name="puanDurumuTxt">30sp</dimen>
+    <dimen name="bilesenlerArasiMarginDegeri">20dp</dimen>
+</resources>

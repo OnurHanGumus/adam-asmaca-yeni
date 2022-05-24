@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -13,22 +13,33 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/kelimeTxt"
+        android:layout_marginVertical="@dimen/bilesenlerArasiMarginDegeri"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:text="kelime getiriliyor"
-        android:textSize="25sp"
+        android:textSize="@dimen/kelimeTxtSize"
         android:gravity="center"
+        android:textColor="@color/tahta_kahve"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/harfTahminTxtLayout"
+
 
         />
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/harfTahminTxtLayout"
+        android:layout_marginVertical="@dimen/bilesenlerArasiMarginDegeri"
         android:layout_width="match_parent"
-        android:layout_height="64dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/kelimeTxt"
         >
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/harfTahminTxt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Harf tahmin et."
+            android:hint="@string/harfTahmin"
+            android:textColorHint="@color/tahta_kahve"
             android:digits="abcçdefgğhıijklmnoöpqrsştuüvwyzABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ"
             android:inputType="text"
             android:maxLength="1"
@@ -43,17 +54,23 @@
 
 
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/kelimeTahminTxtLayout"
         android:layout_width="match_parent"
-        android:layout_height="64dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/harfTahminTxtLayout"
 
         >
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/kelimeTahminTxt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Kelimeyi tahmin et."
+            android:hint="@string/kelimeTahmin"
+            android:textColorHint="@color/tahta_kahve"
+
             android:textAlignment="center"
             android:contentDescription="kelimeyi tahmin et."
+
 
             />
 
@@ -62,25 +79,32 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/yanlisHarfler"
+        android:layout_marginVertical="@dimen/bilesenlerArasiMarginDegeri"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:text=""
-        android:textSize="25sp"
+        android:textSize="@dimen/kelimeTxtSize"
         android:gravity="center"
+        android:textColor="@color/tahta_kahve"
+
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/kelimeTahminTxtLayout"
 
         />
-
-
 
 
     <ImageView
         android:id="@+id/adamImg"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:adjustViewBounds="true"
-        app:srcCompat="@drawable/adam0"
+        android:contentDescription=""
 
-        android:contentDescription=""/>
+        app:layout_constraintBottom_toBottomOf="parent"
+
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/yanlisHarfler"
+        app:srcCompat="@drawable/adam0" />
 
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
