@@ -2,109 +2,100 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Theme.AdamAsmacaOyunu"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".MainActivity"
-    style="@style/Theme.AdamAsmacaOyunu"
-    >
-
-
+    android:padding="20dp"
+    tools:context=".MainActivity">
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/kelimeTxt"
-        android:layout_marginVertical="@dimen/bilesenlerArasiMarginDegeri"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="kelime getiriliyor"
-        android:textSize="@dimen/kelimeTxtSize"
+        android:layout_marginTop="12dp"
         android:gravity="center"
+        android:letterSpacing="0.08"
+        android:text="@string/kelime_getiriliyor"
         android:textColor="@color/tahta_kahve"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/harfTahminTxtLayout"
+        android:textSize="@dimen/kelimeTxtSize"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-
-        />
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/harfTahminTxtLayout"
-        android:layout_marginVertical="@dimen/bilesenlerArasiMarginDegeri"
-        android:layout_width="match_parent"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/kelimeTxt"
-        >
+        android:layout_marginTop="20dp"
+        app:boxStrokeColor="@color/tahta_kahve"
+        app:hintTextColor="@color/tahta_kahve"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/kelimeTxt">
+
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/harfTahminTxt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/harfTahmin"
-            android:textColorHint="@color/tahta_kahve"
             android:digits="abcçdefgğhıijklmnoöpqrsştuüvwyzABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ"
+            android:hint="@string/harfTahmin"
             android:inputType="text"
             android:maxLength="1"
             android:textAlignment="center"
-            android:contentDescription="harf tahmin et."
-
-            />
+            android:textColor="@color/tahta_kahve"
+            android:textColorHint="@color/tahta_kahve" />
     </com.google.android.material.textfield.TextInputLayout>
-
-
-
-
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/kelimeTahminTxtLayout"
-        android:layout_width="match_parent"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/harfTahminTxtLayout"
+        android:layout_marginTop="12dp"
+        app:boxStrokeColor="@color/tahta_kahve"
+        app:hintTextColor="@color/tahta_kahve"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/harfTahminTxtLayout">
 
-        >
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/kelimeTahminTxt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/kelimeTahmin"
-            android:textColorHint="@color/tahta_kahve"
             android:digits="abcçdefgğhıijklmnoöpqrsştuüvwyzABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ"
-
+            android:hint="@string/kelimeTahmin"
+            android:inputType="text"
             android:textAlignment="center"
-            android:contentDescription="kelimeyi tahmin et."
-
-
-            />
-
+            android:textColor="@color/tahta_kahve"
+            android:textColorHint="@color/tahta_kahve" />
     </com.google.android.material.textfield.TextInputLayout>
-
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/yanlisHarfler"
-        android:layout_marginVertical="@dimen/bilesenlerArasiMarginDegeri"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text=""
-        android:textSize="@dimen/kelimeTxtSize"
+        android:layout_marginTop="16dp"
         android:gravity="center"
         android:textColor="@color/tahta_kahve"
-
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/kelimeTahminTxtLayout"
-
-        />
+        android:textSize="@dimen/kelimeTxtSize"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/kelimeTahminTxtLayout" />
 
     <ImageView
         android:id="@+id/adamImg"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
         android:adjustViewBounds="true"
-        android:contentDescription=""
-
+        android:contentDescription="@string/adam_resmi_desc"
+        android:scaleType="fitCenter"
         app:layout_constraintBottom_toBottomOf="parent"
-
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/yanlisHarfler"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/yanlisHarfler"
         app:srcCompat="@drawable/adam0" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

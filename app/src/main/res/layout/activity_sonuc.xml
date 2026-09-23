@@ -2,87 +2,96 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Theme.AdamAsmacaOyunu"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SonucActivity"
-    android:orientation="vertical"
-    style="@style/Theme.AdamAsmacaOyunu"
+    android:padding="20dp"
+    tools:context=".SonucActivity">
 
-    >
-
-
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/puanTxt"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="80"
+        android:layout_marginTop="12dp"
+        android:gravity="center"
+        android:textColor="@color/tahta_kahve"
         android:textSize="@dimen/sonucEkraniPuanTxt"
-        android:gravity="center"
-        android:textColor="@color/tahta_kahve"
         android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        />
-    <TextView
+        tools:text="80" />
+
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/puanDurumuTxt"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Yüksek Puan!"
-        android:textSize="@dimen/puanDurumuTxt"
+        android:layout_marginTop="8dp"
         android:gravity="center"
         android:textColor="@color/tahta_kahve"
+        android:textSize="@dimen/puanDurumuTxt"
         android:textStyle="bold"
-        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/puanTxt"
-        />
+        tools:text="Yüksek Puan!" />
 
     <ImageView
         android:id="@+id/sonucResim"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/adam0"
-        android:layout_marginVertical="20dp"
-        android:contentDescription="@null"
-
-        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/sonuc_resmi_desc"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toTopOf="@id/bulunacakKelimeTxt"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/puanDurumuTxt"
-        />
-    <TextView
+        app:srcCompat="@drawable/adam0" />
+
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/bulunacakKelimeTxt"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Kahramanmaraş"
-        android:textSize="@dimen/puanDurumuTxt"
+        android:layout_marginBottom="24dp"
         android:gravity="center"
         android:textColor="@color/tahta_kahve"
+        android:textSize="@dimen/puanDurumuTxt"
         android:textStyle="bold"
-        android:layout_margin="10dp"
+        app:layout_constraintBottom_toTopOf="@id/tektatOynaBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="Kahramanmaraş" />
 
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/sonucResim"
-        />
-   <com.google.android.material.button.MaterialButton
-       android:id="@+id/tektatOynaBtn"
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content"
-       android:text="Tekrar oyna"
-       app:layout_constraintLeft_toLeftOf="parent"
-       app:layout_constraintBottom_toBottomOf="@id/cikisBtn"
-
-       app:layout_constraintTop_toBottomOf="@id/bulunacakKelimeTxt"
-       />
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/tektatOynaBtn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:paddingVertical="12dp"
+        android:text="@string/tekrar_oyna"
+        android:textSize="16sp"
+        app:backgroundTint="@color/tahta_yesili"
+        app:cornerRadius="8dp"
+        app:layout_constraintBottom_toTopOf="@id/cikisBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/cikisBtn"
-        android:layout_width="wrap_content"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Çıkış"
-
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        android:paddingVertical="12dp"
+        android:text="@string/cikis"
+        android:textColor="@color/tahta_kahve"
+        android:textSize="16sp"
+        app:cornerRadius="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tektatOynaBtn" />
-
-
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:strokeColor="@color/tahta_kahve" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
