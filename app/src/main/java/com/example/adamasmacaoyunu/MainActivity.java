@@ -73,9 +73,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-
-
-
     public void programaDevamEt(){
         setContentDescriptions();
         harfTahminTxt.setEnabled(true);
@@ -241,7 +238,6 @@ public class MainActivity extends AppCompatActivity {
         if (!yanlisHarfler.contains(girilenChar))
             yanlisHarfler.add(girilenHarf.charAt(0));
 
-        Log.i("firebase", yanlisHarfler.toString());
 
         mevcutHata++;
         resmiIlerlet();

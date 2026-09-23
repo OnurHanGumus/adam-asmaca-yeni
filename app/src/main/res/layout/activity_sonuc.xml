@@ -61,18 +61,18 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/sonucResim"
         />
-    <Button
-        android:id="@+id/tektatOynaBtn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Tekrar oyna"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintBottom_toBottomOf="@id/cikisBtn"
+   <com.google.android.material.button.MaterialButton
+       android:id="@+id/tektatOynaBtn"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:text="Tekrar oyna"
+       app:layout_constraintLeft_toLeftOf="parent"
+       app:layout_constraintBottom_toBottomOf="@id/cikisBtn"
 
-        app:layout_constraintTop_toBottomOf="@id/bulunacakKelimeTxt"
-        />
+       app:layout_constraintTop_toBottomOf="@id/bulunacakKelimeTxt"
+       />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/cikisBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -82,6 +82,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tektatOynaBtn" />
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

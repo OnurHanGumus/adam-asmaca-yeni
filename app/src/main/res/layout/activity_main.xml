@@ -67,6 +67,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/kelimeTahmin"
             android:textColorHint="@color/tahta_kahve"
+            android:digits="abcçdefgğhıijklmnoöpqrsştuüvwyzABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ"
 
             android:textAlignment="center"
             android:contentDescription="kelimeyi tahmin et."
@@ -91,7 +92,6 @@
         app:layout_constraintTop_toBottomOf="@id/kelimeTahminTxtLayout"
 
         />
-
 
     <ImageView
         android:id="@+id/adamImg"
