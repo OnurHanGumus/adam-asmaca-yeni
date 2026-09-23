@@ -28,32 +28,43 @@ import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
-    TextInputEditText harfTahminTxt;
-    TextInputEditText kelimeTahminTxt;
-    TextView kelimeTxt;
-    TextView yanlisHarflerTxt;
-    ImageView adamImg;
+    private TextInputEditText harfTahminTxt;
+    private TextInputEditText kelimeTahminTxt;
+    private TextView kelimeTxt;
+    private TextView yanlisHarflerTxt;
+    private ImageView adamImg;
 
-    String ayrac;
-    String bulunacakKelime;
-    String firebasedenAlinanKelime = "s";
-    StringBuilder oyuncuyaGosterilecekMetin;
-    char[] bulunacakKelimeKarakterDizisi;
+    private String ayrac;
+    private String bulunacakKelime;
+    private String firebasedenAlinanKelime = "s";
+    private StringBuilder oyuncuyaGosterilecekMetin;
+    private char[] bulunacakKelimeKarakterDizisi;
 
-    boolean harfeSahipMi = false;
-    int maxHataToleransi = 6;
-    int mevcutHata = 0;
+    private boolean harfeSahipMi = false;
+    private int maxHataToleransi = 6;
+    private int mevcutHata = 0;
 
-    ArrayList<Character>yanlisHarfler;
+    private final int[] adamResimleri = {
+            R.drawable.adam0,
+            R.drawable.adam1,
+            R.drawable.adam2,
+            R.drawable.adam3,
+            R.drawable.adam4,
+            R.drawable.adam5,
+            R.drawable.adam6
+    };
 
-    int puan = 0;
+    private ArrayList<Character> yanlisHarfler;
 
-    FirebaseDatabase database;
-    DatabaseReference myRef;
+    private int puan = 0;
+
+    private FirebaseDatabase database;
+    private DatabaseReference myRef;
 
     static {
         FirebaseDatabase.getInstance().setPersistenceEnabled(true); //veriyi depolamaya yarar.
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         SplashScreen.installSplashScreen(this);
@@ -69,10 +80,9 @@ public class MainActivity extends AppCompatActivity {
 
         puaniGuncelle(0);
         bulunacakKelimeyiUret();
-
-
     }
-    public void programaDevamEt(){
+
+    public void programaDevamEt() {
         setContentDescriptions();
         harfTahminTxt.setEnabled(true);
         kelimeTahminTxt.setEnabled(true);
@@ -82,23 +92,18 @@ public class MainActivity extends AppCompatActivity {
         oyuncuyaGosterilecekMetniOyuncuyaGoster();
     }
 
-    void initComponents(){
+    void initComponents() {
         yanlisHarfler = new ArrayList<Character>();
         harfTahminTxt = findViewById(R.id.harfTahminTxt);
         kelimeTxt = findViewById(R.id.kelimeTxt);
         kelimeTahminTxt = findViewById(R.id.kelimeTahminTxt);
         adamImg = findViewById(R.id.adamImg);
         yanlisHarflerTxt = findViewById(R.id.yanlisHarfler);
-
     }
-    void initComponentsFirebase(){
 
+    void initComponentsFirebase() {
         database = FirebaseDatabase.getInstance();
-
         myRef = database.getReference("0");
-
-
-
     }
 
     void registerEventHandlers() {
@@ -106,9 +111,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
+
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (count == 0){
+                if (count == 0) {
                     return;
                 }
                 bulunacakKelimeGirilenHarfeSahipMi(harfTahminTxt.getText().toString());
@@ -116,6 +122,7 @@ public class MainActivity extends AppCompatActivity {
                 harfTahminTxt.setText("");
                 oyuncuyaGosterilecekMetniOyuncuyaGoster();
             }
+
             @Override
             public void afterTextChanged(Editable s) {
             }
@@ -124,205 +131,168 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
+
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                    girilenKelimeDogruMu();
-                    oyuncuyaGosterilecekMetniOyuncuyaGoster();
+                girilenKelimeDogruMu();
+                oyuncuyaGosterilecekMetniOyuncuyaGoster();
             }
+
             @Override
             public void afterTextChanged(Editable s) {
             }
         });
     }
-    public void bulunacakKelimeyiUret(){
+
+    public void bulunacakKelimeyiUret() {
         Random random = new Random();
         int index = random.nextInt(81 - 0) + 0;
         Log.w("uyarı", String.valueOf(index));
         harfTahminTxt.setEnabled(false);
         kelimeTahminTxt.setEnabled(false);
         firebaseUzerindenRandomDegerIleKelimeAl(index);
-
-
     }
-    public void firebaseUzerindenRandomDegerIleKelimeAl(int random){
 
+    public void firebaseUzerindenRandomDegerIleKelimeAl(int random) {
         myRef.child(String.valueOf(random)).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (!task.isSuccessful()) {
                     Log.e("firebase", "Error getting data", task.getException());
                     firebasedenAlinanKelime = "bulunamadi";
-
-
-                }
-                else {
+                } else {
                     firebasedenAlinanKelime = String.valueOf(task.getResult().getValue());
                     firebasedenAlinanKelime = firebasedenAlinanKelime.toLowerCase(Locale.ROOT);
                     bulunacakKelime = firebasedenAlinanKelime;
                     Log.d("firebase", bulunacakKelime);
                     programaDevamEt();
-
                 }
             }
         });
-
-
     }
-    public void karakterDizisiniBoyutlandir(){
+
+    public void karakterDizisiniBoyutlandir() {
         bulunacakKelimeKarakterDizisi = new char[bulunacakKelime.length()];
     }
 
-    public void karakterDizisineDegerleriAta(){
+    public void karakterDizisineDegerleriAta() {
         for (int i = 0; i < bulunacakKelime.length(); i++) {
             bulunacakKelimeKarakterDizisi[i] = bulunacakKelime.charAt(i);
         }
-       Log.d("selam", Character.toString(bulunacakKelimeKarakterDizisi[0]));
+        Log.d("selam", Character.toString(bulunacakKelimeKarakterDizisi[0]));
     }
 
-    public void oyuncuyaGosterilecekMetniGizle(){
+    public void oyuncuyaGosterilecekMetniGizle() {
         oyuncuyaGosterilecekMetin.delete(0, oyuncuyaGosterilecekMetin.length());
         for (int i = 0; i < bulunacakKelime.length(); i++) {
             oyuncuyaGosterilecekMetin.append(ayrac + " ");
         }
     }
 
-    public void oyuncuyaGosterilecekMetniOyuncuyaGoster(){
+    public void oyuncuyaGosterilecekMetniOyuncuyaGoster() {
         kelimeTxt.setText(oyuncuyaGosterilecekMetin);
-
         yanlisHarflerTxt.setText(yanlisHarfler.toString());
-
         setContentDescriptions();
-
     }
 
-    public void bulunacakKelimeGirilenHarfeSahipMi(String girilenHarf){
+    public void bulunacakKelimeGirilenHarfeSahipMi(String girilenHarf) {
         girilenHarf = harfiBicimlendir(girilenHarf);
         for (int i = 0; i < bulunacakKelime.length(); i++) {
-            if (girilenHarf.equals(Character.toString(bulunacakKelimeKarakterDizisi[i]))){
-                oyuncuyaGosterilecekMetin = oyuncuyaGosterilecekMetin.replace(i*2, i*2+1, Character.toString(bulunacakKelimeKarakterDizisi[i]));
+            if (girilenHarf.equals(Character.toString(bulunacakKelimeKarakterDizisi[i]))) {
+                oyuncuyaGosterilecekMetin = oyuncuyaGosterilecekMetin.replace(i * 2, i * 2 + 1, Character.toString(bulunacakKelimeKarakterDizisi[i]));
                 harfeSahipMi = true;
             }
         }
         Log.w("deneme", oyuncuyaGosterilecekMetin.toString());
-        if (harfeSahipMi == false){
+        if (harfeSahipMi == false) {
             yanlisHarf(girilenHarf);
         }
         harfeSahipMi = false;
     }
 
-    public String harfiBicimlendir(String girilenHarf){
-        if (girilenHarf.equals("İ")){
+    public String harfiBicimlendir(String girilenHarf) {
+        if (girilenHarf.equals("İ")) {
             girilenHarf = "i";
-        }
-        else if (girilenHarf.equals("I")){
+        } else if (girilenHarf.equals("I")) {
             girilenHarf = "ı";
-
         }
         girilenHarf = girilenHarf.toLowerCase(Locale.ROOT);
         return girilenHarf;
     }
-    public void girilenKelimeDogruMu(){
-        if ( kelimeTahminTxt.getText().toString().equalsIgnoreCase(bulunacakKelime)){
+
+    public void girilenKelimeDogruMu() {
+        if (kelimeTahminTxt.getText().toString().equalsIgnoreCase(bulunacakKelime)) {
             for (int i = 0; i < bulunacakKelime.length(); i++) {
-                oyuncuyaGosterilecekMetin = oyuncuyaGosterilecekMetin.replace(i*2, i*2+1, Character.toString(bulunacakKelimeKarakterDizisi[i]));
+                oyuncuyaGosterilecekMetin = oyuncuyaGosterilecekMetin.replace(i * 2, i * 2 + 1, Character.toString(bulunacakKelimeKarakterDizisi[i]));
             }
             bilindi();
         }
-
     }
 
-    public void yanlisHarf(String girilenHarf){
+    public void yanlisHarf(String girilenHarf) {
         Character girilenChar = girilenHarf.charAt(0);
         if (!yanlisHarfler.contains(girilenChar))
             yanlisHarfler.add(girilenHarf.charAt(0));
 
-
         mevcutHata++;
         resmiIlerlet();
     }
-    public void resmiIlerlet(){
-        if (mevcutHata == 0){
-            adamImg.setImageResource(R.drawable.adam0);
 
-        }
-        else if(mevcutHata == 1){
-            adamImg.setImageResource(R.drawable.adam1);
-
-        }
-        else if(mevcutHata == 2){
-            adamImg.setImageResource(R.drawable.adam2);
-
-        }
-        else if(mevcutHata == 3){
-            adamImg.setImageResource(R.drawable.adam3);
-
-        }
-        else if(mevcutHata == 4){
-            adamImg.setImageResource(R.drawable.adam4);
-
-        }
-        else if(mevcutHata == 5){
-            adamImg.setImageResource(R.drawable.adam5);
-
-        }
-        else if(mevcutHata == 6){
-            adamImg.setImageResource(R.drawable.adam6);
-
+    public void resmiIlerlet() {
+        if (mevcutHata >= 0 && mevcutHata < adamResimleri.length) {
+            adamImg.setImageResource(adamResimleri[mevcutHata]);
         }
 
-        if (mevcutHata == maxHataToleransi){
+        if (mevcutHata == maxHataToleransi) {
             bilinemedi();
         }
     }
 
-    public void bilinemedi(){
+    public void bilinemedi() {
         Toast.makeText(this, "Kaybettiniz.", Toast.LENGTH_SHORT).show();
         sonucAktivitesineGec();
     }
-    public void bilindiMi(){
 
+    public void bilindiMi() {
         int altcizgiKalmisMi = oyuncuyaGosterilecekMetin.indexOf(ayrac);
-        if (altcizgiKalmisMi == -1){
+        if (altcizgiKalmisMi == -1) {
             bilindi();
         }
-
     }
-    public void bilindi(){
+
+    public void bilindi() {
         kelimeTahminTxt.setText("");
         puaniGuncelle(5);
         sonrakiSeviye();
     }
 
-    public void puaniGuncelle(int eklenecekPuan){
+    public void puaniGuncelle(int eklenecekPuan) {
         puan += eklenecekPuan;
         this.setTitle("Puan: " + puan);
     }
 
     //----------------sonraki----------------
-    public  void sonrakiSeviye(){
+    public void sonrakiSeviye() {
         mevcutHata = 0;
         yanlisHarfler.clear();
         resmiIlerlet();
         sonrakiSoru();
-
     }
 
-    public void sonrakiSoru(){
+    public void sonrakiSoru() {
         bulunacakKelimeyiUret();
-
     }
 
-    public void sonucAktivitesineGec(){
+    public void sonucAktivitesineGec() {
         Intent intent = new Intent(MainActivity.this, SonucActivity.class);
         String mesaj = getTitle().toString().substring(6);
-        Log.i("tag", "mesaj:"+mesaj);
+        Log.i("tag", "mesaj:" + mesaj);
         intent.putExtra("puan", mesaj);
         intent.putExtra("bulunacakKelime", bulunacakKelime);
         startActivity(intent);
     }
 
-    public void setContentDescriptions(){
+    public void setContentDescriptions() {
         adamImg.setContentDescription("Mevcut hata " + String.valueOf(mevcutHata));
         yanlisHarflerTxt.setContentDescription("Kelimede bulunmayan harfler " + yanlisHarfler.toString());
         Log.d("firebase", yanlisHarfler.toString());

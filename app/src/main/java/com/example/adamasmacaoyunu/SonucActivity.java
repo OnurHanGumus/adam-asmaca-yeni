@@ -19,17 +19,19 @@ import android.widget.TextView;
 import java.util.prefs.Preferences;
 
 public class SonucActivity extends AppCompatActivity {
+
     public TextView puanTxt, puanDurumuTxt, bulunacakKelimeTxt;
     public Button tekrarOynaBtn, cikisBtn;
-    ImageView sonucResim;
-    Intent intent;
-    int puan;
-    String bulunacakKelime;
-    String mesajYuksekPuan = "Yüksek Puan!";
-    String mesajYuksekDegil = "Puanınız.\nYüksek Puanınız: ";
-    Vibrator v;
+    private ImageView sonucResim;
+    private Intent intent;
+    private int puan;
+    private String bulunacakKelime;
+    private String mesajYuksekPuan = "Yüksek Puan!";
+    private String mesajYuksekDegil = "Puanınız.\nYüksek Puanınız: ";
+    private Vibrator v;
 
-    SharedPreferences sharedPreferences;
+    private SharedPreferences sharedPreferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,7 +41,8 @@ public class SonucActivity extends AppCompatActivity {
 
         degerleriAyarla();
     }
-    public void initComponents(){
+
+    public void initComponents() {
         v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         puanTxt = findViewById(R.id.puanTxt);
         puanDurumuTxt = findViewById(R.id.puanDurumuTxt);
@@ -53,10 +56,10 @@ public class SonucActivity extends AppCompatActivity {
         puan = Integer.parseInt(intent.getStringExtra("puan"));
         bulunacakKelime = intent.getStringExtra("bulunacakKelime");
         bulunacakKelimeTxt.setText(bulunacakKelime);
-        Log.i("tag", "mesaj:"+ puan);
-
+        Log.i("tag", "mesaj:" + puan);
     }
-    public void registerEventHandlers(){
+
+    public void registerEventHandlers() {
         tekrarOynaBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,31 +72,26 @@ public class SonucActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 onBackPressed();
-
             }
         });
     }
 
-    public void degerleriAyarla(){
+    public void degerleriAyarla() {
         puanTxt.setText(String.valueOf(puan));
-        if (puan >  sharedPreferences.getInt("yuksekPuan",0))
-        {
+        if (puan > sharedPreferences.getInt("yuksekPuan", 0)) {
             titresim05Saniye();
             sonucResim.setImageResource(R.drawable.adam_ozgur);
             puanDurumuTxt.setText(mesajYuksekPuan);
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putInt("yuksekPuan", puan);
             editor.apply();
-        }
-        else{
+        } else {
             sonucResim.setImageResource(R.drawable.adam6);
-            puanDurumuTxt.setText(mesajYuksekDegil + "\n" + sharedPreferences.getInt("yuksekPuan",0));
-
+            puanDurumuTxt.setText(mesajYuksekDegil + "\n" + sharedPreferences.getInt("yuksekPuan", 0));
         }
-
     }
 
-    void titresim05Saniye(){
+    void titresim05Saniye() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             v.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
         } else {
