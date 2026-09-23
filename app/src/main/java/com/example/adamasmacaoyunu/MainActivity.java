@@ -226,6 +226,7 @@ public class MainActivity extends AppCompatActivity {
                 oyuncuyaGosterilecekMetin = oyuncuyaGosterilecekMetin.replace(i * 2, i * 2 + 1, Character.toString(bulunacakKelimeKarakterDizisi[i]));
             }
             bilindi();
+
         }
     }
 
