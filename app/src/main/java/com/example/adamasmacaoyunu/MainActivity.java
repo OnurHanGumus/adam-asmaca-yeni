@@ -61,10 +61,6 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseDatabase database;
     private DatabaseReference myRef;
 
-    static {
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true); //veriyi depolamaya yarar.
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         SplashScreen.installSplashScreen(this);
@@ -102,6 +98,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void initComponentsFirebase() {
+        try {
+            FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+        } catch (Exception e) {
+            Log.w("firebase", "Persistence could not be enabled or was already enabled", e);
+        }
         database = FirebaseDatabase.getInstance();
         myRef = database.getReference("0");
     }
@@ -157,18 +158,30 @@ public class MainActivity extends AppCompatActivity {
         myRef.child(String.valueOf(random)).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
-                if (!task.isSuccessful()) {
-                    Log.e("firebase", "Error getting data", task.getException());
-                    firebasedenAlinanKelime = "bulunamadi";
-                } else {
-                    firebasedenAlinanKelime = String.valueOf(task.getResult().getValue());
-                    firebasedenAlinanKelime = firebasedenAlinanKelime.toLowerCase(Locale.ROOT);
-                    bulunacakKelime = firebasedenAlinanKelime;
-                    Log.d("firebase", bulunacakKelime);
-                    programaDevamEt();
+                if (task.isSuccessful() && task.getResult() != null && task.getResult().exists() && task.getResult().getValue() != null) {
+                    String kelime = String.valueOf(task.getResult().getValue()).trim().toLowerCase(Locale.ROOT);
+                    if (!kelime.isEmpty() && !kelime.equals("null")) {
+                        firebasedenAlinanKelime = kelime;
+                        bulunacakKelime = firebasedenAlinanKelime;
+                        Log.d("firebase", "Kelime başarıyla alındı: " + bulunacakKelime);
+                        programaDevamEt();
+                        return;
+                    }
                 }
+
+                Log.e("firebase", "Kelime alınamadı veya geçersiz veri döndü", task.getException());
+                firebasedenAlinanKelime = getYedekKelime();
+                bulunacakKelime = firebasedenAlinanKelime;
+                Toast.makeText(MainActivity.this, "Bağlantı kurulamadı, yedek kelime seçildi.", Toast.LENGTH_SHORT).show();
+                programaDevamEt();
             }
         });
+    }
+
+    private String getYedekKelime() {
+        String[] yedekKelimeler = {"ankara", "istanbul", "izmir", "bursa", "antalya", "trabzon", "adana", "konya", "eskisehir"};
+        Random random = new Random();
+        return yedekKelimeler[random.nextInt(yedekKelimeler.length)];
     }
 
     public void karakterDizisiniBoyutlandir() {
