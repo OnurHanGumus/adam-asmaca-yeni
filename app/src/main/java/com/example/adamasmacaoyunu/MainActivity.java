@@ -35,7 +35,6 @@ public class MainActivity extends AppCompatActivity {
     ImageView adamImg;
 
     String ayrac;
-
     String bulunacakKelime;
     String firebasedenAlinanKelime = "s";
     StringBuilder oyuncuyaGosterilecekMetin;
