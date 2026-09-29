@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">HangmanGame</string>
+    <string name="ayrac">_</string>
+    <string name="harfTahmin">Guess letter</string>
+    <string name="kelimeTahmin">Guess the word</string>
+    <string name="kelime_getiriliyor">Loading word...</string>
+    <string name="yanlis_harfler_hint">Wrong letters: []</string>
+    <string name="adam_resmi_desc">Hangman picture</string>
+    <string name="tekrar_oyna">Play Again</string>
+    <string name="cikis">Exit</string>
+    <string name="sonuc_resmi_desc">Result picture</string>
+    <string name="puan_format">Score: %1$d</string>
+    <string name="kaybettiniz">You lost.</string>
+    <string name="baglanti_kurulamadi">Connection failed, backup word selected.</string>
+    <string name="mevcut_hata_desc">Current mistake %1$d</string>
+    <string name="bulunmayan_harfler_desc">Letters not in word %1$s</string>
+    <string name="mesaj_yuksek_puan">High Score!</string>
+    <string name="mesaj_yuksek_degil">Your Score.\nHigh Score: %1$d</string>
+    <string name="menu_dil_secimi">Dil / Language</string>
+    <string name="dil_turkce">Türkçe</string>
+    <string name="dil_ingilizce">English</string>
+</resources>

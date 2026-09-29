@@ -15,9 +15,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class SonucActivity extends AppCompatActivity {
 
-    private static final String MESAJ_YUKSEK_PUAN = "Yüksek Puan!";
-    private static final String MESAJ_YUKSEK_DEGIL = "Puanınız.\nYüksek Puanınız: ";
-
     public TextView puanTxt, puanDurumuTxt, bulunacakKelimeTxt;
     public Button tekrarOynaBtn, cikisBtn;
     private ImageView sonucResim;
@@ -25,6 +22,11 @@ public class SonucActivity extends AppCompatActivity {
     private SharedPreferences sharedPreferences;
 
     private int puan;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(LocaleHelper.onAttach(newBase));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,11 +71,11 @@ public class SonucActivity extends AppCompatActivity {
         if (puan > enYuksekPuan) {
             titresim05Saniye();
             sonucResim.setImageResource(R.drawable.adam_ozgur);
-            puanDurumuTxt.setText(MESAJ_YUKSEK_PUAN);
+            puanDurumuTxt.setText(getString(R.string.mesaj_yuksek_puan));
             sharedPreferences.edit().putInt("yuksekPuan", puan).apply();
         } else {
             sonucResim.setImageResource(R.drawable.adam6);
-            puanDurumuTxt.setText(MESAJ_YUKSEK_DEGIL + "\n" + enYuksekPuan);
+            puanDurumuTxt.setText(getString(R.string.mesaj_yuksek_degil, enYuksekPuan));
         }
     }
 

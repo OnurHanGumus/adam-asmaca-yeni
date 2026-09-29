@@ -4,8 +4,19 @@
     <string name="harfTahmin">Harf tahmin et.</string>
     <string name="kelimeTahmin">Kelime tahmin et.</string>
     <string name="kelime_getiriliyor">Kelime getiriliyor</string>
+    <string name="yanlis_harfler_hint">Yanlış harfler: []</string>
     <string name="adam_resmi_desc">Adam asmaca resmi</string>
     <string name="tekrar_oyna">Tekrar Oyna</string>
     <string name="cikis">Çıkış</string>
     <string name="sonuc_resmi_desc">Sonuç resmi</string>
+    <string name="puan_format">Puan: %1$d</string>
+    <string name="kaybettiniz">Kaybettiniz.</string>
+    <string name="baglanti_kurulamadi">Bağlantı kurulamadı, yedek kelime seçildi.</string>
+    <string name="mevcut_hata_desc">Mevcut hata %1$d</string>
+    <string name="bulunmayan_harfler_desc">Kelimede bulunmayan harfler %1$s</string>
+    <string name="mesaj_yuksek_puan">Yüksek Puan!</string>
+    <string name="mesaj_yuksek_degil">Puanınız.\nYüksek Puanınız: %1$d</string>
+    <string name="menu_dil_secimi">Dil / Language</string>
+    <string name="dil_turkce">Türkçe</string>
+    <string name="dil_ingilizce">English</string>
 </resources>

@@ -1,10 +1,18 @@
 package com.example.adamasmacaoyunu;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
+import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -52,6 +60,11 @@ public class MainActivity extends AppCompatActivity {
 
     private List<Character> yanlisHarfler;
     private DatabaseReference myRef;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(LocaleHelper.onAttach(newBase));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,6 +151,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void bulunacakKelimeyiUret() {
+        if (!isNetworkAvailable()) {
+            bulunacakKelime = getYedekKelime();
+            Toast.makeText(MainActivity.this, getString(R.string.baglanti_kurulamadi), Toast.LENGTH_SHORT).show();
+            programaDevamEt();
+            return;
+        }
+
         Random random = new Random();
         int index = random.nextInt(81);
         harfTahminTxt.setEnabled(false);
@@ -146,6 +166,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void firebaseUzerindenRandomDegerIleKelimeAl(int random) {
+        if (!isNetworkAvailable()) {
+            bulunacakKelime = getYedekKelime();
+            Toast.makeText(MainActivity.this, getString(R.string.baglanti_kurulamadi), Toast.LENGTH_SHORT).show();
+            programaDevamEt();
+            return;
+        }
+
         myRef.child(String.valueOf(random)).get().addOnCompleteListener(task -> {
             if (task.isSuccessful() && task.getResult() != null && task.getResult().exists() && task.getResult().getValue() != null) {
                 String kelime = String.valueOf(task.getResult().getValue()).trim().toLowerCase(LOCALE_TR);
@@ -159,9 +186,27 @@ public class MainActivity extends AppCompatActivity {
 
             Log.e("firebase", "Kelime alınamadı veya geçersiz veri döndü", task.getException());
             bulunacakKelime = getYedekKelime();
-            Toast.makeText(MainActivity.this, "Bağlantı kurulamadı, yedek kelime seçildi.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this, getString(R.string.baglanti_kurulamadi), Toast.LENGTH_SHORT).show();
             programaDevamEt();
         });
+
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivityManager != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                Network network = connectivityManager.getActiveNetwork();
+                if (network != null) {
+                    NetworkCapabilities capabilities = connectivityManager.getNetworkCapabilities(network);
+                    return capabilities != null && capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET);
+                }
+            } else {
+                NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+                return networkInfo != null && networkInfo.isConnected();
+            }
+        }
+        return false;
     }
 
     private String getYedekKelime() {
@@ -246,7 +291,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void bilinemedi() {
-        Toast.makeText(this, "Kaybettiniz.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.kaybettiniz), Toast.LENGTH_SHORT).show();
         sonucAktivitesineGec();
     }
 
@@ -265,7 +310,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void puaniGuncelle(int eklenecekPuan) {
         puan += eklenecekPuan;
-        this.setTitle("Puan: " + puan);
+        this.setTitle(getString(R.string.puan_format, puan));
     }
 
     public void sonrakiSeviye() {
@@ -287,7 +332,31 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void setContentDescriptions() {
-        adamImg.setContentDescription("Mevcut hata " + mevcutHata);
-        yanlisHarflerTxt.setContentDescription("Kelimede bulunmayan harfler " + yanlisHarfler.toString());
+        adamImg.setContentDescription(getString(R.string.mevcut_hata_desc, mevcutHata));
+        yanlisHarflerTxt.setContentDescription(getString(R.string.bulunmayan_harfler_desc, yanlisHarfler.toString()));
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_lang_tr) {
+            diliDegistir("tr");
+            return true;
+        } else if (id == R.id.action_lang_en) {
+            diliDegistir("en");
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void diliDegistir(String languageCode) {
+        LocaleHelper.setLocale(this, languageCode);
+        recreate();
     }
 }
