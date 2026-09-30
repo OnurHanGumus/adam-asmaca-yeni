@@ -13,6 +13,6 @@
     <color name="tahta_kahve_var">#773801</color>
     <color name="tahta_kahve">#7f3b00</color>
     <color name="koyu_tahta_yesili">#033F23</color>
-
-
+    <color name="tus_arkaplan_pasif">#BDBDBD</color>
+    <color name="tus_yazi_pasif">#616161</color>
 </resources>

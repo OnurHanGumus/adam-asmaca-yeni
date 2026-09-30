@@ -8,19 +8,21 @@ import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.splashscreen.SplashScreen;
 
-import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.button.MaterialButton;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -35,11 +37,23 @@ public class MainActivity extends AppCompatActivity {
     private static final Locale LOCALE_TR = new Locale("tr", "TR");
     private static final int MAX_HATA_TOLERANSI = 6;
 
-    private TextInputEditText harfTahminTxt;
-    private TextInputEditText kelimeTahminTxt;
+    private static final String[][] KEYBOARD_TR = {
+            {"E", "R", "T", "Y", "U", "I", "O", "P", "Ğ", "Ü"},
+            {"A", "S", "D", "F", "G", "H", "J", "K", "L", "Ş", "İ"},
+            {"Z", "C", "V", "B", "N", "M", "Ö", "Ç"}
+    };
+
+    private static final String[][] KEYBOARD_EN = {
+            {"Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"},
+            {"A", "S", "D", "F", "G", "H", "J", "K", "L"},
+            {"Z", "X", "C", "V", "B", "N", "M"}
+    };
+
     private TextView kelimeTxt;
     private TextView yanlisHarflerTxt;
     private ImageView adamImg;
+    private LinearLayout keyboardLayout;
+    private final List<MaterialButton> keyboardButtons = new ArrayList<>();
 
     private String ayrac;
     private String bulunacakKelime = "";
@@ -86,19 +100,18 @@ public class MainActivity extends AppCompatActivity {
 
     public void programaDevamEt() {
         setContentDescriptions();
-        harfTahminTxt.setEnabled(true);
-        kelimeTahminTxt.setEnabled(true);
+        resetKeyboard();
         oyuncuyaGosterilecekMetniGizle();
         oyuncuyaGosterilecekMetniOyuncuyaGoster();
     }
 
     private void initComponents() {
         yanlisHarfler = new ArrayList<>();
-        harfTahminTxt = findViewById(R.id.harfTahminTxt);
         kelimeTxt = findViewById(R.id.kelimeTxt);
-        kelimeTahminTxt = findViewById(R.id.kelimeTahminTxt);
         adamImg = findViewById(R.id.adamImg);
         yanlisHarflerTxt = findViewById(R.id.yanlisHarfler);
+        keyboardLayout = findViewById(R.id.keyboardLayout);
+        setupKeyboard();
     }
 
     private void initComponentsFirebase() {
@@ -112,42 +125,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void registerEventHandlers() {
-        harfTahminTxt.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (count == 0 || harfTahminTxt.getText() == null) {
-                    return;
-                }
-                bulunacakKelimeGirilenHarfeSahipMi(harfTahminTxt.getText().toString());
-                bilindiMi();
-                harfTahminTxt.setText("");
-                oyuncuyaGosterilecekMetniOyuncuyaGoster();
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        });
-
-        kelimeTahminTxt.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                girilenKelimeDogruMu();
-                oyuncuyaGosterilecekMetniOyuncuyaGoster();
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        });
     }
 
     public void bulunacakKelimeyiUret() {
@@ -160,9 +137,99 @@ public class MainActivity extends AppCompatActivity {
 
         Random random = new Random();
         int index = random.nextInt(81);
-        harfTahminTxt.setEnabled(false);
-        kelimeTahminTxt.setEnabled(false);
+        setKeyboardEnabled(false);
         firebaseUzerindenRandomDegerIleKelimeAl(index);
+    }
+
+    private void setupKeyboard() {
+        if (keyboardLayout == null) {
+            return;
+        }
+        keyboardLayout.removeAllViews();
+        keyboardButtons.clear();
+
+        boolean isEn = "en".equals(LocaleHelper.getLanguage(this));
+        String[][] layout = isEn ? KEYBOARD_EN : KEYBOARD_TR;
+        int totalCols = 0;
+        for (String[] row : layout) {
+            if (row.length > totalCols) {
+                totalCols = row.length;
+            }
+        }
+        int btnHeight = dpToPx(42);
+        int marginH = dpToPx(1.5f);
+
+        for (String[] row : layout) {
+            LinearLayout rowLayout = new LinearLayout(this);
+            rowLayout.setOrientation(LinearLayout.HORIZONTAL);
+            rowLayout.setGravity(Gravity.CENTER);
+            rowLayout.setWeightSum(totalCols);
+
+            LinearLayout.LayoutParams rowParams = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+            );
+            rowParams.bottomMargin = dpToPx(4);
+            rowLayout.setLayoutParams(rowParams);
+
+            float spacerWeight = (totalCols - row.length) / 2.0f;
+            if (spacerWeight > 0) {
+                View leftSpacer = new View(this);
+                leftSpacer.setLayoutParams(new LinearLayout.LayoutParams(0, btnHeight, spacerWeight));
+                rowLayout.addView(leftSpacer);
+            }
+
+            for (String letter : row) {
+                MaterialButton btn = (MaterialButton) getLayoutInflater().inflate(R.layout.keyboard_key, rowLayout, false);
+                btn.setText(letter);
+                if (!isEn) {
+                    btn.setTextSize(TypedValue.COMPLEX_UNIT_SP, 13);
+                }
+                LinearLayout.LayoutParams btnParams = new LinearLayout.LayoutParams(
+                        0,
+                        btnHeight,
+                        1.0f
+                );
+                btnParams.leftMargin = marginH;
+                btnParams.rightMargin = marginH;
+                btn.setLayoutParams(btnParams);
+
+                btn.setOnClickListener(v -> onLetterClicked(letter, btn));
+                keyboardButtons.add(btn);
+                rowLayout.addView(btn);
+            }
+
+            if (spacerWeight > 0) {
+                View rightSpacer = new View(this);
+                rightSpacer.setLayoutParams(new LinearLayout.LayoutParams(0, btnHeight, spacerWeight));
+                rowLayout.addView(rightSpacer);
+            }
+
+            keyboardLayout.addView(rowLayout);
+        }
+    }
+
+    private void onLetterClicked(String letter, MaterialButton btn) {
+        btn.setEnabled(false);
+        bulunacakKelimeGirilenHarfeSahipMi(letter);
+        bilindiMi();
+        oyuncuyaGosterilecekMetniOyuncuyaGoster();
+    }
+
+    private void resetKeyboard() {
+        for (MaterialButton btn : keyboardButtons) {
+            btn.setEnabled(true);
+        }
+    }
+
+    private void setKeyboardEnabled(boolean enabled) {
+        for (MaterialButton btn : keyboardButtons) {
+            btn.setEnabled(enabled);
+        }
+    }
+
+    private int dpToPx(float dp) {
+        return (int) (dp * getResources().getDisplayMetrics().density + 0.5f);
     }
 
     public void firebaseUzerindenRandomDegerIleKelimeAl(int random) {
@@ -236,10 +303,25 @@ public class MainActivity extends AppCompatActivity {
 
         char harf = girilenHarf.charAt(0);
         boolean harfBulundu = false;
+        boolean isEn = "en".equals(LocaleHelper.getLanguage(this));
 
         for (int i = 0; i < bulunacakKelime.length(); i++) {
-            if (bulunacakKelime.charAt(i) == harf) {
-                oyuncuyaGosterilecekMetin.replace(i * 2, i * 2 + 1, String.valueOf(harf));
+            char target = bulunacakKelime.charAt(i);
+            boolean eslesti = (target == harf);
+
+            if (!eslesti && isEn) {
+                if ((harf == 'i' && target == 'ı') ||
+                    (harf == 'c' && target == 'ç') ||
+                    (harf == 'g' && target == 'ğ') ||
+                    (harf == 'o' && target == 'ö') ||
+                    (harf == 's' && target == 'ş') ||
+                    (harf == 'u' && target == 'ü')) {
+                    eslesti = true;
+                }
+            }
+
+            if (eslesti) {
+                oyuncuyaGosterilecekMetin.replace(i * 2, i * 2 + 1, String.valueOf(target));
                 harfBulundu = true;
             }
         }
@@ -253,18 +335,8 @@ public class MainActivity extends AppCompatActivity {
         if (girilenHarf == null || girilenHarf.isEmpty()) {
             return "";
         }
-        return girilenHarf.toLowerCase(LOCALE_TR);
-    }
-
-    public void girilenKelimeDogruMu() {
-        String girilen = kelimeTahminTxt.getText() != null ? kelimeTahminTxt.getText().toString() : "";
-        if (!girilen.isEmpty() && girilen.equalsIgnoreCase(bulunacakKelime)) {
-            for (int i = 0; i < bulunacakKelime.length(); i++) {
-                char harf = bulunacakKelime.charAt(i);
-                oyuncuyaGosterilecekMetin.replace(i * 2, i * 2 + 1, String.valueOf(harf));
-            }
-            bilindi();
-        }
+        Locale locale = "en".equals(LocaleHelper.getLanguage(this)) ? Locale.ENGLISH : LOCALE_TR;
+        return girilenHarf.toLowerCase(locale);
     }
 
     public void yanlisHarf(String girilenHarf) {
@@ -303,7 +375,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void bilindi() {
-        kelimeTahminTxt.setText("");
         puaniGuncelle(5);
         sonrakiSeviye();
     }
