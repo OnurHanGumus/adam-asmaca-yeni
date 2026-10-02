@@ -15,10 +15,15 @@
 
         <activity
             android:name=".SonucActivity"
-            android:exported="true" />
+            android:exported="false" />
 
         <activity
             android:name=".MainActivity"
+            android:exported="false"
+            android:parentActivityName=".MainMenuActivity" />
+
+        <activity
+            android:name=".MainMenuActivity"
             android:exported="true"
             android:theme="@style/AppTheme.Launcher">
             <intent-filter>

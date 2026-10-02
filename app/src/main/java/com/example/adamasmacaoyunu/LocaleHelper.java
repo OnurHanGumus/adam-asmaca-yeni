@@ -3,8 +3,8 @@ package com.example.adamasmacaoyunu;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.os.Build;
+import android.os.LocaleList;
 
 import java.util.Locale;
 
@@ -15,7 +15,7 @@ public class LocaleHelper {
 
     public static Context onAttach(Context context) {
         String lang = getLanguage(context);
-        return setLocale(context, lang);
+        return updateResources(context, lang);
     }
 
     public static String getLanguage(Context context) {
@@ -30,25 +30,25 @@ public class LocaleHelper {
 
     private static void persist(Context context, String language) {
         SharedPreferences preferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
-        preferences.edit().putString(KEY_LANGUAGE, language).apply();
+        preferences.edit().putString(KEY_LANGUAGE, language).commit();
     }
 
-    @SuppressWarnings("deprecation")
-    private static Context updateResources(Context context, String language) {
+    public static Context updateResources(Context context, String language) {
         Locale locale = new Locale(language);
         Locale.setDefault(locale);
 
-        Resources resources = context.getResources();
-        Configuration configuration = new Configuration(resources.getConfiguration());
-
+        Configuration configuration = new Configuration(context.getResources().getConfiguration());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            configuration.setLocale(locale);
-            resources.updateConfiguration(configuration, resources.getDisplayMetrics());
-            return context.createConfigurationContext(configuration);
+            LocaleList localeList = new LocaleList(locale);
+            LocaleList.setDefault(localeList);
+            configuration.setLocales(localeList);
+            configuration.setLayoutDirection(locale);
         } else {
             configuration.locale = locale;
-            resources.updateConfiguration(configuration, resources.getDisplayMetrics());
-            return context;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                configuration.setLayoutDirection(locale);
+            }
         }
+        return context.createConfigurationContext(configuration);
     }
 }

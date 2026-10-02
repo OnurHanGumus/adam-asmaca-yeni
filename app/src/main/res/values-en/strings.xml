@@ -16,7 +16,20 @@
     <string name="bulunmayan_harfler_desc">Letters not in word %1$s</string>
     <string name="mesaj_yuksek_puan">High Score!</string>
     <string name="mesaj_yuksek_degil">Your Score.\nHigh Score: %1$d</string>
-    <string name="menu_dil_secimi">Dil / Language</string>
+    <string name="menu_dil_secimi">Language / Dil</string>
     <string name="dil_turkce">Türkçe</string>
     <string name="dil_ingilizce">English</string>
+    <string name="kategori_sec">Category</string>
+    <string name="kategori_format">Category: %1$s</string>
+    <string name="ipucu_format">💡 Hint: %1$s</string>
+    <string name="kategori_hepsi">All Categories (Mixed)</string>
+    <string name="kat_body_parts">Body Parts</string>
+    <string name="kat_electronic_devices">Electronic Devices</string>
+    <string name="kat_countries">Countries</string>
+    <string name="kat_animals">Animals</string>
+    <string name="kat_fruits_vegetables">Fruits &amp; Vegetables</string>
+    <string name="oyna">Play Game</string>
+    <string name="dil_format">Language: %1$s</string>
+    <string name="en_yuksek_puan_format">🏆 High Score: %1$d</string>
+    <string name="ana_menu">Main Menu</string>
 </resources>

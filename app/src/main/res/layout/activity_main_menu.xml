@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Theme.AdamAsmacaOyunu"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="20dp"
+    tools:context=".MainMenuActivity">
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/appTitleTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/app_name"
+        android:textColor="@color/tahta_kahve"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/enYuksekPuanTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:textColor="@color/tahta_yesili"
+        android:textSize="17sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/appTitleTxt"
+        tools:text="🏆 En Yüksek Puan: 80" />
+
+    <ImageView
+        android:id="@+id/adamOzgurImg"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/sonuc_resmi_desc"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toTopOf="@id/btnOyna"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/enYuksekPuanTxt"
+        app:srcCompat="@drawable/adam_ozgur" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnOyna"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:paddingVertical="14dp"
+        android:text="@string/oyna"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:backgroundTint="@color/tahta_yesili"
+        app:cornerRadius="12dp"
+        app:layout_constraintBottom_toTopOf="@id/btnKategori"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnKategori"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:paddingVertical="12dp"
+        android:textColor="@color/tahta_kahve"
+        android:textSize="15sp"
+        app:cornerRadius="10dp"
+        app:layout_constraintBottom_toTopOf="@id/btnDil"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:strokeColor="@color/tahta_kahve"
+        tools:text="Kategori: Tüm Kategoriler (Karışık)" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnDil"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:paddingVertical="12dp"
+        android:textColor="@color/tahta_kahve"
+        android:textSize="15sp"
+        app:cornerRadius="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:strokeColor="@color/tahta_kahve"
+        tools:text="Dil: Türkçe" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

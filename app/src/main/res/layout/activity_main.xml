@@ -12,10 +12,24 @@
     tools:context=".MainActivity">
 
     <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/kategoriTxt"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textAlignment="center"
+        android:textColor="@color/tahta_kahve"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Kategori: Hayvanlar" />
+
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/kelimeTxt"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
         android:gravity="center"
         android:letterSpacing="0.08"
         android:text="@string/kelime_getiriliyor"
@@ -25,13 +39,13 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/kategoriTxt" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/yanlisHarfler"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
         android:gravity="center"
         android:hint="@string/yanlis_harfler_hint"
         android:textColor="@color/tahta_kahve"
@@ -41,12 +55,28 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/kelimeTxt" />
 
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/ipucuTxt"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:gravity="center"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:textAlignment="center"
+        android:textColor="@color/tahta_kahve"
+        android:textSize="13sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/yanlisHarfler"
+        tools:text="💡 İpucu: Miyavlayan evcil hayvan." />
+
     <ImageView
         android:id="@+id/adamImg"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
         android:adjustViewBounds="true"
         android:contentDescription="@string/adam_resmi_desc"
         android:scaleType="fitCenter"
@@ -54,7 +84,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight_max="160dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/yanlisHarfler"
+        app:layout_constraintTop_toBottomOf="@id/ipucuTxt"
         app:srcCompat="@drawable/adam0" />
 
     <LinearLayout

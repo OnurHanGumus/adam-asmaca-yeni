@@ -2,6 +2,7 @@ package com.example.adamasmacaoyunu;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
@@ -11,7 +12,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -20,10 +20,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.splashscreen.SplashScreen;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -49,14 +49,30 @@ public class MainActivity extends AppCompatActivity {
             {"Z", "X", "C", "V", "B", "N", "M"}
     };
 
+    private static final String PREF_NAME = "ayarlar";
+    private static final String KEY_CATEGORY = "secilen_kategori";
+
+    private static final String[] CATEGORY_KEYS = {
+            "all",
+            "body_parts",
+            "electronic_devices",
+            "countries",
+            "animals",
+            "fruits_vegetables"
+    };
+
     private TextView kelimeTxt;
     private TextView yanlisHarflerTxt;
+    private TextView kategoriTxt;
+    private TextView ipucuTxt;
     private ImageView adamImg;
     private LinearLayout keyboardLayout;
     private final List<MaterialButton> keyboardButtons = new ArrayList<>();
 
     private String ayrac;
     private String bulunacakKelime = "";
+    private String ipucu = "";
+    private String aktifKategori = "all";
     private StringBuilder oyuncuyaGosterilecekMetin;
 
     private int mevcutHata = 0;
@@ -81,10 +97,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    public void applyOverrideConfiguration(Configuration overrideConfiguration) {
+        if (overrideConfiguration != null) {
+            int uiMode = overrideConfiguration.uiMode;
+            overrideConfiguration.setTo(getBaseContext().getResources().getConfiguration());
+            overrideConfiguration.uiMode = uiMode;
+        }
+        super.applyOverrideConfiguration(overrideConfiguration);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
-        SplashScreen.installSplashScreen(this);
         super.onCreate(savedInstanceState);
         FirebaseApp.initializeApp(this);
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
         setContentView(R.layout.activity_main);
         initComponents();
@@ -110,7 +139,10 @@ public class MainActivity extends AppCompatActivity {
         kelimeTxt = findViewById(R.id.kelimeTxt);
         adamImg = findViewById(R.id.adamImg);
         yanlisHarflerTxt = findViewById(R.id.yanlisHarfler);
+        kategoriTxt = findViewById(R.id.kategoriTxt);
+        ipucuTxt = findViewById(R.id.ipucuTxt);
         keyboardLayout = findViewById(R.id.keyboardLayout);
+        aktifKategori = getSharedPreferences(PREF_NAME, MODE_PRIVATE).getString(KEY_CATEGORY, "all");
         setupKeyboard();
     }
 
@@ -121,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
             Log.w("firebase", "Persistence already enabled or initialization issue", e);
         }
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        myRef = database.getReference("0");
+        myRef = database.getReference("words");
     }
 
     private void registerEventHandlers() {
@@ -129,16 +161,25 @@ public class MainActivity extends AppCompatActivity {
 
     public void bulunacakKelimeyiUret() {
         if (!isNetworkAvailable()) {
-            bulunacakKelime = getYedekKelime();
+            kullanYedekKelime();
             Toast.makeText(MainActivity.this, getString(R.string.baglanti_kurulamadi), Toast.LENGTH_SHORT).show();
             programaDevamEt();
             return;
         }
 
+        String categoryToFetch;
+        if ("all".equals(aktifKategori)) {
+            Random rand = new Random();
+            int catIndex = 1 + rand.nextInt(CATEGORY_KEYS.length - 1);
+            categoryToFetch = CATEGORY_KEYS[catIndex];
+        } else {
+            categoryToFetch = aktifKategori;
+        }
+
         Random random = new Random();
-        int index = random.nextInt(81);
+        int index = random.nextInt(10);
         setKeyboardEnabled(false);
-        firebaseUzerindenRandomDegerIleKelimeAl(index);
+        firebaseUzerindenKelimeAl(categoryToFetch, index);
     }
 
     private void setupKeyboard() {
@@ -232,19 +273,27 @@ public class MainActivity extends AppCompatActivity {
         return (int) (dp * getResources().getDisplayMetrics().density + 0.5f);
     }
 
-    public void firebaseUzerindenRandomDegerIleKelimeAl(int random) {
+    public void firebaseUzerindenKelimeAl(String categoryKey, int index) {
         if (!isNetworkAvailable()) {
-            bulunacakKelime = getYedekKelime();
+            kullanYedekKelime();
             Toast.makeText(MainActivity.this, getString(R.string.baglanti_kurulamadi), Toast.LENGTH_SHORT).show();
             programaDevamEt();
             return;
         }
 
-        myRef.child(String.valueOf(random)).get().addOnCompleteListener(task -> {
-            if (task.isSuccessful() && task.getResult() != null && task.getResult().exists() && task.getResult().getValue() != null) {
-                String kelime = String.valueOf(task.getResult().getValue()).trim().toLowerCase(LOCALE_TR);
-                if (!kelime.isEmpty() && !kelime.equals("null")) {
-                    bulunacakKelime = kelime;
+        String langCode = "en".equals(LocaleHelper.getLanguage(this)) ? "en" : "tr";
+        Locale locale = "en".equals(langCode) ? Locale.ENGLISH : LOCALE_TR;
+
+        myRef.child(categoryKey).child(String.valueOf(index)).child(langCode).get().addOnCompleteListener(task -> {
+            if (task.isSuccessful() && task.getResult() != null && task.getResult().exists()) {
+                DataSnapshot snapshot = task.getResult();
+                String word = snapshot.child("word").getValue(String.class);
+                String hint = snapshot.child("hint").getValue(String.class);
+
+                if (word != null && !word.trim().isEmpty()) {
+                    bulunacakKelime = word.trim().toLowerCase(locale);
+                    ipucu = (hint != null) ? hint : "";
+                    guncelleKategoriVeIpucuUI(categoryKey, ipucu);
                     Log.d("firebase", "Kelime başarıyla alındı: " + bulunacakKelime);
                     programaDevamEt();
                     return;
@@ -252,7 +301,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             Log.e("firebase", "Kelime alınamadı veya geçersiz veri döndü", task.getException());
-            bulunacakKelime = getYedekKelime();
+            kullanYedekKelime();
             Toast.makeText(MainActivity.this, getString(R.string.baglanti_kurulamadi), Toast.LENGTH_SHORT).show();
             programaDevamEt();
         });
@@ -276,16 +325,59 @@ public class MainActivity extends AppCompatActivity {
         return false;
     }
 
-    private String getYedekKelime() {
-        String[] yedekKelimeler = {"ankara", "istanbul", "izmir", "bursa", "antalya", "trabzon", "adana", "konya", "eskisehir"};
-        Random random = new Random();
-        return yedekKelimeler[random.nextInt(yedekKelimeler.length)];
+    private void kullanYedekKelime() {
+        boolean isEn = "en".equals(LocaleHelper.getLanguage(this));
+        if (isEn) {
+            bulunacakKelime = "apple";
+            ipucu = "A round fruit with sweet red or green skin.";
+            guncelleKategoriVeIpucuUI("fruits_vegetables", ipucu);
+        } else {
+            bulunacakKelime = "elma";
+            ipucu = "Kırmızı veya yeşil renkte, tatlı ve sulu meyve.";
+            guncelleKategoriVeIpucuUI("fruits_vegetables", ipucu);
+        }
+    }
+
+    private void guncelleKategoriVeIpucuUI(String categoryKey, String hint) {
+        if (kategoriTxt != null) {
+            kategoriTxt.setText(getString(R.string.kategori_format, getCategoryDisplayName(categoryKey)));
+        }
+        if (ipucuTxt != null) {
+            if (hint != null && !hint.trim().isEmpty()) {
+                ipucuTxt.setText(getString(R.string.ipucu_format, hint));
+                ipucuTxt.setVisibility(View.VISIBLE);
+            } else {
+                ipucuTxt.setVisibility(View.GONE);
+            }
+        }
+    }
+
+    private String getCategoryDisplayName(String categoryKey) {
+        switch (categoryKey) {
+            case "body_parts":
+                return getString(R.string.kat_body_parts);
+            case "electronic_devices":
+                return getString(R.string.kat_electronic_devices);
+            case "countries":
+                return getString(R.string.kat_countries);
+            case "animals":
+                return getString(R.string.kat_animals);
+            case "fruits_vegetables":
+                return getString(R.string.kat_fruits_vegetables);
+            default:
+                return getString(R.string.kategori_hepsi);
+        }
     }
 
     public void oyuncuyaGosterilecekMetniGizle() {
         oyuncuyaGosterilecekMetin.setLength(0);
         for (int i = 0; i < bulunacakKelime.length(); i++) {
-            oyuncuyaGosterilecekMetin.append(ayrac).append(" ");
+            char c = bulunacakKelime.charAt(i);
+            if (c == ' ') {
+                oyuncuyaGosterilecekMetin.append("  ");
+            } else {
+                oyuncuyaGosterilecekMetin.append(ayrac).append(" ");
+            }
         }
     }
 
@@ -400,6 +492,7 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("puan", puan);
         intent.putExtra("bulunacakKelime", bulunacakKelime);
         startActivity(intent);
+        finish();
     }
 
     public void setContentDescriptions() {
@@ -408,26 +501,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_menu, menu);
-        return true;
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_lang_tr) {
-            diliDegistir("tr");
-            return true;
-        } else if (id == R.id.action_lang_en) {
-            diliDegistir("en");
+        if (item.getItemId() == android.R.id.home) {
+            finish();
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    private void diliDegistir(String languageCode) {
-        LocaleHelper.setLocale(this, languageCode);
-        recreate();
     }
 }

@@ -3,6 +3,7 @@ package com.example.adamasmacaoyunu;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.VibrationEffect;
@@ -26,6 +27,16 @@ public class SonucActivity extends AppCompatActivity {
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(LocaleHelper.onAttach(newBase));
+    }
+
+    @Override
+    public void applyOverrideConfiguration(Configuration overrideConfiguration) {
+        if (overrideConfiguration != null) {
+            int uiMode = overrideConfiguration.uiMode;
+            overrideConfiguration.setTo(getBaseContext().getResources().getConfiguration());
+            overrideConfiguration.uiMode = uiMode;
+        }
+        super.applyOverrideConfiguration(overrideConfiguration);
     }
 
     @Override
@@ -59,9 +70,10 @@ public class SonucActivity extends AppCompatActivity {
         tekrarOynaBtn.setOnClickListener(v -> {
             Intent intent = new Intent(SonucActivity.this, MainActivity.class);
             startActivity(intent);
+            finish();
         });
 
-        cikisBtn.setOnClickListener(v -> onBackPressed());
+        cikisBtn.setOnClickListener(v -> anaMenuyeDon());
     }
 
     private void degerleriAyarla() {
@@ -88,8 +100,15 @@ public class SonucActivity extends AppCompatActivity {
         }
     }
 
+    private void anaMenuyeDon() {
+        Intent intent = new Intent(SonucActivity.this, MainMenuActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        startActivity(intent);
+        finish();
+    }
+
     @Override
     public void onBackPressed() {
-        moveTaskToBack(true);
+        anaMenuyeDon();
     }
 }
