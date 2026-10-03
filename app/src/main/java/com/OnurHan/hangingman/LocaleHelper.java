@@ -1,4 +1,4 @@
-package com.example.adamasmacaoyunu;
+package com.OnurHan.hangingman;
 
 import android.content.Context;
 import android.content.SharedPreferences;

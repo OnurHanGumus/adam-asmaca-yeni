@@ -1,4 +1,4 @@
-package com.example.adamasmacaoyunu;
+package com.OnurHan.hangingman;
 
 import org.junit.Test;
 
