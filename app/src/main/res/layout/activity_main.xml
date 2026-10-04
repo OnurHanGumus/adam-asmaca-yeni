@@ -6,10 +6,60 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingStart="8dp"
-    android:paddingTop="12dp"
+    android:paddingTop="10dp"
     android:paddingEnd="8dp"
-    android:paddingBottom="8dp"
+    android:paddingBottom="6dp"
     tools:context=".MainActivity">
+
+    <!-- Top Bar with Mode, Level, Lives, Coins -->
+    <LinearLayout
+        android:id="@+id/topBarLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="4dp"
+        android:paddingBottom="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/modVeSeviyeTxt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@color/tahta_kahve"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            tools:text="Seviye 1" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/gameCanTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/badge_bg"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="3dp"
+            android:textColor="@color/tahta_kahve"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            tools:text="❤️ 3/3" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/gameCoinTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/badge_bg"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="3dp"
+            android:textColor="@color/tahta_kahve"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            tools:text="🪙 50" />
+
+    </LinearLayout>
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/kategoriTxt"
@@ -18,18 +68,18 @@
         android:gravity="center"
         android:textAlignment="center"
         android:textColor="@color/tahta_kahve"
-        android:textSize="14sp"
+        android:textSize="13sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/topBarLayout"
         tools:text="Kategori: Hayvanlar" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/kelimeTxt"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="2dp"
         android:gravity="center"
         android:letterSpacing="0.08"
         android:text="@string/kelime_getiriliyor"
@@ -45,30 +95,78 @@
         android:id="@+id/yanlisHarfler"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="2dp"
         android:gravity="center"
         android:hint="@string/yanlis_harfler_hint"
         android:textColor="@color/tahta_kahve"
         android:textColorHint="@color/kahve"
-        android:textSize="@dimen/kelimeTxtSize"
+        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/kelimeTxt" />
+
+    <!-- Assistance Buttons: Reveal Hint & Reveal Random Letter -->
+    <LinearLayout
+        android:id="@+id/assistanceLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/yanlisHarfler">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnIpucuAl"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:layout_marginEnd="8dp"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="0dp"
+            android:textColor="@color/tahta_kahve"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:cornerRadius="18dp"
+            app:strokeColor="@color/tahta_kahve"
+            tools:text="💡 İpucu (15)" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnHarfAc"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="0dp"
+            android:textColor="@color/tahta_kahve"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:cornerRadius="18dp"
+            app:strokeColor="@color/tahta_kahve"
+            tools:text="🔍 Harf Aç (10)" />
+
+    </LinearLayout>
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/ipucuTxt"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="2dp"
         android:gravity="center"
         android:paddingStart="12dp"
         android:paddingEnd="12dp"
         android:textAlignment="center"
         android:textColor="@color/tahta_kahve"
-        android:textSize="13sp"
+        android:textSize="12sp"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/yanlisHarfler"
+        app:layout_constraintTop_toBottomOf="@id/assistanceLayout"
         tools:text="💡 İpucu: Miyavlayan evcil hayvan." />
 
     <ImageView
@@ -82,7 +180,7 @@
         android:scaleType="fitCenter"
         app:layout_constraintBottom_toTopOf="@id/keyboardLayout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHeight_max="160dp"
+        app:layout_constraintHeight_max="150dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/ipucuTxt"
         app:srcCompat="@drawable/adam0" />
@@ -91,7 +189,7 @@
         android:id="@+id/keyboardLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="6dp"
+        android:layout_marginBottom="4dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

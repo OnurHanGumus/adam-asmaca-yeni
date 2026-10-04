@@ -12,14 +12,52 @@
         android:id="@+id/appTitleTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="8dp"
         android:text="@string/app_name"
         android:textColor="@color/tahta_kahve"
-        android:textSize="30sp"
+        android:textSize="28sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/statusHeaderLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/appTitleTxt">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/coinTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="12dp"
+            android:background="@drawable/badge_bg"
+            android:paddingHorizontal="14dp"
+            android:paddingVertical="5dp"
+            android:textColor="@color/tahta_kahve"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            tools:text="🪙 50" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/canTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/badge_bg"
+            android:paddingHorizontal="14dp"
+            android:paddingVertical="5dp"
+            android:textColor="@color/tahta_kahve"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            tools:text="❤️ 3/3" />
+
+    </LinearLayout>
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/enYuksekPuanTxt"
@@ -27,42 +65,59 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="6dp"
         android:textColor="@color/tahta_yesili"
-        android:textSize="17sp"
+        android:textSize="15sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/appTitleTxt"
+        app:layout_constraintTop_toBottomOf="@id/statusHeaderLayout"
         tools:text="🏆 En Yüksek Puan: 80" />
 
     <ImageView
         android:id="@+id/adamOzgurImg"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="12dp"
         android:adjustViewBounds="true"
         android:contentDescription="@string/sonuc_resmi_desc"
         android:scaleType="fitCenter"
-        app:layout_constraintBottom_toTopOf="@id/btnOyna"
+        app:layout_constraintBottom_toTopOf="@id/btnAnaOyun"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/enYuksekPuanTxt"
         app:srcCompat="@drawable/adam_ozgur" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnOyna"
+        android:id="@+id/btnAnaOyun"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp"
-        android:paddingVertical="14dp"
-        android:text="@string/oyna"
-        android:textSize="18sp"
+        android:layout_marginBottom="8dp"
+        android:paddingVertical="12dp"
+        android:textSize="16sp"
         android:textStyle="bold"
         app:backgroundTint="@color/tahta_yesili"
         app:cornerRadius="12dp"
+        app:layout_constraintBottom_toTopOf="@id/btnPratik"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="Ana Oyun (Seviye 1)" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnPratik"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:paddingVertical="10dp"
+        android:textColor="@color/tahta_kahve"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:cornerRadius="10dp"
         app:layout_constraintBottom_toTopOf="@id/btnKategori"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:strokeColor="@color/tahta_kahve"
+        tools:text="Pratik Modu" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnKategori"
@@ -70,9 +125,9 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:paddingVertical="12dp"
+        android:paddingVertical="10dp"
         android:textColor="@color/tahta_kahve"
-        android:textSize="15sp"
+        android:textSize="14sp"
         app:cornerRadius="10dp"
         app:layout_constraintBottom_toTopOf="@id/btnDil"
         app:layout_constraintEnd_toEndOf="parent"
@@ -85,10 +140,10 @@
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp"
-        android:paddingVertical="12dp"
+        android:layout_marginBottom="4dp"
+        android:paddingVertical="10dp"
         android:textColor="@color/tahta_kahve"
-        android:textSize="15sp"
+        android:textSize="14sp"
         app:cornerRadius="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
