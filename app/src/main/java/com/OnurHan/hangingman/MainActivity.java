@@ -116,7 +116,6 @@ public class MainActivity extends AppCompatActivity {
     private StringBuilder oyuncuyaGosterilecekMetin;
 
     private int mevcutHata = 0;
-    private int puan = 0;
 
     private int mevcutTur = 1;
     private int cozulenKelimeSayisi = 0;
@@ -182,7 +181,7 @@ public class MainActivity extends AppCompatActivity {
         ayrac = getResources().getString(R.string.ayrac);
         oyuncuyaGosterilecekMetin = new StringBuilder();
 
-        puaniGuncelle(0);
+        basligiGuncelle();
         guncelleCanVeAltinUI();
         bulunacakKelimeyiUret();
     }
@@ -761,22 +760,13 @@ public class MainActivity extends AppCompatActivity {
         }
         oyuncuyaGosterilecekMetniOyuncuyaGoster();
 
-        // Dinamik Puan Hesaplama
-        int harfSayisi = bulunacakKelime.replace(" ", "").length();
-        int tabanPuan = harfSayisi * 10;
-        int canBonusu = (MAX_HATA_TOLERANSI - mevcutHata) * 5;
         boolean kusursuz = (mevcutHata == 0);
-        int kusursuzBonus = kusursuz ? 25 : 0;
         if (kusursuz) {
             kusursuzKelimeSayisi++;
         }
 
         komboSerisi++;
-        int komboBonus = (komboSerisi > 1) ? (komboSerisi * 10) : 0;
-        int toplamKazanilan = tabanPuan + canBonusu + kusursuzBonus + komboBonus;
-
         cozulenKelimeSayisi++;
-        puaniGuncelle(toplamKazanilan);
 
         titretCiftDarbe();
 
@@ -786,11 +776,8 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, getString(R.string.seviye_zafer_mesaj, CurrencyManager.LEVEL_WIN_REWARD), Toast.LENGTH_SHORT).show();
         } else {
             String tebrikMesaji = kusursuz
-                    ? getString(R.string.tebrikler_kusursuz, toplamKazanilan)
-                    : getString(R.string.tebrikler_puan, toplamKazanilan);
-            if (komboSerisi > 1) {
-                tebrikMesaji += " • " + getString(R.string.kombo_ekstra, komboBonus);
-            }
+                    ? getString(R.string.tebrikler_kusursuz)
+                    : getString(R.string.tebrikler_dogru);
             Toast.makeText(this, tebrikMesaji, Toast.LENGTH_SHORT).show();
         }
 
@@ -802,12 +789,11 @@ public class MainActivity extends AppCompatActivity {
         sonucAktivitesineGec(true);
     }
 
-    public void puaniGuncelle(int eklenecekPuan) {
-        puan += eklenecekPuan;
+    public void basligiGuncelle() {
         if (gameMode == GameMode.MAIN_GAME) {
-            this.setTitle(getString(R.string.seviye_format, currentLevel) + " • " + getString(R.string.puan_format, puan));
+            this.setTitle(getString(R.string.seviye_format, currentLevel));
         } else {
-            this.setTitle(getString(R.string.pratik_modu_etiket) + " • " + getString(R.string.puan_format, puan));
+            this.setTitle(getString(R.string.pratik_modu_etiket));
         }
     }
 
@@ -815,7 +801,6 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(MainActivity.this, SonucActivity.class);
         intent.putExtra("gameMode", gameMode.name());
         intent.putExtra("kazandi", kazandi);
-        intent.putExtra("puan", puan);
         intent.putExtra("bulunacakKelime", bulunacakKelime);
         intent.putExtra("cozulenKelime", cozulenKelimeSayisi);
         intent.putExtra("hedefTur", HEDEF_TUR);

@@ -9,32 +9,18 @@
     tools:context=".SonucActivity">
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/puanTxt"
+        android:id="@+id/durumTxt"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:gravity="center"
-        android:textColor="@color/tahta_kahve"
-        android:textSize="@dimen/sonucEkraniPuanTxt"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="80" />
-
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/puanDurumuTxt"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:gravity="center"
         android:textColor="@color/tahta_kahve"
         android:textSize="@dimen/puanDurumuTxt"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/puanTxt"
-        tools:text="Yüksek Puan!" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="🎉 SEVİYE 1 GEÇİLDİ!" />
 
     <ImageView
         android:id="@+id/sonucResim"
@@ -48,7 +34,7 @@
         app:layout_constraintBottom_toTopOf="@id/bulunacakKelimeTxt"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/puanDurumuTxt"
+        app:layout_constraintTop_toBottomOf="@id/durumTxt"
         app:srcCompat="@drawable/adam0" />
 
     <com.google.android.material.textview.MaterialTextView

@@ -53,7 +53,6 @@ public class MainMenuActivity extends AppCompatActivity {
     private TextView appTitleTxt;
     private TextView coinTxt;
     private TextView canTxt;
-    private TextView enYuksekPuanTxt;
     private ImageView adamOzgurImg;
     private MaterialButton btnAnaOyun;
     private MaterialButton btnPratik;
@@ -118,7 +117,6 @@ public class MainMenuActivity extends AppCompatActivity {
         appTitleTxt = findViewById(R.id.appTitleTxt);
         coinTxt = findViewById(R.id.coinTxt);
         canTxt = findViewById(R.id.canTxt);
-        enYuksekPuanTxt = findViewById(R.id.enYuksekPuanTxt);
         adamOzgurImg = findViewById(R.id.adamOzgurImg);
         btnAnaOyun = findViewById(R.id.btnAnaOyun);
         btnPratik = findViewById(R.id.btnPratik);
@@ -191,14 +189,6 @@ public class MainMenuActivity extends AppCompatActivity {
         }
 
         guncelleCanVeAltinUI();
-
-        SharedPreferences verilerPref = getSharedPreferences("veriler", MODE_PRIVATE);
-        int yuksekPuan = verilerPref.getInt("yuksekPuan", 0);
-        if (enYuksekPuanTxt != null) {
-            enYuksekPuanTxt.setText(getString(R.string.en_yuksek_puan_format, yuksekPuan));
-        }
-
-        // guncelleCanVeAltinUI ve yuksek puan gosterimi yapildi
     }
 
     private void guncelleCanVeAltinUI() {

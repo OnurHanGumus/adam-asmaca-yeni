@@ -2,7 +2,6 @@ package com.OnurHan.hangingman;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,15 +18,13 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 public class SonucActivity extends AppCompatActivity {
 
-    public TextView puanTxt, puanDurumuTxt, bulunacakKelimeTxt;
+    public TextView durumTxt, bulunacakKelimeTxt;
     public Button tekrarOynaBtn, cikisBtn;
     private ImageView sonucResim;
     private Vibrator v;
-    private SharedPreferences sharedPreferences;
 
     private GameMode gameMode = GameMode.MAIN_GAME;
     private boolean kazandi;
-    private int puan;
     private int cozulenKelime;
     private int hedefTur;
     private int kusursuzSayisi;
@@ -67,13 +64,11 @@ public class SonucActivity extends AppCompatActivity {
 
     private void initComponents() {
         v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-        puanTxt = findViewById(R.id.puanTxt);
-        puanDurumuTxt = findViewById(R.id.puanDurumuTxt);
+        durumTxt = findViewById(R.id.durumTxt);
         bulunacakKelimeTxt = findViewById(R.id.bulunacakKelimeTxt);
         tekrarOynaBtn = findViewById(R.id.tektatOynaBtn);
         cikisBtn = findViewById(R.id.cikisBtn);
         sonucResim = findViewById(R.id.sonucResim);
-        sharedPreferences = getSharedPreferences("veriler", MODE_PRIVATE);
 
         Intent intent = getIntent();
         String modeExtra = intent.getStringExtra("gameMode");
@@ -86,7 +81,6 @@ public class SonucActivity extends AppCompatActivity {
         }
 
         kazandi = intent.getBooleanExtra("kazandi", false);
-        puan = intent.getIntExtra("puan", 0);
         cozulenKelime = intent.getIntExtra("cozulenKelime", 0);
         hedefTur = intent.getIntExtra("hedefTur", 1);
         kusursuzSayisi = intent.getIntExtra("kusursuzSayisi", 0);
@@ -150,24 +144,12 @@ public class SonucActivity extends AppCompatActivity {
     }
 
     private void degerleriAyarla() {
-        puanTxt.setText(String.valueOf(puan));
-        int enYuksekPuan = sharedPreferences.getInt("yuksekPuan", 0);
-        boolean yeniRekor = (puan > enYuksekPuan);
-
-        if (yeniRekor) {
-            sharedPreferences.edit().putInt("yuksekPuan", puan).apply();
-        }
-
         if (gameMode == GameMode.MAIN_GAME) {
             if (kazandi) {
                 sonucResim.setImageResource(R.drawable.adam_ozgur);
                 titresimZafer();
 
-                String durum = getString(R.string.seviye_zafer_baslik, seviye);
-                if (yeniRekor) {
-                    durum += "\n" + getString(R.string.en_yuksek_puan_bildirim);
-                }
-                puanDurumuTxt.setText(durum);
+                durumTxt.setText(getString(R.string.seviye_zafer_baslik, seviye));
 
                 String mesaj = getString(R.string.seviye_zafer_mesaj, kazanilanAltin);
                 if (bulunacakKelime != null && !bulunacakKelime.trim().isEmpty()) {
@@ -179,8 +161,7 @@ public class SonucActivity extends AppCompatActivity {
                 sonucResim.setImageResource(R.drawable.adam6);
                 titresim05Saniye();
 
-                String durum = getString(R.string.seviye_kayip_baslik, seviye);
-                puanDurumuTxt.setText(durum);
+                durumTxt.setText(getString(R.string.seviye_kayip_baslik, seviye));
 
                 // Main Game Mode retry: keep the word secret so retry is a real challenge
                 bulunacakKelimeTxt.setText(getString(R.string.seviye_kayip_mesaj, kalanCan));
@@ -192,11 +173,7 @@ public class SonucActivity extends AppCompatActivity {
                 sonucResim.setImageResource(R.drawable.adam_ozgur);
                 titresimZafer();
 
-                String durum = getString(R.string.pratik_zafer_baslik);
-                if (yeniRekor) {
-                    durum += "\n" + getString(R.string.en_yuksek_puan_bildirim);
-                }
-                puanDurumuTxt.setText(durum);
+                durumTxt.setText(getString(R.string.pratik_zafer_baslik));
 
                 String mesaj = getString(R.string.pratik_zafer_mesaj);
                 if (bulunacakKelime != null && !bulunacakKelime.trim().isEmpty()) {
@@ -207,8 +184,7 @@ public class SonucActivity extends AppCompatActivity {
                 sonucResim.setImageResource(R.drawable.adam6);
                 titresim05Saniye();
 
-                String durum = getString(R.string.pratik_kayip_baslik);
-                puanDurumuTxt.setText(durum);
+                durumTxt.setText(getString(R.string.pratik_kayip_baslik));
 
                 String mesaj = getString(R.string.pratik_kayip_mesaj);
                 if (bulunacakKelime != null && !bulunacakKelime.trim().isEmpty()) {

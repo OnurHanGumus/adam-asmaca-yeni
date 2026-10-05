@@ -44,8 +44,9 @@
     <string name="tur_format">Tur: %1$d/%2$d</string>
     <string name="tur_puan_format">Tur: %1$d/%2$d • Puan: %3$d</string>
     <string name="tur_kategori_format">Tur: %1$d/%2$d • %3$s</string>
-    <string name="tebrikler_puan">👏 Doğru! +%1$d Puan</string>
-    <string name="tebrikler_kusursuz">🌟 Kusursuz! +%1$d Puan</string>
+    <string name="tebrikler_dogru">👏 Doğru!</string>
+    <string name="tebrikler_puan">👏 Doğru!</string>
+    <string name="tebrikler_kusursuz">🌟 Kusursuz!</string>
     <string name="kombo_ekstra">🔥 Kombo Bonusu! +%1$d Puan</string>
     <string name="zafer_baslik">🎉 ZAFER! ADAM KURTARILDI!</string>
     <string name="zafer_mesaj">Tüm %1$d kelimeyi çözdün ve adamı kurtardın!</string>

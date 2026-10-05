@@ -44,8 +44,9 @@
     <string name="tur_format">Round: %1$d/%2$d</string>
     <string name="tur_puan_format">Round: %1$d/%2$d • Score: %3$d</string>
     <string name="tur_kategori_format">Round: %1$d/%2$d • %3$s</string>
-    <string name="tebrikler_puan">👏 Correct! +%1$d Points</string>
-    <string name="tebrikler_kusursuz">🌟 Flawless! +%1$d Points</string>
+    <string name="tebrikler_dogru">👏 Correct!</string>
+    <string name="tebrikler_puan">👏 Correct!</string>
+    <string name="tebrikler_kusursuz">🌟 Flawless!</string>
     <string name="kombo_ekstra">🔥 Combo Bonus! +%1$d Points</string>
     <string name="zafer_baslik">🎉 VICTORY! HANGMAN RESCUED!</string>
     <string name="zafer_mesaj">You solved all %1$d words and rescued the hangman!</string>

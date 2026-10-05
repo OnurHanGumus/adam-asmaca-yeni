@@ -72,19 +72,6 @@
 
     </LinearLayout>
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/enYuksekPuanTxt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
-        android:textColor="@color/tahta_yesili"
-        android:textSize="15sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/statusHeaderLayout"
-        tools:text="🏆 En Yüksek Puan: 80" />
-
     <ImageView
         android:id="@+id/adamOzgurImg"
         android:layout_width="0dp"
@@ -97,7 +84,7 @@
         app:layout_constraintBottom_toTopOf="@id/btnAnaOyun"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/enYuksekPuanTxt"
+        app:layout_constraintTop_toBottomOf="@id/statusHeaderLayout"
         app:srcCompat="@drawable/adam_ozgur" />
 
     <com.google.android.material.button.MaterialButton
