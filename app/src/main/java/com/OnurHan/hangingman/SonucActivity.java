@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -14,12 +15,14 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 public class SonucActivity extends AppCompatActivity {
 
     public TextView durumTxt, bulunacakKelimeTxt;
     public Button tekrarOynaBtn, cikisBtn;
+    public MaterialButton carkBonusBtn;
     private ImageView sonucResim;
     private Vibrator v;
 
@@ -68,6 +71,7 @@ public class SonucActivity extends AppCompatActivity {
         bulunacakKelimeTxt = findViewById(R.id.bulunacakKelimeTxt);
         tekrarOynaBtn = findViewById(R.id.tektatOynaBtn);
         cikisBtn = findViewById(R.id.cikisBtn);
+        carkBonusBtn = findViewById(R.id.carkBonusBtn);
         sonucResim = findViewById(R.id.sonucResim);
 
         Intent intent = getIntent();
@@ -93,6 +97,7 @@ public class SonucActivity extends AppCompatActivity {
     private void registerEventHandlers() {
         tekrarOynaBtn.setOnClickListener(v -> onTekrarOynaTiklandi());
         cikisBtn.setOnClickListener(v -> anaMenuyeDon());
+        carkBonusBtn.setOnClickListener(v -> showFortuneWheel());
     }
 
     private void onTekrarOynaTiklandi() {
@@ -157,7 +162,26 @@ public class SonucActivity extends AppCompatActivity {
                 }
                 bulunacakKelimeTxt.setText(mesaj);
                 tekrarOynaBtn.setText(R.string.sonraki_seviye);
+
+                // Check for every 5 levels fortune wheel milestone
+                if (seviye % 5 == 0) {
+                    if (ProgressionManager.isWheelAvailableForLevel(this, seviye)) {
+                        carkBonusBtn.setVisibility(View.VISIBLE);
+                        carkBonusBtn.setText(getString(R.string.cark_bonus_buton_format, seviye));
+                        carkBonusBtn.setEnabled(true);
+                        carkBonusBtn.postDelayed(this::showFortuneWheel, 500);
+                    } else if (ProgressionManager.getLastWheelSpunLevel(this) >= seviye) {
+                        carkBonusBtn.setVisibility(View.VISIBLE);
+                        carkBonusBtn.setText(R.string.cark_tamamlandi);
+                        carkBonusBtn.setEnabled(false);
+                    } else {
+                        carkBonusBtn.setVisibility(View.GONE);
+                    }
+                } else {
+                    carkBonusBtn.setVisibility(View.GONE);
+                }
             } else {
+                carkBonusBtn.setVisibility(View.GONE);
                 sonucResim.setImageResource(R.drawable.adam6);
                 titresim05Saniye();
 
@@ -168,6 +192,7 @@ public class SonucActivity extends AppCompatActivity {
                 tekrarOynaBtn.setText(R.string.tekrar_dene);
             }
         } else {
+            carkBonusBtn.setVisibility(View.GONE);
             // Practice Mode (1 word at a time)
             if (kazandi) {
                 sonucResim.setImageResource(R.drawable.adam_ozgur);
@@ -194,6 +219,22 @@ public class SonucActivity extends AppCompatActivity {
             }
             tekrarOynaBtn.setText(R.string.tekrar_oyna);
         }
+    }
+
+    private void showFortuneWheel() {
+        if (isFinishing()) return;
+        FortuneWheelDialog.show(this, seviye, wonCoins -> {
+            carkBonusBtn.setVisibility(View.VISIBLE);
+            carkBonusBtn.setText(getString(R.string.cark_odul_alindi_format, wonCoins));
+            carkBonusBtn.setEnabled(false);
+
+            String mesaj = getString(R.string.seviye_zafer_mesaj, kazanilanAltin)
+                    + "\n" + getString(R.string.cark_kazandin_format, wonCoins);
+            if (bulunacakKelime != null && !bulunacakKelime.trim().isEmpty()) {
+                mesaj += "\n" + getString(R.string.kelime_bilgi_format, bulunacakKelime.toUpperCase());
+            }
+            bulunacakKelimeTxt.setText(mesaj);
+        });
     }
 
     private void titresimZafer() {

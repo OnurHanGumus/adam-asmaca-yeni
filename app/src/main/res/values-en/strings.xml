@@ -98,4 +98,15 @@
     <string name="pratik_aciklama">Practice without limits and improve your vocabulary.</string>
     <string name="pratik_baslat">Start Practice</string>
     <string name="kategori_secimi_baslik">Category Selection</string>
+
+    <!-- Fortune Wheel -->
+    <string name="cark_baslik">Fortune Wheel</string>
+    <string name="cark_aciklama_format">Congratulations! Level %1$d cleared! Spin the wheel to win bonus coins!</string>
+    <string name="cark_cevir">Spin Wheel</string>
+    <string name="cark_cevriliyor">Spinning...</string>
+    <string name="cark_kazandin_format">🎉 Congratulations! You Won %1$d Coins!</string>
+    <string name="cark_bonus_buton_format">🎡 Level %1$d Bonus: Spin Wheel!</string>
+    <string name="cark_odul_alindi_format">✅ Fortune Wheel Claimed (+%1$d Coins)</string>
+    <string name="cark_tamamlandi">✅ Fortune Wheel Claimed</string>
+    <string name="topla">Collect</string>
 </resources>

@@ -81,4 +81,20 @@ public class ProgressionManager {
                 .remove(KEY_HINT_REVEALED)
                 .apply();
     }
+
+    private static final String KEY_LAST_WHEEL_SPUN_LEVEL = "son_cark_cevrilen_seviye";
+
+    public static int getLastWheelSpunLevel(Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        return prefs.getInt(KEY_LAST_WHEEL_SPUN_LEVEL, 0);
+    }
+
+    public static void setLastWheelSpunLevel(Context context, int level) {
+        SharedPreferences prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        prefs.edit().putInt(KEY_LAST_WHEEL_SPUN_LEVEL, level).apply();
+    }
+
+    public static boolean isWheelAvailableForLevel(Context context, int level) {
+        return (level > 0) && (level % 5 == 0) && (getLastWheelSpunLevel(context) < level);
+    }
 }

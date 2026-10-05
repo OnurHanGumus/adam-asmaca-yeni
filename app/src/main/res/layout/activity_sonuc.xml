@@ -46,10 +46,26 @@
         android:textColor="@color/tahta_kahve"
         android:textSize="@dimen/puanDurumuTxt"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@id/tektatOynaBtn"
+        app:layout_constraintBottom_toTopOf="@id/carkBonusBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         tools:text="Kahramanmaraş" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/carkBonusBtn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:paddingVertical="12dp"
+        android:text="@string/cark_cevir"
+        android:textSize="16sp"
+        android:visibility="gone"
+        app:backgroundTint="@color/tahta_kahve"
+        app:cornerRadius="8dp"
+        app:layout_constraintBottom_toTopOf="@id/tektatOynaBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:visibility="visible" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/tektatOynaBtn"

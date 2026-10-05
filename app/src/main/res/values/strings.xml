@@ -98,4 +98,15 @@
     <string name="pratik_aciklama">Can harcamadan sınırsız pratik yapın ve kelime dağarcığınızı geliştirin.</string>
     <string name="pratik_baslat">Pratiğe Başla</string>
     <string name="kategori_secimi_baslik">Kategori Seçimi</string>
+
+    <!-- Şans Çarkı -->
+    <string name="cark_baslik">Şans Çarkı</string>
+    <string name="cark_aciklama_format">Tebrikler! Seviye %1$d tamamlandı! Çarkı çevir ve bonus altınları kazan!</string>
+    <string name="cark_cevir">Çarkı Çevir</string>
+    <string name="cark_cevriliyor">Çark Dönüyor...</string>
+    <string name="cark_kazandin_format">🎉 Tebrikler! %1$d Altın Kazandın!</string>
+    <string name="cark_bonus_buton_format">🎡 Seviye %1$d Bonusu: Çarkı Çevir!</string>
+    <string name="cark_odul_alindi_format">✅ Şans Çarkı Tamamlandı (+%1$d Altın)</string>
+    <string name="cark_tamamlandi">✅ Şans Çarkı Tamamlandı</string>
+    <string name="topla">Topla</string>
 </resources>
