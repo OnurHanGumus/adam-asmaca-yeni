@@ -87,4 +87,14 @@
     <string name="seviye_kayip_baslik">💀 LEVEL %1$d FAILED!</string>
     <string name="seviye_kayip_mesaj">You lost 1 life! Remaining: %1$d/3\nYou will face the same word on your next attempt.</string>
     <string name="pratik_modu_etiket">Practice Mode</string>
+    <string name="titresim_acik">Vibration: On</string>
+    <string name="titresim_kapali">Vibration: Off</string>
+    <string name="ayarlar">Settings</string>
+    <string name="titresim">Vibration</string>
+    <string name="titresim_aciklama">Touch and in-game vibrations</string>
+    <string name="dil">Language</string>
+    <string name="dil_aciklama">Select game language</string>
+    <string name="pratik_aciklama">Practice without limits and improve your vocabulary.</string>
+    <string name="pratik_baslat">Start Practice</string>
+    <string name="kategori_secimi_baslik">Category Selection</string>
 </resources>

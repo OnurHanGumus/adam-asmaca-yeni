@@ -4,12 +4,20 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.splashscreen.SplashScreen;
@@ -49,8 +57,7 @@ public class MainMenuActivity extends AppCompatActivity {
     private ImageView adamOzgurImg;
     private MaterialButton btnAnaOyun;
     private MaterialButton btnPratik;
-    private MaterialButton btnKategori;
-    private MaterialButton btnDil;
+    private ImageButton btnAyarlar;
 
     private String aktifKategori = "all";
     private final Handler timerHandler = new Handler(Looper.getMainLooper());
@@ -115,8 +122,7 @@ public class MainMenuActivity extends AppCompatActivity {
         adamOzgurImg = findViewById(R.id.adamOzgurImg);
         btnAnaOyun = findViewById(R.id.btnAnaOyun);
         btnPratik = findViewById(R.id.btnPratik);
-        btnKategori = findViewById(R.id.btnKategori);
-        btnDil = findViewById(R.id.btnDil);
+        btnAyarlar = findViewById(R.id.btnAyarlar);
 
         aktifKategori = getSharedPreferences(PREF_NAME, MODE_PRIVATE).getString(KEY_CATEGORY, "all");
     }
@@ -124,15 +130,11 @@ public class MainMenuActivity extends AppCompatActivity {
     private void registerEventHandlers() {
         btnAnaOyun.setOnClickListener(v -> onAnaOyunTiklandi());
 
-        btnPratik.setOnClickListener(v -> {
-            Intent intent = new Intent(MainMenuActivity.this, MainActivity.class);
-            intent.putExtra(EXTRA_GAME_MODE, GameMode.PRACTICE.name());
-            startActivity(intent);
-        });
+        btnPratik.setOnClickListener(v -> pratikModuPaneliniGoster());
 
-        btnKategori.setOnClickListener(v -> kategoriSecimDiyaloguGoster());
-
-        btnDil.setOnClickListener(v -> dilSecimDiyaloguGoster());
+        if (btnAyarlar != null) {
+            btnAyarlar.setOnClickListener(v -> ayarlarPaneliniGoster());
+        }
     }
 
     private void onAnaOyunTiklandi() {
@@ -196,16 +198,7 @@ public class MainMenuActivity extends AppCompatActivity {
             enYuksekPuanTxt.setText(getString(R.string.en_yuksek_puan_format, yuksekPuan));
         }
 
-        aktifKategori = getSharedPreferences(PREF_NAME, MODE_PRIVATE).getString(KEY_CATEGORY, "all");
-        if (btnKategori != null) {
-            btnKategori.setText(getString(R.string.kategori_format, getCategoryDisplayName(aktifKategori)));
-        }
-
-        String lang = LocaleHelper.getLanguage(this);
-        String langDisplay = "en".equals(lang) ? getString(R.string.dil_ingilizce) : getString(R.string.dil_turkce);
-        if (btnDil != null) {
-            btnDil.setText(getString(R.string.dil_format, langDisplay));
-        }
+        // guncelleCanVeAltinUI ve yuksek puan gosterimi yapildi
     }
 
     private void guncelleCanVeAltinUI() {
@@ -261,7 +254,7 @@ public class MainMenuActivity extends AppCompatActivity {
         }
     }
 
-    private void kategoriSecimDiyaloguGoster() {
+    private void kategoriSecimDiyaloguGoster(Runnable onCategorySelected) {
         String[] categoryNames = new String[]{
                 getString(R.string.kategori_hepsi),
                 getString(R.string.kat_body_parts),
@@ -280,6 +273,7 @@ public class MainMenuActivity extends AppCompatActivity {
                 getString(R.string.kat_weather)
         };
 
+        aktifKategori = getSharedPreferences(PREF_NAME, MODE_PRIVATE).getString(KEY_CATEGORY, "all");
         int checkedItem = 0;
         for (int i = 0; i < CATEGORY_KEYS.length; i++) {
             if (CATEGORY_KEYS[i].equals(aktifKategori)) {
@@ -297,7 +291,9 @@ public class MainMenuActivity extends AppCompatActivity {
                             .putString(KEY_CATEGORY, aktifKategori)
                             .apply();
                     dialog.dismiss();
-                    guncelleUI();
+                    if (onCategorySelected != null) {
+                        onCategorySelected.run();
+                    }
                 })
                 .setNegativeButton(android.R.string.cancel, null)
                 .show();
@@ -322,5 +318,94 @@ public class MainMenuActivity extends AppCompatActivity {
                 })
                 .setNegativeButton(android.R.string.cancel, null)
                 .show();
+    }
+
+    private void ayarlarPaneliniGoster() {
+        BottomSheetDialog dialog = new BottomSheetDialog(this);
+        View sheetView = getLayoutInflater().inflate(R.layout.dialog_settings, null);
+        dialog.setContentView(sheetView);
+
+        SwitchMaterial switchTitresim = sheetView.findViewById(R.id.switchTitresim);
+        View layoutDilAyari = sheetView.findViewById(R.id.layoutDilAyari);
+        TextView txtMevcutDil = sheetView.findViewById(R.id.txtMevcutDil);
+        View btnKapat = sheetView.findViewById(R.id.btnKapatAyarlar);
+
+        if (switchTitresim != null) {
+            switchTitresim.setChecked(VibrationManager.isVibrationEnabled(this));
+            switchTitresim.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                VibrationManager.setVibrationEnabled(this, isChecked);
+                if (isChecked) {
+                    titretKisa();
+                }
+            });
+        }
+
+        if (txtMevcutDil != null) {
+            String lang = LocaleHelper.getLanguage(this);
+            String langDisplay = "en".equals(lang) ? getString(R.string.dil_ingilizce) : getString(R.string.dil_turkce);
+            txtMevcutDil.setText(langDisplay + " ▾");
+        }
+
+        if (layoutDilAyari != null) {
+            layoutDilAyari.setOnClickListener(v -> {
+                dialog.dismiss();
+                dilSecimDiyaloguGoster();
+            });
+        }
+
+        if (btnKapat != null) {
+            btnKapat.setOnClickListener(v -> dialog.dismiss());
+        }
+
+        dialog.show();
+    }
+
+    private void titretKisa() {
+        try {
+            Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+            if (v != null) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    v.vibrate(VibrationEffect.createOneShot(50, VibrationEffect.DEFAULT_AMPLITUDE));
+                } else {
+                    v.vibrate(50);
+                }
+            }
+        } catch (Exception ignored) {
+        }
+    }
+
+    private void pratikModuPaneliniGoster() {
+        BottomSheetDialog dialog = new BottomSheetDialog(this);
+        View sheetView = getLayoutInflater().inflate(R.layout.dialog_practice_mode, null);
+        dialog.setContentView(sheetView);
+
+        MaterialButton btnKategoriSecimi = sheetView.findViewById(R.id.btnKategoriSecimi);
+        MaterialButton btnPratikBaslat = sheetView.findViewById(R.id.btnPratikBaslat);
+
+        guncellePratikKategoriBtn(btnKategoriSecimi);
+
+        if (btnKategoriSecimi != null) {
+            btnKategoriSecimi.setOnClickListener(v -> {
+                kategoriSecimDiyaloguGoster(() -> guncellePratikKategoriBtn(btnKategoriSecimi));
+            });
+        }
+
+        if (btnPratikBaslat != null) {
+            btnPratikBaslat.setOnClickListener(v -> {
+                dialog.dismiss();
+                Intent intent = new Intent(MainMenuActivity.this, MainActivity.class);
+                intent.putExtra(EXTRA_GAME_MODE, GameMode.PRACTICE.name());
+                startActivity(intent);
+            });
+        }
+
+        dialog.show();
+    }
+
+    private void guncellePratikKategoriBtn(MaterialButton btn) {
+        if (btn != null) {
+            aktifKategori = getSharedPreferences(PREF_NAME, MODE_PRIVATE).getString(KEY_CATEGORY, "all");
+            btn.setText(getString(R.string.kategori_format, getCategoryDisplayName(aktifKategori)));
+        }
     }
 }

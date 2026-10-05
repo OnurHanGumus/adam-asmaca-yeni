@@ -21,6 +21,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageButton
+        android:id="@+id/btnAyarlar"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:background="@drawable/badge_bg"
+        android:contentDescription="@string/ayarlar"
+        android:padding="9dp"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toBottomOf="@id/appTitleTxt"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/appTitleTxt"
+        app:srcCompat="@drawable/ic_settings" />
+
     <LinearLayout
         android:id="@+id/statusHeaderLayout"
         android:layout_width="0dp"
@@ -113,42 +126,10 @@
         android:textSize="15sp"
         android:textStyle="bold"
         app:cornerRadius="10dp"
-        app:layout_constraintBottom_toTopOf="@id/btnKategori"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:strokeColor="@color/tahta_kahve"
-        tools:text="Pratik Modu" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnKategori"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:paddingVertical="10dp"
-        android:textColor="@color/tahta_kahve"
-        android:textSize="14sp"
-        app:cornerRadius="10dp"
-        app:layout_constraintBottom_toTopOf="@id/btnDil"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:strokeColor="@color/tahta_kahve"
-        tools:text="Kategori: Tüm Kategoriler (Karışık)" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnDil"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="4dp"
-        android:paddingVertical="10dp"
-        android:textColor="@color/tahta_kahve"
-        android:textSize="14sp"
-        app:cornerRadius="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:strokeColor="@color/tahta_kahve"
-        tools:text="Dil: Türkçe" />
+        tools:text="Pratik Modu" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

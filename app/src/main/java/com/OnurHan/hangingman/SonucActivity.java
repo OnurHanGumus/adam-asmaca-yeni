@@ -221,7 +221,7 @@ public class SonucActivity extends AppCompatActivity {
     }
 
     private void titresimZafer() {
-        if (v == null) return;
+        if (!VibrationManager.isVibrationEnabled(this) || v == null) return;
         try {
             long[] timings = {0, 150, 100, 150, 100, 300};
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -235,7 +235,7 @@ public class SonucActivity extends AppCompatActivity {
     }
 
     private void titresim05Saniye() {
-        if (v == null) return;
+        if (!VibrationManager.isVibrationEnabled(this) || v == null) return;
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 v.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));

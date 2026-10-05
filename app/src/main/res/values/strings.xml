@@ -87,4 +87,14 @@
     <string name="seviye_kayip_baslik">💀 SEVİYE %1$d BAŞARISIZ!</string>
     <string name="seviye_kayip_mesaj">1 Can kaybettin! Kalan Can: %1$d/3\nTekrar denediğinde aynı kelime ile karşılaşacaksın.</string>
     <string name="pratik_modu_etiket">Pratik Modu</string>
+    <string name="titresim_acik">Titreşim: Açık</string>
+    <string name="titresim_kapali">Titreşim: Kapalı</string>
+    <string name="ayarlar">Ayarlar</string>
+    <string name="titresim">Titreşim</string>
+    <string name="titresim_aciklama">Dokunma ve oyun içi titreşimler</string>
+    <string name="dil">Dil</string>
+    <string name="dil_aciklama">Oyun dilini seçin</string>
+    <string name="pratik_aciklama">Can harcamadan sınırsız pratik yapın ve kelime dağarcığınızı geliştirin.</string>
+    <string name="pratik_baslat">Pratiğe Başla</string>
+    <string name="kategori_secimi_baslik">Kategori Seçimi</string>
 </resources>

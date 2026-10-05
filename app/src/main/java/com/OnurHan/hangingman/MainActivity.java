@@ -828,7 +828,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void titret(long millis) {
-        if (vibrator == null) return;
+        if (!VibrationManager.isVibrationEnabled(this) || vibrator == null) return;
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 vibrator.vibrate(VibrationEffect.createOneShot(millis, VibrationEffect.DEFAULT_AMPLITUDE));
@@ -840,7 +840,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void titretCiftDarbe() {
-        if (vibrator == null) return;
+        if (!VibrationManager.isVibrationEnabled(this) || vibrator == null) return;
         try {
             long[] timings = {0, 80, 80, 140};
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -854,7 +854,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void titretUzun() {
-        if (vibrator == null) return;
+        if (!VibrationManager.isVibrationEnabled(this) || vibrator == null) return;
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 vibrator.vibrate(VibrationEffect.createOneShot(400, VibrationEffect.DEFAULT_AMPLITUDE));
