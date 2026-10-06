@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">HangmanGame</string>
+    <string name="app_name">Hangman on the Board</string>
     <string name="ayrac">_</string>
     <string name="harfTahmin">Guess letter</string>
     <string name="kelimeTahmin">Guess the word</string>
