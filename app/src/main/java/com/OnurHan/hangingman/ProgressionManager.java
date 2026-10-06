@@ -11,6 +11,7 @@ public class ProgressionManager {
     private static final String KEY_SAVED_HINT = "ana_oyun_kayitli_ipucu";
     private static final String KEY_SAVED_CATEGORY = "ana_oyun_kayitli_kategori";
     private static final String KEY_HINT_REVEALED = "ana_oyun_ipucu_acik";
+    private static final String KEY_SAVED_LANGUAGE = "ana_oyun_kayitli_dil";
 
     public static int getLevel(Context context) {
         SharedPreferences prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
@@ -28,6 +29,7 @@ public class ProgressionManager {
                 .remove(KEY_SAVED_HINT)
                 .remove(KEY_SAVED_CATEGORY)
                 .remove(KEY_HINT_REVEALED)
+                .remove(KEY_SAVED_LANGUAGE)
                 .apply();
 
         return newLevel;
@@ -35,12 +37,26 @@ public class ProgressionManager {
 
     public static boolean hasSavedWord(Context context) {
         String word = getSavedWord(context);
-        return word != null && !word.trim().isEmpty();
+        if (word == null || word.trim().isEmpty()) {
+            return false;
+        }
+        String savedLang = getSavedLanguage(context);
+        String currentLang = LocaleHelper.getLanguage(context);
+        if (!currentLang.equals(savedLang)) {
+            clearSavedWord(context);
+            return false;
+        }
+        return true;
     }
 
     public static String getSavedWord(Context context) {
         SharedPreferences prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         return prefs.getString(KEY_SAVED_WORD, "");
+    }
+
+    public static String getSavedLanguage(Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        return prefs.getString(KEY_SAVED_LANGUAGE, "");
     }
 
     public static String getSavedHint(Context context) {
@@ -64,11 +80,13 @@ public class ProgressionManager {
     }
 
     public static void saveCurrentLevelWord(Context context, String word, String hint, String category) {
+        String currentLang = LocaleHelper.getLanguage(context);
         SharedPreferences prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         prefs.edit()
                 .putString(KEY_SAVED_WORD, word)
                 .putString(KEY_SAVED_HINT, hint)
                 .putString(KEY_SAVED_CATEGORY, category)
+                .putString(KEY_SAVED_LANGUAGE, currentLang)
                 .apply();
     }
 
@@ -78,7 +96,7 @@ public class ProgressionManager {
                 .remove(KEY_SAVED_WORD)
                 .remove(KEY_SAVED_HINT)
                 .remove(KEY_SAVED_CATEGORY)
-                .remove(KEY_HINT_REVEALED)
+                .remove(KEY_SAVED_LANGUAGE)
                 .apply();
     }
 

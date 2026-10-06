@@ -221,6 +221,7 @@ public class MainActivity extends AppCompatActivity {
         btnHarfAc.setText(getString(R.string.btn_harf_ac_format, CurrencyManager.REVEAL_LETTER_COST));
 
         aktifKategori = getSharedPreferences(PREF_NAME, MODE_PRIVATE).getString(KEY_CATEGORY, "all");
+        ipucuAcikMi = (gameMode == GameMode.MAIN_GAME) && ProgressionManager.isHintRevealed(this);
         indeksleriYenile();
         setupKeyboard();
     }
@@ -371,7 +372,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // New word needed
-        ipucuAcikMi = false;
+        ipucuAcikMi = (gameMode == GameMode.MAIN_GAME) && ProgressionManager.isHintRevealed(this);
 
         if (!isNetworkAvailable()) {
             kullanYedekKelime();

@@ -303,6 +303,7 @@ public class MainMenuActivity extends AppCompatActivity {
                     dialog.dismiss();
                     if (!secilenDil.equals(LocaleHelper.getLanguage(this))) {
                         LocaleHelper.setLocale(this, secilenDil);
+                        ProgressionManager.clearSavedWord(this);
                         recreate();
                     }
                 })

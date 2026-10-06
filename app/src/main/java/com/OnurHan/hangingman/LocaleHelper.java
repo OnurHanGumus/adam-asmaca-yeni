@@ -20,7 +20,12 @@ public class LocaleHelper {
 
     public static String getLanguage(Context context) {
         SharedPreferences preferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
-        return preferences.getString(KEY_LANGUAGE, Locale.getDefault().getLanguage());
+        String defaultLang = "tr".equalsIgnoreCase(Locale.getDefault().getLanguage()) ? "tr" : "en";
+        String lang = preferences.getString(KEY_LANGUAGE, defaultLang);
+        if (!"tr".equals(lang) && !"en".equals(lang)) {
+            lang = defaultLang;
+        }
+        return lang;
     }
 
     public static Context setLocale(Context context, String language) {
