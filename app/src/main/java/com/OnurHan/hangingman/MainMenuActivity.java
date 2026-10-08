@@ -215,10 +215,18 @@ public class MainMenuActivity extends AppCompatActivity {
         View sheetView = getLayoutInflater().inflate(R.layout.dialog_settings, null);
         dialog.setContentView(sheetView);
 
+        SwitchMaterial switchSes = sheetView.findViewById(R.id.switchSes);
         SwitchMaterial switchTitresim = sheetView.findViewById(R.id.switchTitresim);
         View layoutDilAyari = sheetView.findViewById(R.id.layoutDilAyari);
         TextView txtMevcutDil = sheetView.findViewById(R.id.txtMevcutDil);
         View btnKapat = sheetView.findViewById(R.id.btnKapatAyarlar);
+
+        if (switchSes != null) {
+            switchSes.setChecked(SoundManager.isSoundEnabled(this));
+            switchSes.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                SoundManager.setSoundEnabled(this, isChecked);
+            });
+        }
 
         if (switchTitresim != null) {
             switchTitresim.setChecked(VibrationManager.isVibrationEnabled(this));

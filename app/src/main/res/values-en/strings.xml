@@ -68,9 +68,13 @@
     <string name="seviye_kayip_baslik">💀 LEVEL %1$d FAILED!</string>
     <string name="seviye_kayip_mesaj">You lost 1 life! Remaining: %1$d/%2$d\nYou will face the same word on your next attempt.</string>
     <string name="pratik_modu_etiket">Practice Mode</string>
+    <string name="ses_acik">Sound: On</string>
+    <string name="ses_kapali">Sound: Off</string>
     <string name="titresim_acik">Vibration: On</string>
     <string name="titresim_kapali">Vibration: Off</string>
     <string name="ayarlar">Settings</string>
+    <string name="ses">Sound</string>
+    <string name="ses_aciklama">In-game sound effects</string>
     <string name="titresim">Vibration</string>
     <string name="titresim_aciklama">Touch and in-game vibrations</string>
     <string name="dil">Language</string>

@@ -62,7 +62,7 @@ MainMenuActivity (launcher, splash)
 | `ProgressionManager` | Main-game level, the saved in-progress word/hint/category/language, the hint-revealed flag, and the last level the wheel was spun. |
 | `LocaleHelper` | Stores the in-app language and wraps the context with that locale. |
 | `VibrationManager` | Vibration on/off preference and centralized haptic vibration helpers (`vibrateShort`, `vibrateLong`, `vibrateVictory`, etc.). |
-| `SoundManager` | SoundPool manager for chalk stroke audio effects on mistakes (`R.raw.stroke_on_chalk_board_long`, `stroke_on_chalk_board_short`). Progression: 1-long, 2-short, 3-long, 4-short, 5-short, 6-long. |
+| `SoundManager` | SoundPool manager for chalk stroke audio effects on mistakes (`R.raw.stroke_on_chalk_board_long`, `stroke_on_chalk_board_short`). Progression: 1-long, 2-short, 3-long, 4-short, 5-short, 6-long. Also manages sound on/off preference (`ses_durumu`). |
 
 ### Game rules & constants
 
@@ -101,7 +101,7 @@ Two pref files. Keep keys stable, because changing them wipes player progress.
 
 | File | Keys | Owner |
 |---|---|---|
-| `ayarlar` (settings) | `secilen_dil`, `secilen_kategori`, `titresim_durumu` | `LocaleHelper`, Menu/MainActivity, `VibrationManager` |
+| `ayarlar` (settings) | `secilen_dil`, `secilen_kategori`, `titresim_durumu`, `ses_durumu` | `LocaleHelper`, Menu/MainActivity, `VibrationManager`, `SoundManager` |
 | `veriler` (data) | `oyuncu_altin`, `oyuncu_can`, `son_can_yenilenme_zamani`, `ana_oyun_seviye`, `ana_oyun_kayitli_kelime`, `ana_oyun_kayitli_ipucu`, `ana_oyun_kayitli_kategori`, `ana_oyun_kayitli_dil`, `ana_oyun_ipucu_acik`, `son_cark_cevrilen_seviye` | Currency/Life/ProgressionManager |
 
 A saved main-game word is dropped if the language changed (`hasSavedWord()` checks this). Changing the language from the menu also calls `clearSavedWord()` and then `recreate()`.
