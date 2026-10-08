@@ -1,21 +1,16 @@
 <resources>
     <string name="app_name">AdamAsmacaOyunu</string>
     <string name="ayrac">_</string>
-    <string name="harfTahmin">Harf tahmin et.</string>
-    <string name="kelimeTahmin">Kelime tahmin et.</string>
     <string name="kelime_getiriliyor">Kelime getiriliyor</string>
     <string name="yanlis_harfler_hint">Yanlış harfler: []</string>
     <string name="adam_resmi_desc">Adam asmaca resmi</string>
     <string name="tekrar_oyna">Tekrar Oyna</string>
     <string name="cikis">Çıkış</string>
     <string name="sonuc_resmi_desc">Sonuç resmi</string>
-    <string name="puan_format">Puan: %1$d</string>
     <string name="kaybettiniz">Kaybettiniz.</string>
     <string name="baglanti_kurulamadi">Bağlantı kurulamadı, yedek kelime seçildi.</string>
     <string name="mevcut_hata_desc">Mevcut hata %1$d</string>
     <string name="bulunmayan_harfler_desc">Kelimede bulunmayan harfler %1$s</string>
-    <string name="mesaj_yuksek_puan">Yüksek Puan!</string>
-    <string name="mesaj_yuksek_degil">Puanınız.\nYüksek Puanınız: %1$d</string>
     <string name="menu_dil_secimi">Dil / Language</string>
     <string name="dil_turkce">Türkçe</string>
     <string name="dil_ingilizce">English</string>
@@ -37,26 +32,11 @@
     <string name="kat_musical_instruments">Müzik Aletleri</string>
     <string name="kat_superheroes">Süper Kahramanlar</string>
     <string name="kat_weather">Hava Durumu</string>
-    <string name="oyna">Oyuna Başla</string>
-    <string name="dil_format">Dil: %1$s</string>
-    <string name="en_yuksek_puan_format">🏆 En Yüksek Puan: %1$d</string>
-    <string name="ana_menu">Ana Menü</string>
-    <string name="tur_format">Tur: %1$d/%2$d</string>
-    <string name="tur_puan_format">Tur: %1$d/%2$d • Puan: %3$d</string>
-    <string name="tur_kategori_format">Tur: %1$d/%2$d • %3$s</string>
     <string name="tebrikler_dogru">👏 Doğru!</string>
-    <string name="tebrikler_puan">👏 Doğru!</string>
     <string name="tebrikler_kusursuz">🌟 Kusursuz!</string>
-    <string name="kombo_ekstra">🔥 Kombo Bonusu! +%1$d Puan</string>
-    <string name="zafer_baslik">🎉 ZAFER! ADAM KURTARILDI!</string>
-    <string name="zafer_mesaj">Tüm %1$d kelimeyi çözdün ve adamı kurtardın!</string>
-    <string name="kaybettiniz_baslik">💀 OYUN BİTTİ!</string>
     <string name="kelime_bilgi_format">Doğru Kelime: %1$s</string>
-    <string name="tamamlanan_tur_format">Tamamlanan: %1$d/%2$d Kelime</string>
-    <string name="kusursuz_sayisi_format">🌟 Kusursuz Turlar: %1$d</string>
-    <string name="en_yuksek_puan_bildirim">🏆 Yeni En Yüksek Puan!</string>
 
-    <!-- Yeni Eklenenler: Ana Oyun, Pratik, Can ve Altın Sistemi -->
+    <!-- Ana Oyun, Pratik, Can ve Altın Sistemi -->
     <string name="ana_oyun_format">Ana Oyun (Seviye %1$d)</string>
     <string name="pratik_modu">Pratik Modu</string>
     <string name="seviye_format">Seviye %1$d</string>
@@ -86,7 +66,7 @@
     <string name="seviye_zafer_baslik">🎉 SEVİYE %1$d GEÇİLDİ!</string>
     <string name="seviye_zafer_mesaj">Tebrikler! +%1$d Altın kazandın.</string>
     <string name="seviye_kayip_baslik">💀 SEVİYE %1$d BAŞARISIZ!</string>
-    <string name="seviye_kayip_mesaj">1 Can kaybettin! Kalan Can: %1$d/3\nTekrar denediğinde aynı kelime ile karşılaşacaksın.</string>
+    <string name="seviye_kayip_mesaj">1 Can kaybettin! Kalan Can: %1$d/%2$d\nTekrar denediğinde aynı kelime ile karşılaşacaksın.</string>
     <string name="pratik_modu_etiket">Pratik Modu</string>
     <string name="titresim_acik">Titreşim: Açık</string>
     <string name="titresim_kapali">Titreşim: Kapalı</string>

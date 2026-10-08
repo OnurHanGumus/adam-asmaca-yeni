@@ -11,9 +11,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.os.VibrationEffect;
-import android.os.Vibrator;
 import android.util.Log;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.TransitionDrawable;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MenuItem;
@@ -23,7 +23,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.FirebaseApp;
@@ -33,15 +35,17 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
+import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final Locale LOCALE_TR = new Locale("tr", "TR");
     private static final int MAX_HATA_TOLERANSI = 6;
-    private static final int HEDEF_TUR = 1; // Both Practice and Main Game Level are 1 word per round
+    private static final int DRAWING_CROSSFADE_DURATION_MS = 200;
 
     private static final String[][] KEYBOARD_TR = {
             {"E", "R", "T", "Y", "U", "I", "O", "P", "Ğ", "Ü"},
@@ -71,26 +75,18 @@ public class MainActivity extends AppCompatActivity {
             {"nose", "The organ used for smelling and breathing.", "body_parts"}
     };
 
-    private static final String PREF_NAME = "ayarlar";
-    private static final String KEY_CATEGORY = "secilen_kategori";
-
-    private static final String[] CATEGORY_KEYS = {
-            "all",
-            "body_parts",
-            "electronic_devices",
-            "countries",
-            "animals",
-            "fruits_vegetables",
-            "food",
-            "sports",
-            "vehicles",
-            "professions",
-            "space",
-            "fantastic_elements",
-            "musical_instruments",
-            "superheroes",
-            "weather"
-    };
+    // onSaveInstanceState keys (restores the round after rotation / theme change / process death)
+    private static final String STATE_SEVIYE = "state_seviye";
+    private static final String STATE_KELIME = "state_kelime";
+    private static final String STATE_IPUCU = "state_ipucu";
+    private static final String STATE_KATEGORI = "state_kategori";
+    private static final String STATE_IPUCU_ACIK = "state_ipucu_acik";
+    private static final String STATE_GOSTERILEN_METIN = "state_gosterilen_metin";
+    private static final String STATE_YANLIS_HARFLER = "state_yanlis_harfler";
+    private static final String STATE_HATA = "state_hata";
+    private static final String STATE_BASILAN_TUSLAR = "state_basilan_tuslar";
+    private static final String STATE_INDEKSLER = "state_indeksler";
+    private static final String STATE_ROUND_GECISI = "state_round_gecisi";
 
     private GameMode gameMode = GameMode.MAIN_GAME;
     private int currentLevel = 1;
@@ -107,24 +103,21 @@ public class MainActivity extends AppCompatActivity {
     private ImageView adamImg;
     private LinearLayout keyboardLayout;
     private final List<MaterialButton> keyboardButtons = new ArrayList<>();
+    // Lowercase letters the player can produce with the active keyboard
+    private final Set<Character> tahminEdilebilirHarfler = new HashSet<>();
 
     private String ayrac;
     private String bulunacakKelime = "";
     private String ipucu = "";
-    private String aktifKategori = "all";
+    private String aktifKategori = CategoryManager.CATEGORY_ALL;
     private boolean ipucuAcikMi = false;
     private StringBuilder oyuncuyaGosterilecekMetin;
 
     private int mevcutHata = 0;
 
-    private int mevcutTur = 1;
-    private int cozulenKelimeSayisi = 0;
-    private int kusursuzKelimeSayisi = 0;
-    private int komboSerisi = 0;
     private boolean roundGecisiYapiliyor = false;
     private final List<Integer> kullanilabilirIndeksler = new ArrayList<>();
     private final Handler handler = new Handler(Looper.getMainLooper());
-    private Vibrator vibrator;
 
     private final int[] adamResimleri = {
             R.drawable.adam0,
@@ -171,7 +164,10 @@ public class MainActivity extends AppCompatActivity {
                 gameMode = GameMode.MAIN_GAME;
             }
         }
-        currentLevel = ProgressionManager.getLevel(this);
+        // After a win the stored level is already advanced, so a restored round keeps its own level
+        currentLevel = (savedInstanceState != null)
+                ? savedInstanceState.getInt(STATE_SEVIYE, ProgressionManager.getLevel(this))
+                : ProgressionManager.getLevel(this);
 
         setContentView(R.layout.activity_main);
         initComponents();
@@ -183,7 +179,9 @@ public class MainActivity extends AppCompatActivity {
 
         basligiGuncelle();
         guncelleCanVeAltinUI();
-        bulunacakKelimeyiUret();
+        if (!oyunDurumunuGeriYukle(savedInstanceState)) {
+            bulunacakKelimeyiUret();
+        }
     }
 
     public void programaDevamEt() {
@@ -196,7 +194,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void initComponents() {
         yanlisHarfler = new ArrayList<>();
-        vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         modVeSeviyeTxt = findViewById(R.id.modVeSeviyeTxt);
         gameCanTxt = findViewById(R.id.gameCanTxt);
         gameCoinTxt = findViewById(R.id.gameCoinTxt);
@@ -220,10 +217,11 @@ public class MainActivity extends AppCompatActivity {
         btnIpucuAl.setText(getString(R.string.btn_ipucu_al_format, CurrencyManager.HINT_COST));
         btnHarfAc.setText(getString(R.string.btn_harf_ac_format, CurrencyManager.REVEAL_LETTER_COST));
 
-        aktifKategori = getSharedPreferences(PREF_NAME, MODE_PRIVATE).getString(KEY_CATEGORY, "all");
+        aktifKategori = CategoryManager.getSelectedCategory(this);
         ipucuAcikMi = (gameMode == GameMode.MAIN_GAME) && ProgressionManager.isHintRevealed(this);
         indeksleriYenile();
         setupKeyboard();
+        SoundManager.init(this);
     }
 
     private void indeksleriYenile() {
@@ -386,15 +384,14 @@ public class MainActivity extends AppCompatActivity {
 
         if (gameMode == GameMode.MAIN_GAME) {
             // Main Game Mode cycles through categories and indices based on level
-            int catIndex = 1 + ((currentLevel - 1) % (CATEGORY_KEYS.length - 1));
-            categoryToFetch = CATEGORY_KEYS[catIndex];
-            index = ((currentLevel - 1) / (CATEGORY_KEYS.length - 1)) % 10;
+            categoryToFetch = CategoryManager.getMainGameCategoryForLevel(currentLevel);
+            index = CategoryManager.getMainGameIndexForLevel(currentLevel);
         } else {
             // Practice Mode uses selected category
-            if ("all".equals(aktifKategori)) {
+            if (CategoryManager.CATEGORY_ALL.equals(aktifKategori)) {
                 Random rand = new Random();
-                int catIndex = 1 + rand.nextInt(CATEGORY_KEYS.length - 1);
-                categoryToFetch = CATEGORY_KEYS[catIndex];
+                int catIndex = 1 + rand.nextInt(CategoryManager.CATEGORY_KEYS.length - 1);
+                categoryToFetch = CategoryManager.CATEGORY_KEYS[catIndex];
             } else {
                 categoryToFetch = aktifKategori;
             }
@@ -417,6 +414,22 @@ public class MainActivity extends AppCompatActivity {
 
         boolean isEn = "en".equals(LocaleHelper.getLanguage(this));
         String[][] layout = isEn ? KEYBOARD_EN : KEYBOARD_TR;
+
+        Locale locale = isEn ? Locale.ENGLISH : LOCALE_TR;
+        tahminEdilebilirHarfler.clear();
+        for (String[] row : layout) {
+            for (String letter : row) {
+                String lower = letter.toLowerCase(locale);
+                if (lower.length() == 1) {
+                    tahminEdilebilirHarfler.add(lower.charAt(0));
+                }
+            }
+        }
+        if (isEn) {
+            // English keys also match these Turkish letters (see bulunacakKelimeGirilenHarfeSahipMi)
+            Collections.addAll(tahminEdilebilirHarfler, 'ı', 'ç', 'ğ', 'ö', 'ş', 'ü');
+        }
+
         int totalCols = 0;
         for (String[] row : layout) {
             if (row.length > totalCols) {
@@ -564,7 +577,7 @@ public class MainActivity extends AppCompatActivity {
         String[][] yedekHavuzu = isEn ? YEDEK_KELIMELER_EN : YEDEK_KELIMELER_TR;
         int yedekIndex = (gameMode == GameMode.MAIN_GAME)
                 ? (currentLevel - 1) % yedekHavuzu.length
-                : (mevcutTur - 1) % yedekHavuzu.length;
+                : new Random().nextInt(yedekHavuzu.length);
 
         bulunacakKelime = yedekHavuzu[yedekIndex][0];
         ipucu = yedekHavuzu[yedekIndex][1];
@@ -601,38 +614,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private String getCategoryDisplayName(String categoryKey) {
-        switch (categoryKey) {
-            case "body_parts":
-                return getString(R.string.kat_body_parts);
-            case "electronic_devices":
-                return getString(R.string.kat_electronic_devices);
-            case "countries":
-                return getString(R.string.kat_countries);
-            case "animals":
-                return getString(R.string.kat_animals);
-            case "fruits_vegetables":
-                return getString(R.string.kat_fruits_vegetables);
-            case "food":
-                return getString(R.string.kat_food);
-            case "sports":
-                return getString(R.string.kat_sports);
-            case "vehicles":
-                return getString(R.string.kat_vehicles);
-            case "professions":
-                return getString(R.string.kat_professions);
-            case "space":
-                return getString(R.string.kat_space);
-            case "fantastic_elements":
-                return getString(R.string.kat_fantastic_elements);
-            case "musical_instruments":
-                return getString(R.string.kat_musical_instruments);
-            case "superheroes":
-                return getString(R.string.kat_superheroes);
-            case "weather":
-                return getString(R.string.kat_weather);
-            default:
-                return getString(R.string.kategori_hepsi);
-        }
+        return CategoryManager.getCategoryDisplayName(this, categoryKey);
     }
 
     public void oyuncuyaGosterilecekMetniGizle() {
@@ -641,6 +623,9 @@ public class MainActivity extends AppCompatActivity {
             char c = bulunacakKelime.charAt(i);
             if (c == ' ') {
                 oyuncuyaGosterilecekMetin.append("  ");
+            } else if (!tahminEdilebilirHarfler.contains(c)) {
+                // Not typeable on the active keyboard (punctuation, digits, Q/W/X in Turkish): show it from the start
+                oyuncuyaGosterilecekMetin.append(c).append(" ");
             } else {
                 oyuncuyaGosterilecekMetin.append(ayrac).append(" ");
             }
@@ -687,7 +672,6 @@ public class MainActivity extends AppCompatActivity {
         if (harfBulundu) {
             titret(40);
         } else {
-            komboSerisi = 0;
             titret(150);
             yanlisHarf(String.valueOf(harf));
         }
@@ -716,7 +700,25 @@ public class MainActivity extends AppCompatActivity {
 
     public void resmiIlerlet() {
         if (mevcutHata >= 0 && mevcutHata < adamResimleri.length) {
-            adamImg.setImageResource(adamResimleri[mevcutHata]);
+            SoundManager.playMistakeStroke(this, mevcutHata);
+
+            Drawable current = adamImg.getDrawable();
+            if (current instanceof TransitionDrawable) {
+                TransitionDrawable td = (TransitionDrawable) current;
+                current = td.getDrawable(td.getNumberOfLayers() - 1);
+            }
+            if (current != null) {
+                current.setAlpha(255);
+            }
+            Drawable next = ContextCompat.getDrawable(this, adamResimleri[mevcutHata]);
+            if (current != null && next != null) {
+                TransitionDrawable transition = new TransitionDrawable(new Drawable[]{current, next});
+                transition.setCrossFadeEnabled(false);
+                adamImg.setImageDrawable(transition);
+                transition.startTransition(DRAWING_CROSSFADE_DURATION_MS);
+            } else {
+                adamImg.setImageResource(adamResimleri[mevcutHata]);
+            }
         }
 
         if (mevcutHata >= MAX_HATA_TOLERANSI) {
@@ -729,7 +731,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (gameMode == GameMode.MAIN_GAME) {
             LifeManager.loseLife(this);
-            Toast.makeText(this, getString(R.string.seviye_kayip_mesaj, LifeManager.getLives(this)), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.seviye_kayip_mesaj, LifeManager.getLives(this), LifeManager.MAX_LIVES), Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(this, getString(R.string.kaybettiniz), Toast.LENGTH_SHORT).show();
         }
@@ -762,12 +764,6 @@ public class MainActivity extends AppCompatActivity {
         oyuncuyaGosterilecekMetniOyuncuyaGoster();
 
         boolean kusursuz = (mevcutHata == 0);
-        if (kusursuz) {
-            kusursuzKelimeSayisi++;
-        }
-
-        komboSerisi++;
-        cozulenKelimeSayisi++;
 
         titretCiftDarbe();
 
@@ -803,9 +799,6 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("gameMode", gameMode.name());
         intent.putExtra("kazandi", kazandi);
         intent.putExtra("bulunacakKelime", bulunacakKelime);
-        intent.putExtra("cozulenKelime", cozulenKelimeSayisi);
-        intent.putExtra("hedefTur", HEDEF_TUR);
-        intent.putExtra("kusursuzSayisi", kusursuzKelimeSayisi);
         intent.putExtra("seviye", currentLevel);
         intent.putExtra("kalanCan", LifeManager.getLives(this));
         intent.putExtra("kazanilanAltin", (kazandi && gameMode == GameMode.MAIN_GAME) ? CurrencyManager.LEVEL_WIN_REWARD : 0);
@@ -814,46 +807,108 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void titret(long millis) {
-        if (!VibrationManager.isVibrationEnabled(this) || vibrator == null) return;
-        try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                vibrator.vibrate(VibrationEffect.createOneShot(millis, VibrationEffect.DEFAULT_AMPLITUDE));
-            } else {
-                vibrator.vibrate(millis);
-            }
-        } catch (Exception ignored) {
-        }
+        VibrationManager.vibrate(this, millis);
     }
 
     private void titretCiftDarbe() {
-        if (!VibrationManager.isVibrationEnabled(this) || vibrator == null) return;
-        try {
-            long[] timings = {0, 80, 80, 140};
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                int[] amplitudes = {0, VibrationEffect.DEFAULT_AMPLITUDE, 0, VibrationEffect.DEFAULT_AMPLITUDE};
-                vibrator.vibrate(VibrationEffect.createWaveform(timings, amplitudes, -1));
-            } else {
-                vibrator.vibrate(timings, -1);
-            }
-        } catch (Exception ignored) {
-        }
+        VibrationManager.vibrateDoublePulse(this);
     }
 
     private void titretUzun() {
-        if (!VibrationManager.isVibrationEnabled(this) || vibrator == null) return;
-        try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                vibrator.vibrate(VibrationEffect.createOneShot(400, VibrationEffect.DEFAULT_AMPLITUDE));
-            } else {
-                vibrator.vibrate(400);
-            }
-        } catch (Exception ignored) {
-        }
+        VibrationManager.vibrateLong(this);
     }
 
     public void setContentDescriptions() {
         adamImg.setContentDescription(getString(R.string.mevcut_hata_desc, mevcutHata));
         yanlisHarflerTxt.setContentDescription(getString(R.string.bulunmayan_harfler_desc, yanlisHarfler.toString()));
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(STATE_SEVIYE, currentLevel);
+        if (bulunacakKelime == null || bulunacakKelime.isEmpty()) {
+            // Word is still loading; it will simply be fetched again after recreation
+            return;
+        }
+        outState.putString(STATE_KELIME, bulunacakKelime);
+        outState.putString(STATE_IPUCU, ipucu);
+        outState.putString(STATE_KATEGORI, aktifKategori);
+        outState.putBoolean(STATE_IPUCU_ACIK, ipucuAcikMi);
+        outState.putString(STATE_GOSTERILEN_METIN, oyuncuyaGosterilecekMetin.toString());
+
+        StringBuilder yanlis = new StringBuilder();
+        for (Character c : yanlisHarfler) {
+            yanlis.append(c);
+        }
+        outState.putString(STATE_YANLIS_HARFLER, yanlis.toString());
+        outState.putInt(STATE_HATA, mevcutHata);
+
+        ArrayList<String> basilanTuslar = new ArrayList<>();
+        for (MaterialButton btn : keyboardButtons) {
+            if (!btn.isEnabled() && btn.getText() != null) {
+                basilanTuslar.add(btn.getText().toString());
+            }
+        }
+        outState.putStringArrayList(STATE_BASILAN_TUSLAR, basilanTuslar);
+        outState.putIntegerArrayList(STATE_INDEKSLER, new ArrayList<>(kullanilabilirIndeksler));
+        outState.putBoolean(STATE_ROUND_GECISI, roundGecisiYapiliyor);
+    }
+
+    /**
+     * Restores a round saved by onSaveInstanceState.
+     *
+     * @return false if there is nothing to restore (caller should fetch a word normally)
+     */
+    private boolean oyunDurumunuGeriYukle(Bundle state) {
+        if (state == null) {
+            return false;
+        }
+        String kelime = state.getString(STATE_KELIME);
+        String gosterilen = state.getString(STATE_GOSTERILEN_METIN);
+        if (kelime == null || kelime.isEmpty() || gosterilen == null) {
+            return false;
+        }
+
+        bulunacakKelime = kelime;
+        ipucu = state.getString(STATE_IPUCU, "");
+        aktifKategori = state.getString(STATE_KATEGORI, "all");
+        ipucuAcikMi = state.getBoolean(STATE_IPUCU_ACIK, false);
+        mevcutHata = state.getInt(STATE_HATA, 0);
+
+        oyuncuyaGosterilecekMetin.setLength(0);
+        oyuncuyaGosterilecekMetin.append(gosterilen);
+
+        yanlisHarfler.clear();
+        String yanlis = state.getString(STATE_YANLIS_HARFLER, "");
+        for (int i = 0; i < yanlis.length(); i++) {
+            yanlisHarfler.add(yanlis.charAt(i));
+        }
+
+        ArrayList<Integer> indeksler = state.getIntegerArrayList(STATE_INDEKSLER);
+        if (indeksler != null) {
+            kullanilabilirIndeksler.clear();
+            kullanilabilirIndeksler.addAll(indeksler);
+        }
+
+        ArrayList<String> basilanTuslar = state.getStringArrayList(STATE_BASILAN_TUSLAR);
+        for (MaterialButton btn : keyboardButtons) {
+            boolean basildi = basilanTuslar != null && btn.getText() != null
+                    && basilanTuslar.contains(btn.getText().toString());
+            btn.setEnabled(!basildi);
+        }
+
+        adamImg.setImageResource(adamResimleri[Math.min(mevcutHata, adamResimleri.length - 1)]);
+        guncelleKategoriVeIpucuUI(aktifKategori, ipucu);
+        oyuncuyaGosterilecekMetniOyuncuyaGoster();
+
+        if (state.getBoolean(STATE_ROUND_GECISI, false)) {
+            // Word was already solved (coins/level already granted) - only finish the transition
+            roundGecisiYapiliyor = true;
+            setKeyboardEnabled(false);
+            handler.postDelayed(this::zaferKazanildi, 1300);
+        }
+        return true;
     }
 
     @Override

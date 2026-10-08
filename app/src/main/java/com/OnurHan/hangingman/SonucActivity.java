@@ -3,20 +3,15 @@ package com.OnurHan.hangingman;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.VibrationEffect;
-import android.os.Vibrator;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.button.MaterialButton;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 public class SonucActivity extends AppCompatActivity {
 
@@ -24,13 +19,9 @@ public class SonucActivity extends AppCompatActivity {
     public Button tekrarOynaBtn, cikisBtn;
     public MaterialButton carkBonusBtn;
     private ImageView sonucResim;
-    private Vibrator v;
 
     private GameMode gameMode = GameMode.MAIN_GAME;
     private boolean kazandi;
-    private int cozulenKelime;
-    private int hedefTur;
-    private int kusursuzSayisi;
     private int seviye;
     private int kalanCan;
     private int kazanilanAltin;
@@ -66,7 +57,6 @@ public class SonucActivity extends AppCompatActivity {
     }
 
     private void initComponents() {
-        v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         durumTxt = findViewById(R.id.durumTxt);
         bulunacakKelimeTxt = findViewById(R.id.bulunacakKelimeTxt);
         tekrarOynaBtn = findViewById(R.id.tektatOynaBtn);
@@ -85,9 +75,6 @@ public class SonucActivity extends AppCompatActivity {
         }
 
         kazandi = intent.getBooleanExtra("kazandi", false);
-        cozulenKelime = intent.getIntExtra("cozulenKelime", 0);
-        hedefTur = intent.getIntExtra("hedefTur", 1);
-        kusursuzSayisi = intent.getIntExtra("kusursuzSayisi", 0);
         seviye = intent.getIntExtra("seviye", 1);
         kalanCan = intent.getIntExtra("kalanCan", LifeManager.MAX_LIVES);
         kazanilanAltin = intent.getIntExtra("kazanilanAltin", 0);
@@ -120,39 +107,14 @@ public class SonucActivity extends AppCompatActivity {
     }
 
     private void canBittiDiyaloguGoster() {
-        long remainingMillis = LifeManager.getRemainingMillisUntilNextLife(this);
-        String remainingStr = LifeManager.formatRemainingTime(remainingMillis);
-
-        new MaterialAlertDialogBuilder(this)
-                .setTitle(R.string.can_bitti_baslik)
-                .setMessage(getString(R.string.can_bitti_mesaj_format, remainingStr, CurrencyManager.REFILL_LIFE_COST))
-                .setPositiveButton(getString(R.string.can_satin_al_format, CurrencyManager.REFILL_LIFE_COST), (dialog, which) -> {
-                    if (CurrencyManager.spendCoins(this, CurrencyManager.REFILL_LIFE_COST)) {
-                        LifeManager.refillOneLife(this);
-                        Toast.makeText(this, R.string.can_yenilendi, Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(SonucActivity.this, MainActivity.class);
-                        intent.putExtra(MainMenuActivity.EXTRA_GAME_MODE, GameMode.MAIN_GAME.name());
-                        startActivity(intent);
-                        finish();
-                    } else {
-                        Toast.makeText(this, getString(R.string.yetersiz_altin_format, CurrencyManager.REFILL_LIFE_COST), Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .setNeutralButton(R.string.pratik_modu, (dialog, which) -> {
-                    Intent intent = new Intent(SonucActivity.this, MainActivity.class);
-                    intent.putExtra(MainMenuActivity.EXTRA_GAME_MODE, GameMode.PRACTICE.name());
-                    startActivity(intent);
-                    finish();
-                })
-                .setNegativeButton(R.string.kapat, null)
-                .show();
+        OutOfLivesDialog.show(this, true, null);
     }
 
     private void degerleriAyarla() {
         if (gameMode == GameMode.MAIN_GAME) {
             if (kazandi) {
                 sonucResim.setImageResource(R.drawable.adam_ozgur);
-                titresimZafer();
+                VibrationManager.vibrateVictory(this);
 
                 durumTxt.setText(getString(R.string.seviye_zafer_baslik, seviye));
 
@@ -183,12 +145,12 @@ public class SonucActivity extends AppCompatActivity {
             } else {
                 carkBonusBtn.setVisibility(View.GONE);
                 sonucResim.setImageResource(R.drawable.adam6);
-                titresim05Saniye();
+                VibrationManager.vibrate(this, 500);
 
                 durumTxt.setText(getString(R.string.seviye_kayip_baslik, seviye));
 
                 // Main Game Mode retry: keep the word secret so retry is a real challenge
-                bulunacakKelimeTxt.setText(getString(R.string.seviye_kayip_mesaj, kalanCan));
+                bulunacakKelimeTxt.setText(getString(R.string.seviye_kayip_mesaj, kalanCan, LifeManager.MAX_LIVES));
                 tekrarOynaBtn.setText(R.string.tekrar_dene);
             }
         } else {
@@ -196,7 +158,7 @@ public class SonucActivity extends AppCompatActivity {
             // Practice Mode (1 word at a time)
             if (kazandi) {
                 sonucResim.setImageResource(R.drawable.adam_ozgur);
-                titresimZafer();
+                VibrationManager.vibrateVictory(this);
 
                 durumTxt.setText(getString(R.string.pratik_zafer_baslik));
 
@@ -207,7 +169,7 @@ public class SonucActivity extends AppCompatActivity {
                 bulunacakKelimeTxt.setText(mesaj);
             } else {
                 sonucResim.setImageResource(R.drawable.adam6);
-                titresim05Saniye();
+                VibrationManager.vibrate(this, 500);
 
                 durumTxt.setText(getString(R.string.pratik_kayip_baslik));
 
@@ -235,32 +197,6 @@ public class SonucActivity extends AppCompatActivity {
             }
             bulunacakKelimeTxt.setText(mesaj);
         });
-    }
-
-    private void titresimZafer() {
-        if (!VibrationManager.isVibrationEnabled(this) || v == null) return;
-        try {
-            long[] timings = {0, 150, 100, 150, 100, 300};
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                int[] amplitudes = {0, VibrationEffect.DEFAULT_AMPLITUDE, 0, VibrationEffect.DEFAULT_AMPLITUDE, 0, VibrationEffect.DEFAULT_AMPLITUDE};
-                v.vibrate(VibrationEffect.createWaveform(timings, amplitudes, -1));
-            } else {
-                v.vibrate(timings, -1);
-            }
-        } catch (Exception ignored) {
-        }
-    }
-
-    private void titresim05Saniye() {
-        if (!VibrationManager.isVibrationEnabled(this) || v == null) return;
-        try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                v.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
-            } else {
-                v.vibrate(500);
-            }
-        } catch (Exception ignored) {
-        }
     }
 
     private void anaMenuyeDon() {
