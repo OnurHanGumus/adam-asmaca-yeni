@@ -11,6 +11,8 @@
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <!-- Fullscreen: hide status bar (clock, battery, wifi) -->
+        <item name="android:windowFullscreen">true</item>
         <!-- Customize your theme here. -->
     </style>
 </resources>

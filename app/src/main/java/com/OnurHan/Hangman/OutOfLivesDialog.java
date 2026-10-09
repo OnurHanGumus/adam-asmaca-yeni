@@ -6,6 +6,9 @@ import android.content.Intent;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
@@ -19,7 +22,7 @@ public class OutOfLivesDialog {
         long remainingMillis = LifeManager.getRemainingMillisUntilNextLife(context);
         String remainingStr = LifeManager.formatRemainingTime(remainingMillis);
 
-        return new MaterialAlertDialogBuilder(context)
+        AlertDialog alertDialog = new MaterialAlertDialogBuilder(context)
                 .setTitle(R.string.can_bitti_baslik)
                 .setMessage(context.getString(R.string.can_bitti_mesaj_format, remainingStr, CurrencyManager.REFILL_LIFE_COST))
                 .setPositiveButton(context.getString(R.string.can_satin_al_format, CurrencyManager.REFILL_LIFE_COST), (dialog, which) -> {
@@ -48,6 +51,19 @@ public class OutOfLivesDialog {
                     }
                 })
                 .setNegativeButton(R.string.kapat, null)
-                .show();
+                .create();
+
+        alertDialog.setOnShowListener(d -> {
+            if (alertDialog.getWindow() != null) {
+                WindowInsetsControllerCompat controller = WindowCompat.getInsetsController(alertDialog.getWindow(), alertDialog.getWindow().getDecorView());
+                if (controller != null) {
+                    controller.hide(WindowInsetsCompat.Type.systemBars());
+                    controller.setSystemBarsBehavior(WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
+                }
+            }
+        });
+
+        alertDialog.show();
+        return alertDialog;
     }
 }
