@@ -21,7 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/pratik_modu"
-        android:textColor="@color/tahta_kahve"
+        android:textColor="@color/metin_ana"
         android:textSize="20sp"
         android:textStyle="bold" />
 
@@ -31,21 +31,21 @@
         android:layout_marginTop="4dp"
         android:layout_marginBottom="16dp"
         android:text="@string/pratik_aciklama"
-        android:textColor="#757575"
+        android:textColor="@color/metin_ikincil"
         android:textSize="13sp" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginBottom="16dp"
-        android:background="#1A7F3B00" />
+        android:background="@color/ayrac_cizgi" />
 
     <com.google.android.material.textview.MaterialTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:text="@string/kategori_secimi_baslik"
-        android:textColor="@color/tahta_kahve"
+        android:textColor="@color/metin_ana"
         android:textSize="14sp"
         android:textStyle="bold" />
 
@@ -55,10 +55,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingVertical="12dp"
-        android:textColor="@color/tahta_kahve"
+        android:textColor="@color/metin_ana"
         android:textSize="14sp"
         app:cornerRadius="10dp"
-        app:strokeColor="@color/tahta_kahve"
+        app:strokeColor="@color/buton_outlined_kenarlik"
         tools:text="Kategori: Tüm Kategoriler (Karışık)" />
 
     <com.google.android.material.button.MaterialButton
@@ -68,6 +68,7 @@
         android:layout_marginTop="20dp"
         android:paddingVertical="12dp"
         android:text="@string/pratik_baslat"
+        android:textColor="@color/white"
         android:textSize="16sp"
         android:textStyle="bold"
         app:backgroundTint="@color/tahta_yesili"

@@ -15,4 +15,20 @@
     <color name="koyu_tahta_yesili">#033F23</color>
     <color name="tus_arkaplan_pasif">#BDBDBD</color>
     <color name="tus_yazi_pasif">#616161</color>
+    <!-- Theme-aware semantic colors: Light / Normal Mode -->
+    <color name="metin_ana">#7F3B00</color>
+    <color name="metin_vurgu">#754600</color>
+    <color name="metin_yanlis">#C62828</color>
+    <color name="metin_yanlis_hint">#80754600</color>
+    <color name="metin_ipucu">#754600</color>
+    <color name="tebesir_golge">#00000000</color>
+    <color name="word_slot_arkaplan">#107F3B00</color>
+    <color name="word_slot_kenarlik">#337F3B00</color>
+    <color name="badge_arkaplan">#127F3B00</color>
+    <color name="badge_kenarlik">#3D7F3B00</color>
+    <color name="buton_outlined_kenarlik">#507F3B00</color>
+    <color name="metin_ikincil">#757575</color>
+    <color name="metin_yesil_vurgu">#188b56</color>
+    <color name="ayrac_cizgi">#1A7F3B00</color>
+    <color name="sheet_handle_renk">#4D7F3B00</color>
 </resources>

@@ -13,4 +13,20 @@
     <color name="tahta_kahve_var">#773801</color>
     <color name="tahta_kahve">#7f3b00</color>
     <color name="koyu_tahta_yesili">#033F23</color>
+    <!-- Theme-aware semantic colors: Dark / Night Mode -->
+    <color name="metin_ana">#FFFDF7</color>
+    <color name="metin_vurgu">#FFF59D</color>
+    <color name="metin_yanlis">#FFCDD2</color>
+    <color name="metin_yanlis_hint">#99FFCDD2</color>
+    <color name="metin_ipucu">#FFF59D</color>
+    <color name="tebesir_golge">#60000000</color>
+    <color name="word_slot_arkaplan">#24000000</color>
+    <color name="word_slot_kenarlik">#44FFFFFF</color>
+    <color name="badge_arkaplan">#24000000</color>
+    <color name="badge_kenarlik">#4DFFFFFF</color>
+    <color name="buton_outlined_kenarlik">#4DFFFFFF</color>
+    <color name="metin_ikincil">#B0BEC5</color>
+    <color name="metin_yesil_vurgu">#81C784</color>
+    <color name="ayrac_cizgi">#26FFFFFF</color>
+    <color name="sheet_handle_renk">#4DFFFFFF</color>
 </resources>
