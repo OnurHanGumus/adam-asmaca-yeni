@@ -8,7 +8,7 @@ Guidance for AI coding assistants working in this repository.
 Words and hints come from **Firebase Realtime Database**. If the network or Firebase fails, a small built-in fallback word list is used.
 The game supports **Turkish (default) and English**, set from inside the app.
 
-- Package / applicationId / namespace: `com.OnurHan.hangingman` (capital `O` and `H`)
+- Package / applicationId / namespace: `com.OnurHan.Hangman` (capital `O` and `H`)
 - Root project name: `AdamAsmacaOyunu`
 - Single module: `:app`
 
@@ -46,7 +46,7 @@ MainMenuActivity (launcher, splash)
    └─ "Practice"  ──► MainActivity (GameMode.PRACTICE)  ──► SonucActivity
 ```
 
-### Source files (`app/src/main/java/com/OnurHan/hangingman/`)
+### Source files (`app/src/main/java/com/OnurHan/Hangman/`)
 
 | File | Role |
 |---|---|

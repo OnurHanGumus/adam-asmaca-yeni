@@ -8,9 +8,47 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:5810987544:android:281da03a1262dc90c6196d",
+        "android_client_info": {
+          "package_name": "com.OnurHan.Hangman"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBwMCjjVaNdD0JVpF09CmrJYwWf_tQerFM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:5810987544:android:5f534f798cdd7816c6196d",
         "android_client_info": {
           "package_name": "com.OnurHan.hangingman"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBwMCjjVaNdD0JVpF09CmrJYwWf_tQerFM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:5810987544:android:66e6b52e4629fd17c6196d",
+        "android_client_info": {
+          "package_name": "com.OnurHan.hangman"
         }
       },
       "oauth_client": [],

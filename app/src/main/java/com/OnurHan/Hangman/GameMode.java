@@ -1,4 +1,4 @@
-package com.OnurHan.hangingman;
+package com.OnurHan.Hangman;
 
 public enum GameMode {
     PRACTICE,

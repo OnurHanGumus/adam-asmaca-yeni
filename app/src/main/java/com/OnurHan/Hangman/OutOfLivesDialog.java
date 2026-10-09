@@ -1,4 +1,4 @@
-package com.OnurHan.hangingman;
+package com.OnurHan.Hangman;
 
 import android.app.Activity;
 import android.content.Context;

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">AdamAsmacaOyunu</string>
+    <string name="app_name">Tahtada Adam Asmaca</string>
     <string name="ayrac">_</string>
     <string name="kelime_getiriliyor">Kelime getiriliyor</string>
     <string name="yanlis_harfler_hint">Yanlış harfler: []</string>
