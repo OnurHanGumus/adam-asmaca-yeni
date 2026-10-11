@@ -148,7 +148,7 @@ public class SonucActivity extends AppCompatActivity {
                 }
             } else {
                 carkBonusBtn.setVisibility(View.GONE);
-                sonucResim.setImageResource(R.drawable.adam6);
+                sonucResim.setImageResource(R.drawable.adam7);
                 VibrationManager.vibrate(this, 500);
 
                 durumTxt.setText(getString(R.string.seviye_kayip_baslik, seviye));

@@ -47,7 +47,7 @@ import java.util.Set;
 public class MainActivity extends AppCompatActivity {
 
     private static final Locale LOCALE_TR = new Locale("tr", "TR");
-    private static final int MAX_HATA_TOLERANSI = 6;
+    private static final int MAX_HATA_TOLERANSI = 7;
     private static final int DRAWING_CROSSFADE_DURATION_MS = 200;
 
     private static final String[][] KEYBOARD_TR = {
@@ -129,7 +129,8 @@ public class MainActivity extends AppCompatActivity {
             R.drawable.adam3,
             R.drawable.adam4,
             R.drawable.adam5,
-            R.drawable.adam6
+            R.drawable.adam6,
+            R.drawable.adam7,
     };
 
     private List<Character> yanlisHarfler;
@@ -156,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
         FirebaseApp.initializeApp(this);
 
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().hide();
         }
 
         String modeExtra = getIntent().getStringExtra(MainMenuActivity.EXTRA_GAME_MODE);
@@ -247,6 +248,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void registerEventHandlers() {
+        View btnGeri = findViewById(R.id.btnGeri);
+        if (btnGeri != null) {
+            btnGeri.setOnClickListener(v -> finish());
+        }
         btnIpucuAl.setOnClickListener(v -> ipucuAc());
         btnHarfAc.setOnClickListener(v -> rastgeleHarfAc());
     }
@@ -793,8 +798,14 @@ public class MainActivity extends AppCompatActivity {
     public void basligiGuncelle() {
         if (gameMode == GameMode.MAIN_GAME) {
             this.setTitle(getString(R.string.seviye_format, currentLevel));
+            if (modVeSeviyeTxt != null) {
+                modVeSeviyeTxt.setText(getString(R.string.seviye_format, currentLevel));
+            }
         } else {
             this.setTitle(getString(R.string.pratik_modu_etiket));
+            if (modVeSeviyeTxt != null) {
+                modVeSeviyeTxt.setText(R.string.pratik_modu_etiket);
+            }
         }
     }
 

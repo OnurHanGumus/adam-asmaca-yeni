@@ -49,12 +49,12 @@ public class SoundManager {
     }
 
     /**
-     * Determines whether the given mistake number (1-based, 1 to 6)
+     * Determines whether the given mistake number (1-based, 1 to 7)
      * corresponds to a long chalk stroke.
-     * Order: 1-long, 2-short, 3-long, 4-short, 5-short, 6-long.
+     * Order: 1-long, 2-long, 2-short, 3-short, 4-short, 5-short, 6-short, 7-long.
      */
     public static boolean isLongStroke(int mistakeNumber) {
-        return mistakeNumber == 1 || mistakeNumber == 6;
+        return mistakeNumber == 1 || mistakeNumber == 2 || mistakeNumber == 7;
     }
 
     /**

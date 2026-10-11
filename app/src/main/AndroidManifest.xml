@@ -23,6 +23,7 @@
             android:name=".MainActivity"
             android:screenOrientation="portrait"
             android:exported="false"
+            android:theme="@style/Theme.AdamAsmacaOyunu.NoActionBar"
             android:parentActivityName=".MainMenuActivity" />
 
         <activity
