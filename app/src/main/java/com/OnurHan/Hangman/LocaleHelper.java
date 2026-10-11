@@ -20,9 +20,14 @@ public class LocaleHelper {
 
     public static String getLanguage(Context context) {
         SharedPreferences preferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
-        String defaultLang = "tr".equalsIgnoreCase(Locale.getDefault().getLanguage()) ? "tr" : "en";
+        String def = Locale.getDefault().getLanguage();
+        String defaultLang = "tr".equalsIgnoreCase(def) ? "tr" :
+                ("fr".equalsIgnoreCase(def) ? "fr" :
+                ("it".equalsIgnoreCase(def) ? "it" :
+                ("de".equalsIgnoreCase(def) ? "de" :
+                ("es".equalsIgnoreCase(def) ? "es" : "en"))));
         String lang = preferences.getString(KEY_LANGUAGE, defaultLang);
-        if (!"tr".equals(lang) && !"en".equals(lang)) {
+        if (!"tr".equals(lang) && !"en".equals(lang) && !"fr".equals(lang) && !"it".equals(lang) && !"de".equals(lang) && !"es".equals(lang)) {
             lang = defaultLang;
         }
         return lang;

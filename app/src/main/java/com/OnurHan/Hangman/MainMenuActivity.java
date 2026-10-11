@@ -211,14 +211,43 @@ public class MainMenuActivity extends AppCompatActivity {
     private void dilSecimDiyaloguGoster() {
         String[] diller = new String[]{
                 getString(R.string.dil_turkce),
-                getString(R.string.dil_ingilizce)
+                getString(R.string.dil_ingilizce),
+                getString(R.string.dil_fransizca),
+                getString(R.string.dil_italyanca),
+                getString(R.string.dil_almanca),
+                getString(R.string.dil_ispanyolca)
         };
-        int checkedItem = "en".equals(LocaleHelper.getLanguage(this)) ? 1 : 0;
+        int checkedItem = 0;
+        String curLang = LocaleHelper.getLanguage(this);
+        if ("en".equals(curLang)) {
+            checkedItem = 1;
+        } else if ("fr".equals(curLang)) {
+            checkedItem = 2;
+        } else if ("it".equals(curLang)) {
+            checkedItem = 3;
+        } else if ("de".equals(curLang)) {
+            checkedItem = 4;
+        } else if ("es".equals(curLang)) {
+            checkedItem = 5;
+        }
 
         new MaterialAlertDialogBuilder(this)
                 .setTitle(R.string.menu_dil_secimi)
                 .setSingleChoiceItems(diller, checkedItem, (dialog, which) -> {
-                    String secilenDil = (which == 1) ? "en" : "tr";
+                    String secilenDil;
+                    if (which == 1) {
+                        secilenDil = "en";
+                    } else if (which == 2) {
+                        secilenDil = "fr";
+                    } else if (which == 3) {
+                        secilenDil = "it";
+                    } else if (which == 4) {
+                        secilenDil = "de";
+                    } else if (which == 5) {
+                        secilenDil = "es";
+                    } else {
+                        secilenDil = "tr";
+                    }
                     dialog.dismiss();
                     if (!secilenDil.equals(LocaleHelper.getLanguage(this))) {
                         LocaleHelper.setLocale(this, secilenDil);
@@ -260,7 +289,20 @@ public class MainMenuActivity extends AppCompatActivity {
 
         if (txtMevcutDil != null) {
             String lang = LocaleHelper.getLanguage(this);
-            String langDisplay = "en".equals(lang) ? getString(R.string.dil_ingilizce) : getString(R.string.dil_turkce);
+            String langDisplay;
+            if ("es".equals(lang)) {
+                langDisplay = getString(R.string.dil_ispanyolca);
+            } else if ("de".equals(lang)) {
+                langDisplay = getString(R.string.dil_almanca);
+            } else if ("it".equals(lang)) {
+                langDisplay = getString(R.string.dil_italyanca);
+            } else if ("fr".equals(lang)) {
+                langDisplay = getString(R.string.dil_fransizca);
+            } else if ("en".equals(lang)) {
+                langDisplay = getString(R.string.dil_ingilizce);
+            } else {
+                langDisplay = getString(R.string.dil_turkce);
+            }
             txtMevcutDil.setText(langDisplay + " ▾");
         }
 

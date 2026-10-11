@@ -62,6 +62,30 @@ public class MainActivity extends AppCompatActivity {
             {"Z", "X", "C", "V", "B", "N", "M"}
     };
 
+    private static final String[][] KEYBOARD_FR = {
+            {"A", "Z", "E", "R", "T", "Y", "U", "I", "O", "P"},
+            {"Q", "S", "D", "F", "G", "H", "J", "K", "L", "M"},
+            {"W", "X", "C", "V", "B", "N"}
+    };
+
+    private static final String[][] KEYBOARD_IT = {
+            {"Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"},
+            {"A", "S", "D", "F", "G", "H", "J", "K", "L"},
+            {"Z", "X", "C", "V", "B", "N", "M"}
+    };
+
+    private static final String[][] KEYBOARD_DE = {
+            {"Q", "W", "E", "R", "T", "Z", "U", "I", "O", "P", "Ü"},
+            {"A", "S", "D", "F", "G", "H", "J", "K", "L", "Ö", "Ä"},
+            {"Y", "X", "C", "V", "B", "N", "M", "ß"}
+    };
+
+    private static final String[][] KEYBOARD_ES = {
+            {"Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"},
+            {"A", "S", "D", "F", "G", "H", "J", "K", "L", "Ñ"},
+            {"Z", "X", "C", "V", "B", "N", "M"}
+    };
+
     private static final String[][] YEDEK_KELIMELER_TR = {
             {"elma", "Kırmızı veya yeşil renkte, tatlı ve sulu meyve.", "fruits_vegetables"},
             {"kedi", "Evcil ve sevimli, miyavlayan hayvan.", "animals"},
@@ -76,6 +100,38 @@ public class MainActivity extends AppCompatActivity {
             {"phone", "A portable electronic device for communication.", "electronic_devices"},
             {"turkey", "A country situated between Europe and Asia.", "countries"},
             {"nose", "The organ used for smelling and breathing.", "body_parts"}
+    };
+
+    private static final String[][] YEDEK_KELIMELER_FR = {
+            {"pomme", "Fruit rond rouge ou vert très croquant.", "fruits_vegetables"},
+            {"chat", "Petit félin domestique qui miaule et ronronne.", "animals"},
+            {"telephone", "Appareil pour communiquer à distance.", "electronic_devices"},
+            {"france", "Pays d'Europe occidentale célèbre pour Paris.", "countries"},
+            {"nez", "Organe du visage servant à la respiration et à l'odorat.", "body_parts"}
+    };
+
+    private static final String[][] YEDEK_KELIMELER_IT = {
+            {"mela", "Frutto rotondo rosso o verde, croccante e dolce.", "fruits_vegetables"},
+            {"gatto", "Piccolo felino domestico che fa le fusa e miagola.", "animals"},
+            {"telefono", "Dispositivo elettronico portatile per comunicare.", "electronic_devices"},
+            {"italia", "Paese a forma di stivale famoso per la sua storia e cucina.", "countries"},
+            {"naso", "Organo del viso usado per respirare e odorare.", "body_parts"}
+    };
+
+    private static final String[][] YEDEK_KELIMELER_DE = {
+            {"apfel", "Runde, knackige Frucht mit roter oder grüner Schale.", "fruits_vegetables"},
+            {"katze", "Kleines Haustier, das schnurrt und miaut.", "animals"},
+            {"telefon", "Gerät zur Kommunikation über Distanzen.", "electronic_devices"},
+            {"deutschland", "Mitteleuropäisches Land mit der Hauptstadt Berlin.", "countries"},
+            {"nase", "Gesichtsorgan, mit dem wir atmen und riechen.", "body_parts"}
+    };
+
+    private static final String[][] YEDEK_KELIMELER_ES = {
+            {"manzana", "Fruta redondeada, dulce y crujiente de piel roja o verde.", "fruits_vegetables"},
+            {"gato", "Pequeño felino doméstico que ronronea y maúlla.", "animals"},
+            {"telefono", "Dispositivo para comunicarse a distancia.", "electronic_devices"},
+            {"españa", "País de la península ibérica con capital en Madrid.", "countries"},
+            {"nariz", "Órgano del rostro situado en el centro para oler.", "body_parts"}
     };
 
     // onSaveInstanceState keys (restores the round after rotation / theme change / process death)
@@ -421,10 +477,34 @@ public class MainActivity extends AppCompatActivity {
         keyboardLayout.removeAllViews();
         keyboardButtons.clear();
 
-        boolean isEn = "en".equals(LocaleHelper.getLanguage(this));
-        String[][] layout = isEn ? KEYBOARD_EN : KEYBOARD_TR;
+        String lang = LocaleHelper.getLanguage(this);
+        boolean isEn = "en".equals(lang);
+        boolean isFr = "fr".equals(lang);
+        boolean isIt = "it".equals(lang);
+        boolean isDe = "de".equals(lang);
+        boolean isEs = "es".equals(lang);
+        String[][] layout;
+        Locale locale;
+        if (isEs) {
+            layout = KEYBOARD_ES;
+            locale = new Locale("es");
+        } else if (isDe) {
+            layout = KEYBOARD_DE;
+            locale = Locale.GERMAN;
+        } else if (isIt) {
+            layout = KEYBOARD_IT;
+            locale = Locale.ITALIAN;
+        } else if (isFr) {
+            layout = KEYBOARD_FR;
+            locale = Locale.FRENCH;
+        } else if (isEn) {
+            layout = KEYBOARD_EN;
+            locale = Locale.ENGLISH;
+        } else {
+            layout = KEYBOARD_TR;
+            locale = LOCALE_TR;
+        }
 
-        Locale locale = isEn ? Locale.ENGLISH : LOCALE_TR;
         tahminEdilebilirHarfler.clear();
         for (String[] row : layout) {
             for (String letter : row) {
@@ -437,6 +517,18 @@ public class MainActivity extends AppCompatActivity {
         if (isEn) {
             // English keys also match these Turkish letters (see bulunacakKelimeGirilenHarfeSahipMi)
             Collections.addAll(tahminEdilebilirHarfler, 'ı', 'ç', 'ğ', 'ö', 'ş', 'ü');
+        } else if (isFr) {
+            // French keys also match these accented letters
+            Collections.addAll(tahminEdilebilirHarfler, 'é', 'è', 'ê', 'ë', 'à', 'â', 'ç', 'î', 'ï', 'ô', 'ù', 'û', 'ü');
+        } else if (isIt) {
+            // Italian keys also match accented vowels
+            Collections.addAll(tahminEdilebilirHarfler, 'à', 'è', 'é', 'ì', 'ò', 'ù');
+        } else if (isDe) {
+            // German keys also match umlauts and ß
+            Collections.addAll(tahminEdilebilirHarfler, 'ä', 'ö', 'ü', 'ß');
+        } else if (isEs) {
+            // Spanish keys also match accented vowels and ñ
+            Collections.addAll(tahminEdilebilirHarfler, 'á', 'é', 'í', 'ó', 'ú', 'ü', 'ñ');
         }
 
         int totalCols = 0;
@@ -532,8 +624,28 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        String langCode = "en".equals(LocaleHelper.getLanguage(this)) ? "en" : "tr";
-        Locale locale = "en".equals(langCode) ? Locale.ENGLISH : LOCALE_TR;
+        String lang = LocaleHelper.getLanguage(this);
+        String langCode;
+        Locale locale;
+        if ("es".equals(lang)) {
+            langCode = "es";
+            locale = new Locale("es");
+        } else if ("de".equals(lang)) {
+            langCode = "de";
+            locale = Locale.GERMAN;
+        } else if ("it".equals(lang)) {
+            langCode = "it";
+            locale = Locale.ITALIAN;
+        } else if ("fr".equals(lang)) {
+            langCode = "fr";
+            locale = Locale.FRENCH;
+        } else if ("en".equals(lang)) {
+            langCode = "en";
+            locale = Locale.ENGLISH;
+        } else {
+            langCode = "tr";
+            locale = LOCALE_TR;
+        }
 
         myRef.child(categoryKey).child(String.valueOf(index)).child(langCode).get().addOnCompleteListener(task -> {
             if (task.isSuccessful() && task.getResult() != null && task.getResult().exists()) {
@@ -582,8 +694,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void kullanYedekKelime() {
-        boolean isEn = "en".equals(LocaleHelper.getLanguage(this));
-        String[][] yedekHavuzu = isEn ? YEDEK_KELIMELER_EN : YEDEK_KELIMELER_TR;
+        String lang = LocaleHelper.getLanguage(this);
+        String[][] yedekHavuzu;
+        if ("es".equals(lang)) {
+            yedekHavuzu = YEDEK_KELIMELER_ES;
+        } else if ("de".equals(lang)) {
+            yedekHavuzu = YEDEK_KELIMELER_DE;
+        } else if ("it".equals(lang)) {
+            yedekHavuzu = YEDEK_KELIMELER_IT;
+        } else if ("fr".equals(lang)) {
+            yedekHavuzu = YEDEK_KELIMELER_FR;
+        } else if ("en".equals(lang)) {
+            yedekHavuzu = YEDEK_KELIMELER_EN;
+        } else {
+            yedekHavuzu = YEDEK_KELIMELER_TR;
+        }
         int yedekIndex = (gameMode == GameMode.MAIN_GAME)
                 ? (currentLevel - 1) % yedekHavuzu.length
                 : new Random().nextInt(yedekHavuzu.length);
@@ -655,7 +780,12 @@ public class MainActivity extends AppCompatActivity {
 
         char harf = girilenHarf.charAt(0);
         boolean harfBulundu = false;
-        boolean isEn = "en".equals(LocaleHelper.getLanguage(this));
+        String lang = LocaleHelper.getLanguage(this);
+        boolean isEn = "en".equals(lang);
+        boolean isFr = "fr".equals(lang);
+        boolean isIt = "it".equals(lang);
+        boolean isDe = "de".equals(lang);
+        boolean isEs = "es".equals(lang);
 
         for (int i = 0; i < bulunacakKelime.length(); i++) {
             char target = bulunacakKelime.charAt(i);
@@ -668,6 +798,39 @@ public class MainActivity extends AppCompatActivity {
                         (harf == 'o' && target == 'ö') ||
                         (harf == 's' && target == 'ş') ||
                         (harf == 'u' && target == 'ü')) {
+                    eslesti = true;
+                }
+            } else if (!eslesti && isFr) {
+                if ((harf == 'e' && (target == 'é' || target == 'è' || target == 'ê' || target == 'ë')) ||
+                        (harf == 'a' && (target == 'à' || target == 'â')) ||
+                        (harf == 'c' && target == 'ç') ||
+                        (harf == 'i' && (target == 'î' || target == 'ï')) ||
+                        (harf == 'o' && target == 'ô') ||
+                        (harf == 'u' && (target == 'ù' || target == 'û' || target == 'ü'))) {
+                    eslesti = true;
+                }
+            } else if (!eslesti && isIt) {
+                if ((harf == 'a' && target == 'à') ||
+                        (harf == 'e' && (target == 'è' || target == 'é')) ||
+                        (harf == 'i' && target == 'ì') ||
+                        (harf == 'o' && target == 'ò') ||
+                        (harf == 'u' && target == 'ù')) {
+                    eslesti = true;
+                }
+            } else if (!eslesti && isDe) {
+                if ((harf == 'a' && target == 'ä') ||
+                        (harf == 'o' && target == 'ö') ||
+                        (harf == 'u' && target == 'ü') ||
+                        (harf == 's' && target == 'ß')) {
+                    eslesti = true;
+                }
+            } else if (!eslesti && isEs) {
+                if ((harf == 'a' && target == 'á') ||
+                        (harf == 'e' && target == 'é') ||
+                        (harf == 'i' && target == 'í') ||
+                        (harf == 'o' && target == 'ó') ||
+                        (harf == 'u' && (target == 'ú' || target == 'ü')) ||
+                        (harf == 'n' && target == 'ñ')) {
                     eslesti = true;
                 }
             }
@@ -690,7 +853,12 @@ public class MainActivity extends AppCompatActivity {
         if (girilenHarf == null || girilenHarf.isEmpty()) {
             return "";
         }
-        Locale locale = "en".equals(LocaleHelper.getLanguage(this)) ? Locale.ENGLISH : LOCALE_TR;
+        String lang = LocaleHelper.getLanguage(this);
+        Locale locale = "tr".equals(lang) ? LOCALE_TR :
+                ("es".equals(lang) ? new Locale("es") :
+                ("de".equals(lang) ? Locale.GERMAN :
+                ("it".equals(lang) ? Locale.ITALIAN :
+                ("fr".equals(lang) ? Locale.FRENCH : Locale.ENGLISH))));
         return girilenHarf.toLowerCase(locale);
     }
 

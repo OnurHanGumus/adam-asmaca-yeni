@@ -14,6 +14,10 @@
     <string name="menu_dil_secimi">Language / Dil</string>
     <string name="dil_turkce">Türkçe</string>
     <string name="dil_ingilizce">English</string>
+    <string name="dil_fransizca">Français</string>
+    <string name="dil_italyanca">Italiano</string>
+    <string name="dil_almanca">Deutsch</string>
+    <string name="dil_ispanyolca">Español</string>
     <string name="kategori_sec">Category</string>
     <string name="kategori_format">Category: %1$s</string>
     <string name="ipucu_format">💡 Hint: %1$s</string>
