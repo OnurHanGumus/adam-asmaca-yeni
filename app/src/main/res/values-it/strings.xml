@@ -18,6 +18,9 @@
     <string name="dil_italyanca">Italiano</string>
     <string name="dil_almanca">Deutsch</string>
     <string name="dil_ispanyolca">Español</string>
+    <string name="dil_portekizce">Português</string>
+    <string name="dil_rusca">Русский</string>
+    <string name="dil_japonca">日本語</string>
     <string name="kategori_sec">Categoria</string>
     <string name="kategori_format">Categoria: %1$s</string>
     <string name="ipucu_format">💡 Indizio: %1$s</string>

@@ -25,9 +25,12 @@ public class LocaleHelper {
                 ("fr".equalsIgnoreCase(def) ? "fr" :
                 ("it".equalsIgnoreCase(def) ? "it" :
                 ("de".equalsIgnoreCase(def) ? "de" :
-                ("es".equalsIgnoreCase(def) ? "es" : "en"))));
+                ("es".equalsIgnoreCase(def) ? "es" :
+                ("pt".equalsIgnoreCase(def) ? "pt" :
+                ("ru".equalsIgnoreCase(def) ? "ru" :
+                ("ja".equalsIgnoreCase(def) ? "ja" : "en")))))));
         String lang = preferences.getString(KEY_LANGUAGE, defaultLang);
-        if (!"tr".equals(lang) && !"en".equals(lang) && !"fr".equals(lang) && !"it".equals(lang) && !"de".equals(lang) && !"es".equals(lang)) {
+        if (!"tr".equals(lang) && !"en".equals(lang) && !"fr".equals(lang) && !"it".equals(lang) && !"de".equals(lang) && !"es".equals(lang) && !"pt".equals(lang) && !"ru".equals(lang) && !"ja".equals(lang)) {
             lang = defaultLang;
         }
         return lang;

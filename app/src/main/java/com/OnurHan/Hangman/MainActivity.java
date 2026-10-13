@@ -86,6 +86,29 @@ public class MainActivity extends AppCompatActivity {
             {"Z", "X", "C", "V", "B", "N", "M"}
     };
 
+    private static final String[][] KEYBOARD_PT = {
+            {"Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"},
+            {"A", "S", "D", "F", "G", "H", "J", "K", "L", "Ç"},
+            {"Z", "X", "C", "V", "B", "N", "M"}
+    };
+
+    private static final String[][] KEYBOARD_RU = {
+            {"Й", "Ц", "У", "К", "Е", "Н", "Г", "Ш", "Щ", "З", "Х", "Ъ"},
+            {"Ф", "Ы", "В", "А", "П", "Р", "О", "Л", "Д", "Ж", "Э"},
+            {"Ё", "Я", "Ч", "С", "М", "И", "Т", "Ь", "Б", "Ю"}
+    };
+
+    private static final String[][] KEYBOARD_JA_HIRA = {
+            {"あ", "か", "さ", "た", "な", "は", "ま", "や", "ら", "わ"},
+            {"い", "き", "し", "ち", "に", "ひ", "み", "ー", "り", ""},
+            {"う", "く", "す", "つ", "ぬ", "ふ", "む", "ゆ", "る", "を"},
+            {"え", "け", "せ", "て", "ね", "へ", "め", "",   "れ", "カナ"},
+            {"お", "こ", "そ", "と", "の", "ほ", "も", "よ", "ろ", "ん"}
+    };
+
+    private static final String KANA_TOGGLE_TO_KATA = "カナ";
+    private static final String KANA_TOGGLE_TO_HIRA = "かな";
+
     private static final String[][] YEDEK_KELIMELER_TR = {
             {"elma", "Kırmızı veya yeşil renkte, tatlı ve sulu meyve.", "fruits_vegetables"},
             {"kedi", "Evcil ve sevimli, miyavlayan hayvan.", "animals"},
@@ -134,6 +157,30 @@ public class MainActivity extends AppCompatActivity {
             {"nariz", "Órgano del rostro situado en el centro para oler.", "body_parts"}
     };
 
+    private static final String[][] YEDEK_KELIMELER_PT = {
+            {"maca", "Fruta redonda, doce e crocante com casca vermelha ou verde.", "fruits_vegetables"},
+            {"gato", "Pequeno felino doméstico que ronrona e mia.", "animals"},
+            {"telefone", "Aparelho para comunicação de voz e mensagens à distância.", "electronic_devices"},
+            {"brasil", "O maior país da América do Sul, famoso pelo futebol e carnaval.", "countries"},
+            {"nariz", "Órgão do rosto situado no centro usado para respirar e cheirar.", "body_parts"}
+    };
+
+    private static final String[][] YEDEK_KELIMELER_RU = {
+            {"яблоко", "Круглый сочный плод с красной, зеленой или желтой кожицей.", "fruits_vegetables"},
+            {"кот", "Маленькое домашнее животное, которое мурлычет и ловит мышей.", "animals"},
+            {"телефон", "Устройство для голосовой связи и обмена сообщениями на расстоянии.", "electronic_devices"},
+            {"россия", "Крупнейшее по площади государство в мире, расположенное в Евразии.", "countries"},
+            {"нос", "Орган дыхания и обоняния, расположенный в центре лица.", "body_parts"}
+    };
+
+    private static final String[][] YEDEK_KELIMELER_JA = {
+            {"りんご", "赤や緑の皮を持ち、甘酸っぱくてシャキシャキした丸い果物。", "fruits_vegetables"},
+            {"ねこ", "「ニャー」と鳴く、ネズミを捕まえる身近で可愛いペット。", "animals"},
+            {"でんわ", "遠く離れた人と声で会話をするための通信機器。", "electronic_devices"},
+            {"にほん", "富士山や桜、アニメや和食で知られる東アジアの島国。", "countries"},
+            {"はな", "顔の中心にあり、呼吸をしたり匂いを嗅いだりする器官。", "body_parts"}
+    };
+
     // onSaveInstanceState keys (restores the round after rotation / theme change / process death)
     private static final String STATE_SEVIYE = "state_seviye";
     private static final String STATE_KELIME = "state_kelime";
@@ -164,6 +211,8 @@ public class MainActivity extends AppCompatActivity {
     private final List<MaterialButton> keyboardButtons = new ArrayList<>();
     // Lowercase letters the player can produce with the active keyboard
     private final Set<Character> tahminEdilebilirHarfler = new HashSet<>();
+    private final Set<String> basilanHarfler = new HashSet<>();
+    private boolean isKatakanaMode = false;
 
     private String ayrac;
     private String bulunacakKelime = "";
@@ -380,12 +429,32 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        Locale locale = "en".equals(LocaleHelper.getLanguage(this)) ? Locale.ENGLISH : LOCALE_TR;
+        String lang = LocaleHelper.getLanguage(this);
+        Locale locale = "tr".equals(lang) ? LOCALE_TR :
+                ("ja".equals(lang) ? Locale.JAPANESE :
+                ("ru".equals(lang) ? new Locale("ru") :
+                ("pt".equals(lang) ? new Locale("pt") :
+                ("es".equals(lang) ? new Locale("es") :
+                ("de".equals(lang) ? Locale.GERMAN :
+                ("it".equals(lang) ? Locale.ITALIAN :
+                ("fr".equals(lang) ? Locale.FRENCH : Locale.ENGLISH)))))));
         String chosenUpper = String.valueOf(chosenChar).toUpperCase(locale);
+        basilanHarfler.add(String.valueOf(chosenChar));
+        if (chosenChar >= 0x3041 && chosenChar <= 0x3096) {
+            basilanHarfler.add(String.valueOf((char) (chosenChar + 0x60)));
+        } else if (chosenChar >= 0x30A1 && chosenChar <= 0x30F6) {
+            basilanHarfler.add(String.valueOf((char) (chosenChar - 0x60)));
+        }
         for (MaterialButton btn : keyboardButtons) {
-            if (btn.getText() != null && btn.getText().toString().toUpperCase(locale).equals(chosenUpper)) {
-                btn.setEnabled(false);
-                break;
+            if (btn.getText() != null) {
+                String btnText = btn.getText().toString();
+                if (btnText.toUpperCase(locale).equals(chosenUpper) ||
+                        (btnText.length() == 1 && chosenChar >= 0x3041 && chosenChar <= 0x30F6 &&
+                                ((btnText.charAt(0) >= 0x30A1 && btnText.charAt(0) <= 0x30F6 ? (char) (btnText.charAt(0) - 0x60) : btnText.charAt(0)) ==
+                                        (chosenChar >= 0x30A1 && chosenChar <= 0x30F6 ? (char) (chosenChar - 0x60) : chosenChar)))) {
+                    btn.setEnabled(false);
+                    break;
+                }
             }
         }
 
@@ -483,9 +552,22 @@ public class MainActivity extends AppCompatActivity {
         boolean isIt = "it".equals(lang);
         boolean isDe = "de".equals(lang);
         boolean isEs = "es".equals(lang);
+        boolean isPt = "pt".equals(lang);
+        boolean isRu = "ru".equals(lang);
+        boolean isJa = "ja".equals(lang);
         String[][] layout;
         Locale locale;
-        if (isEs) {
+        if (isJa) {
+            layout = KEYBOARD_JA_HIRA;
+            locale = Locale.JAPANESE;
+            isKatakanaMode = false;
+        } else if (isRu) {
+            layout = KEYBOARD_RU;
+            locale = new Locale("ru");
+        } else if (isPt) {
+            layout = KEYBOARD_PT;
+            locale = new Locale("pt");
+        } else if (isEs) {
             layout = KEYBOARD_ES;
             locale = new Locale("es");
         } else if (isDe) {
@@ -508,6 +590,9 @@ public class MainActivity extends AppCompatActivity {
         tahminEdilebilirHarfler.clear();
         for (String[] row : layout) {
             for (String letter : row) {
+                if (letter.isEmpty() || KANA_TOGGLE_TO_KATA.equals(letter)) {
+                    continue;
+                }
                 String lower = letter.toLowerCase(locale);
                 if (lower.length() == 1) {
                     tahminEdilebilirHarfler.add(lower.charAt(0));
@@ -529,6 +614,20 @@ public class MainActivity extends AppCompatActivity {
         } else if (isEs) {
             // Spanish keys also match accented vowels and ñ
             Collections.addAll(tahminEdilebilirHarfler, 'á', 'é', 'í', 'ó', 'ú', 'ü', 'ñ');
+        } else if (isPt) {
+            // Portuguese keys also match accented vowels and ç
+            Collections.addAll(tahminEdilebilirHarfler, 'ç', 'á', 'à', 'â', 'ã', 'é', 'ê', 'í', 'ó', 'ô', 'õ', 'ú');
+        } else if (isRu) {
+            // Russian keys also match ё
+            Collections.addAll(tahminEdilebilirHarfler, 'ё');
+        } else if (isJa) {
+            for (char c = 0x3041; c <= 0x3096; c++) {
+                tahminEdilebilirHarfler.add(c);
+            }
+            for (char c = 0x30A1; c <= 0x30F6; c++) {
+                tahminEdilebilirHarfler.add(c);
+            }
+            tahminEdilebilirHarfler.add('ー');
         }
 
         int totalCols = 0;
@@ -537,7 +636,7 @@ public class MainActivity extends AppCompatActivity {
                 totalCols = row.length;
             }
         }
-        int btnHeight = dpToPx(42);
+        int btnHeight = isJa ? dpToPx(34) : dpToPx(42);
         int marginH = dpToPx(1.5f);
 
         for (String[] row : layout) {
@@ -550,7 +649,7 @@ public class MainActivity extends AppCompatActivity {
                     LinearLayout.LayoutParams.MATCH_PARENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT
             );
-            rowParams.bottomMargin = dpToPx(4);
+            rowParams.bottomMargin = isJa ? dpToPx(3) : dpToPx(4);
             rowLayout.setLayoutParams(rowParams);
 
             float spacerWeight = (totalCols - row.length) / 2.0f;
@@ -561,11 +660,6 @@ public class MainActivity extends AppCompatActivity {
             }
 
             for (String letter : row) {
-                MaterialButton btn = (MaterialButton) getLayoutInflater().inflate(R.layout.keyboard_key, rowLayout, false);
-                btn.setText(letter);
-                if (!isEn) {
-                    btn.setTextSize(TypedValue.COMPLEX_UNIT_SP, 13);
-                }
                 LinearLayout.LayoutParams btnParams = new LinearLayout.LayoutParams(
                         0,
                         btnHeight,
@@ -573,9 +667,42 @@ public class MainActivity extends AppCompatActivity {
                 );
                 btnParams.leftMargin = marginH;
                 btnParams.rightMargin = marginH;
+
+                if (letter.isEmpty()) {
+                    View emptySpacer = new View(this);
+                    emptySpacer.setLayoutParams(btnParams);
+                    rowLayout.addView(emptySpacer);
+                    continue;
+                }
+
+                MaterialButton btn = (MaterialButton) getLayoutInflater().inflate(R.layout.keyboard_key, rowLayout, false);
                 btn.setLayoutParams(btnParams);
 
-                btn.setOnClickListener(v -> onLetterClicked(letter, btn));
+                if (KANA_TOGGLE_TO_KATA.equals(letter)) {
+                    btn.setText(KANA_TOGGLE_TO_KATA);
+                    btn.setTag("toggle");
+                    btn.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
+                    btn.setPadding(0, 0, 0, 0);
+                    btn.setOnClickListener(v -> toggleKanaMode());
+                    keyboardButtons.add(btn);
+                    rowLayout.addView(btn);
+                    continue;
+                }
+
+                btn.setText(letter);
+                btn.setTag(letter);
+
+                if (isJa) {
+                    btn.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+                    btn.setPadding(0, 0, 0, 0);
+                } else if (isRu) {
+                    btn.setTextSize(TypedValue.COMPLEX_UNIT_SP, 11);
+                    btn.setPadding(0, 0, 0, 0);
+                } else if (!isEn) {
+                    btn.setTextSize(TypedValue.COMPLEX_UNIT_SP, 13);
+                }
+
+                btn.setOnClickListener(v -> onLetterClicked(btn.getText().toString(), btn));
                 keyboardButtons.add(btn);
                 rowLayout.addView(btn);
             }
@@ -590,9 +717,41 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void toggleKanaMode() {
+        isKatakanaMode = !isKatakanaMode;
+        for (MaterialButton btn : keyboardButtons) {
+            Object tag = btn.getTag();
+            if ("toggle".equals(tag)) {
+                btn.setText(isKatakanaMode ? KANA_TOGGLE_TO_HIRA : KANA_TOGGLE_TO_KATA);
+            } else if (tag instanceof String) {
+                String baseHira = (String) tag;
+                if ("ー".equals(baseHira)) {
+                    btn.setText("ー");
+                    btn.setEnabled(!basilanHarfler.contains("ー"));
+                } else if (!baseHira.isEmpty()) {
+                    char hiraChar = baseHira.charAt(0);
+                    char targetChar = isKatakanaMode ? (char) (hiraChar + 0x60) : hiraChar;
+                    String targetStr = String.valueOf(targetChar);
+                    btn.setText(targetStr);
+                    btn.setEnabled(!basilanHarfler.contains(targetStr));
+                }
+            }
+        }
+        titret(30);
+    }
+
     private void onLetterClicked(String letter, MaterialButton btn) {
         if (roundGecisiYapiliyor) {
             return;
+        }
+        basilanHarfler.add(letter);
+        if (letter.length() == 1) {
+            char c = letter.charAt(0);
+            if (c >= 0x3041 && c <= 0x3096) {
+                basilanHarfler.add(String.valueOf((char) (c + 0x60)));
+            } else if (c >= 0x30A1 && c <= 0x30F6) {
+                basilanHarfler.add(String.valueOf((char) (c - 0x60)));
+            }
         }
         btn.setEnabled(false);
         bulunacakKelimeGirilenHarfeSahipMi(letter);
@@ -601,14 +760,34 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void resetKeyboard() {
+        basilanHarfler.clear();
+        isKatakanaMode = false;
         for (MaterialButton btn : keyboardButtons) {
-            btn.setEnabled(true);
+            Object tag = btn.getTag();
+            if ("toggle".equals(tag)) {
+                btn.setText(KANA_TOGGLE_TO_KATA);
+                btn.setEnabled(true);
+            } else if (tag instanceof String) {
+                String baseHira = (String) tag;
+                btn.setText(baseHira);
+                btn.setEnabled(true);
+            } else {
+                btn.setEnabled(true);
+            }
         }
     }
 
     private void setKeyboardEnabled(boolean enabled) {
         for (MaterialButton btn : keyboardButtons) {
-            btn.setEnabled(enabled);
+            Object tag = btn.getTag();
+            if ("toggle".equals(tag)) {
+                btn.setEnabled(enabled);
+            } else if (enabled && tag instanceof String) {
+                String currentText = btn.getText().toString();
+                btn.setEnabled(!basilanHarfler.contains(currentText));
+            } else {
+                btn.setEnabled(enabled);
+            }
         }
     }
 
@@ -627,7 +806,16 @@ public class MainActivity extends AppCompatActivity {
         String lang = LocaleHelper.getLanguage(this);
         String langCode;
         Locale locale;
-        if ("es".equals(lang)) {
+        if ("ja".equals(lang)) {
+            langCode = "ja";
+            locale = Locale.JAPANESE;
+        } else if ("ru".equals(lang)) {
+            langCode = "ru";
+            locale = new Locale("ru");
+        } else if ("pt".equals(lang)) {
+            langCode = "pt";
+            locale = new Locale("pt");
+        } else if ("es".equals(lang)) {
             langCode = "es";
             locale = new Locale("es");
         } else if ("de".equals(lang)) {
@@ -696,7 +884,13 @@ public class MainActivity extends AppCompatActivity {
     private void kullanYedekKelime() {
         String lang = LocaleHelper.getLanguage(this);
         String[][] yedekHavuzu;
-        if ("es".equals(lang)) {
+        if ("ja".equals(lang)) {
+            yedekHavuzu = YEDEK_KELIMELER_JA;
+        } else if ("ru".equals(lang)) {
+            yedekHavuzu = YEDEK_KELIMELER_RU;
+        } else if ("pt".equals(lang)) {
+            yedekHavuzu = YEDEK_KELIMELER_PT;
+        } else if ("es".equals(lang)) {
             yedekHavuzu = YEDEK_KELIMELER_ES;
         } else if ("de".equals(lang)) {
             yedekHavuzu = YEDEK_KELIMELER_DE;
@@ -786,6 +980,9 @@ public class MainActivity extends AppCompatActivity {
         boolean isIt = "it".equals(lang);
         boolean isDe = "de".equals(lang);
         boolean isEs = "es".equals(lang);
+        boolean isPt = "pt".equals(lang);
+        boolean isRu = "ru".equals(lang);
+        boolean isJa = "ja".equals(lang);
 
         for (int i = 0; i < bulunacakKelime.length(); i++) {
             char target = bulunacakKelime.charAt(i);
@@ -833,6 +1030,56 @@ public class MainActivity extends AppCompatActivity {
                         (harf == 'n' && target == 'ñ')) {
                     eslesti = true;
                 }
+            } else if (!eslesti && isPt) {
+                if ((harf == 'a' && (target == 'á' || target == 'à' || target == 'â' || target == 'ã')) ||
+                        (harf == 'e' && (target == 'é' || target == 'ê')) ||
+                        (harf == 'i' && target == 'í') ||
+                        (harf == 'o' && (target == 'ó' || target == 'ô' || target == 'õ')) ||
+                        (harf == 'u' && target == 'ú') ||
+                        (harf == 'c' && target == 'ç')) {
+                    eslesti = true;
+                }
+            } else if (!eslesti && isRu) {
+                if ((harf == 'е' && target == 'ё') ||
+                        (harf == 'ё' && target == 'е')) {
+                    eslesti = true;
+                }
+            } else if (!eslesti && isJa) {
+                char h = (harf >= 0x30A1 && harf <= 0x30F6) ? (char) (harf - 0x60) : harf;
+                char t = (target >= 0x30A1 && target <= 0x30F6) ? (char) (target - 0x60) : target;
+
+                if (h == t) {
+                    eslesti = true;
+                } else if ((h == 'か' && t == 'が') ||
+                        (h == 'き' && t == 'ぎ') ||
+                        (h == 'く' && t == 'ぐ') ||
+                        (h == 'け' && t == 'げ') ||
+                        (h == 'こ' && t == 'ご') ||
+                        (h == 'さ' && t == 'ざ') ||
+                        (h == 'し' && t == 'じ') ||
+                        (h == 'す' && t == 'ず') ||
+                        (h == 'せ' && t == 'ぜ') ||
+                        (h == 'そ' && t == 'ぞ') ||
+                        (h == 'た' && t == 'だ') ||
+                        (h == 'ち' && t == 'ぢ') ||
+                        (h == 'つ' && (t == 'づ' || t == 'っ')) ||
+                        (h == 'て' && t == 'で') ||
+                        (h == 'と' && t == 'ど') ||
+                        (h == 'は' && (t == 'ば' || t == 'ぱ')) ||
+                        (h == 'ひ' && (t == 'び' || t == 'ぴ')) ||
+                        (h == 'ふ' && (t == 'ぶ' || t == 'ぷ')) ||
+                        (h == 'へ' && (t == 'べ' || t == 'ぺ')) ||
+                        (h == 'ほ' && (t == 'ぼ' || t == 'ぽ')) ||
+                        (h == 'や' && t == 'ゃ') ||
+                        (h == 'ゆ' && t == 'ゅ') ||
+                        (h == 'よ' && t == 'ょ') ||
+                        (h == 'あ' && t == 'ぁ') ||
+                        (h == 'い' && t == 'ぃ') ||
+                        (h == 'う' && (t == 'ゔ' || t == 'ぅ')) ||
+                        (h == 'え' && t == 'ぇ') ||
+                        (h == 'お' && t == 'ぉ')) {
+                    eslesti = true;
+                }
             }
 
             if (eslesti) {
@@ -855,10 +1102,13 @@ public class MainActivity extends AppCompatActivity {
         }
         String lang = LocaleHelper.getLanguage(this);
         Locale locale = "tr".equals(lang) ? LOCALE_TR :
+                ("ja".equals(lang) ? Locale.JAPANESE :
+                ("ru".equals(lang) ? new Locale("ru") :
+                ("pt".equals(lang) ? new Locale("pt") :
                 ("es".equals(lang) ? new Locale("es") :
                 ("de".equals(lang) ? Locale.GERMAN :
                 ("it".equals(lang) ? Locale.ITALIAN :
-                ("fr".equals(lang) ? Locale.FRENCH : Locale.ENGLISH))));
+                ("fr".equals(lang) ? Locale.FRENCH : Locale.ENGLISH)))))));
         return girilenHarf.toLowerCase(locale);
     }
 

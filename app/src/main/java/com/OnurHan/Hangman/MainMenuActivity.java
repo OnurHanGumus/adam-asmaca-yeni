@@ -215,7 +215,10 @@ public class MainMenuActivity extends AppCompatActivity {
                 getString(R.string.dil_fransizca),
                 getString(R.string.dil_italyanca),
                 getString(R.string.dil_almanca),
-                getString(R.string.dil_ispanyolca)
+                getString(R.string.dil_ispanyolca),
+                getString(R.string.dil_portekizce),
+                getString(R.string.dil_rusca),
+                getString(R.string.dil_japonca)
         };
         int checkedItem = 0;
         String curLang = LocaleHelper.getLanguage(this);
@@ -229,6 +232,12 @@ public class MainMenuActivity extends AppCompatActivity {
             checkedItem = 4;
         } else if ("es".equals(curLang)) {
             checkedItem = 5;
+        } else if ("pt".equals(curLang)) {
+            checkedItem = 6;
+        } else if ("ru".equals(curLang)) {
+            checkedItem = 7;
+        } else if ("ja".equals(curLang)) {
+            checkedItem = 8;
         }
 
         new MaterialAlertDialogBuilder(this)
@@ -245,6 +254,12 @@ public class MainMenuActivity extends AppCompatActivity {
                         secilenDil = "de";
                     } else if (which == 5) {
                         secilenDil = "es";
+                    } else if (which == 6) {
+                        secilenDil = "pt";
+                    } else if (which == 7) {
+                        secilenDil = "ru";
+                    } else if (which == 8) {
+                        secilenDil = "ja";
                     } else {
                         secilenDil = "tr";
                     }
@@ -290,7 +305,13 @@ public class MainMenuActivity extends AppCompatActivity {
         if (txtMevcutDil != null) {
             String lang = LocaleHelper.getLanguage(this);
             String langDisplay;
-            if ("es".equals(lang)) {
+            if ("ja".equals(lang)) {
+                langDisplay = getString(R.string.dil_japonca);
+            } else if ("ru".equals(lang)) {
+                langDisplay = getString(R.string.dil_rusca);
+            } else if ("pt".equals(lang)) {
+                langDisplay = getString(R.string.dil_portekizce);
+            } else if ("es".equals(lang)) {
                 langDisplay = getString(R.string.dil_ispanyolca);
             } else if ("de".equals(lang)) {
                 langDisplay = getString(R.string.dil_almanca);
