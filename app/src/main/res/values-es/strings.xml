@@ -101,4 +101,7 @@
     <string name="cark_odul_alindi_format">✅ Ruleta completada (+%1$d Monedas)</string>
     <string name="cark_tamamlandi">✅ Ruleta de la Suerte completada</string>
     <string name="topla">Recoger</string>
+    <string name="ana_menuye_don_baslik">Volver al menú principal</string>
+    <string name="ana_menuye_don_can_kaybi_mesaj">Si vuelves al menú principal, perderás 1 vida. ¿Seguro que quieres salir?</string>
+    <string name="vazgec">Cancelar</string>
 </resources>

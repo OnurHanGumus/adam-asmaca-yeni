@@ -101,4 +101,7 @@
     <string name="cark_odul_alindi_format">✅ ルーレット獲得済み (+%1$dコイン)</string>
     <string name="cark_tamamlandi">✅ ルーレット完了</string>
     <string name="topla">受け取る</string>
+    <string name="ana_menuye_don_baslik">メインメニューに戻る</string>
+    <string name="ana_menuye_don_can_kaybi_mesaj">メインメニューに戻るとライフを1つ失います。本当に終了しますか？</string>
+    <string name="vazgec">キャンセル</string>
 </resources>

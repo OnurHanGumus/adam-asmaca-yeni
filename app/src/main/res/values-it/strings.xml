@@ -101,4 +101,7 @@
     <string name="cark_odul_alindi_format">✅ Ruota completata (+%1$d Monete)</string>
     <string name="cark_tamamlandi">✅ Ruota della Fortuna completata</string>
     <string name="topla">Riscatta</string>
+    <string name="ana_menuye_don_baslik">Torna al menu principale</string>
+    <string name="ana_menuye_don_can_kaybi_mesaj">Se torni al menu principale, perderai 1 vita. Sei sicuro di voler uscire?</string>
+    <string name="vazgec">Annulla</string>
 </resources>

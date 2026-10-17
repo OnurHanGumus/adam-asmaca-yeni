@@ -101,4 +101,7 @@
     <string name="cark_odul_alindi_format">✅ Fortune Wheel Completed (+%1$d Coins)</string>
     <string name="cark_tamamlandi">✅ Fortune Wheel Completed</string>
     <string name="topla">Collect</string>
+    <string name="ana_menuye_don_baslik">Return to Main Menu</string>
+    <string name="ana_menuye_don_can_kaybi_mesaj">If you return to the main menu, you will lose 1 life. Are you sure you want to leave?</string>
+    <string name="vazgec">Cancel</string>
 </resources>

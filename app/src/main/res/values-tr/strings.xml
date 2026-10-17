@@ -101,4 +101,7 @@
     <string name="cark_odul_alindi_format">✅ Şans Çarkı Tamamlandı (+%1$d Altın)</string>
     <string name="cark_tamamlandi">✅ Şans Çarkı Tamamlandı</string>
     <string name="topla">Topla</string>
+    <string name="ana_menuye_don_baslik">Ana Menüye Dön</string>
+    <string name="ana_menuye_don_can_kaybi_mesaj">Ana menüye dönerseniz 1 can kaybedeceksiniz. Çıkmak istediğinizden emin misiniz?</string>
+    <string name="vazgec">Vazgeç</string>
 </resources>

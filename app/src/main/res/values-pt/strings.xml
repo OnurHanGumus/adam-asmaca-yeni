@@ -101,4 +101,7 @@
     <string name="cark_odul_alindi_format">✅ Roda concluída (+%1$d Moedas)</string>
     <string name="cark_tamamlandi">✅ Roda da Fortuna concluída</string>
     <string name="topla">Coletar</string>
+    <string name="ana_menuye_don_baslik">Voltar ao Menu Principal</string>
+    <string name="ana_menuye_don_can_kaybi_mesaj">Se você voltar ao menu principal, perderá 1 vida. Tem certeza de que deseja sair?</string>
+    <string name="vazgec">Cancelar</string>
 </resources>

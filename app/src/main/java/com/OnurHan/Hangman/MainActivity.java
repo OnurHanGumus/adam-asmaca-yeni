@@ -24,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.WindowCompat;
@@ -31,6 +32,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
@@ -226,6 +228,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean roundGecisiYapiliyor = false;
     private final List<Integer> kullanilabilirIndeksler = new ArrayList<>();
     private final Handler handler = new Handler(Looper.getMainLooper());
+    private AlertDialog cikisOnayDiyalogu;
 
     private final int[] adamResimleri = {
             R.drawable.adam0,
@@ -355,7 +358,7 @@ public class MainActivity extends AppCompatActivity {
     private void registerEventHandlers() {
         View btnGeri = findViewById(R.id.btnGeri);
         if (btnGeri != null) {
-            btnGeri.setOnClickListener(v -> finish());
+            btnGeri.setOnClickListener(v -> onGeriTiklandi());
         }
         btnIpucuAl.setOnClickListener(v -> ipucuAc());
         btnHarfAc.setOnClickListener(v -> rastgeleHarfAc());
@@ -1344,10 +1347,62 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    private void onGeriTiklandi() {
+        if (roundGecisiYapiliyor) {
+            return;
+        }
+
+        if (gameMode == GameMode.MAIN_GAME) {
+            cikisOnayDiyaloguGoster();
+        } else {
+            finish();
+        }
+    }
+
+    private void cikisOnayDiyaloguGoster() {
+        if (isFinishing() || isDestroyed()) {
+            return;
+        }
+
+        if (cikisOnayDiyalogu != null && cikisOnayDiyalogu.isShowing()) {
+            return;
+        }
+
+        cikisOnayDiyalogu = new MaterialAlertDialogBuilder(this)
+                .setTitle(R.string.ana_menuye_don_baslik)
+                .setMessage(R.string.ana_menuye_don_can_kaybi_mesaj)
+                .setPositiveButton(R.string.cikis, (dialog, which) -> {
+                    LifeManager.loseLife(MainActivity.this);
+                    finish();
+                })
+                .setNegativeButton(R.string.vazgec, null)
+                .create();
+
+        cikisOnayDiyalogu.setOnShowListener(d -> {
+            if (cikisOnayDiyalogu != null && cikisOnayDiyalogu.getWindow() != null) {
+                WindowInsetsControllerCompat controller = WindowCompat.getInsetsController(
+                        cikisOnayDiyalogu.getWindow(),
+                        cikisOnayDiyalogu.getWindow().getDecorView()
+                );
+                if (controller != null) {
+                    controller.hide(WindowInsetsCompat.Type.systemBars());
+                    controller.setSystemBarsBehavior(WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
+                }
+            }
+        });
+
+        cikisOnayDiyalogu.show();
+    }
+
+    @Override
+    public void onBackPressed() {
+        onGeriTiklandi();
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            finish();
+            onGeriTiklandi();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -1371,6 +1426,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
+        if (cikisOnayDiyalogu != null && cikisOnayDiyalogu.isShowing()) {
+            cikisOnayDiyalogu.dismiss();
+            cikisOnayDiyalogu = null;
+        }
         handler.removeCallbacksAndMessages(null);
         super.onDestroy();
     }

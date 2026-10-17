@@ -101,4 +101,7 @@
     <string name="cark_odul_alindi_format">✅ Колесо завершено (+%1$d монет)</string>
     <string name="cark_tamamlandi">✅ Колесо фортуны завершено</string>
     <string name="topla">Забрать</string>
+    <string name="ana_menuye_don_baslik">Вернуться в главное меню</string>
+    <string name="ana_menuye_don_can_kaybi_mesaj">Если вы вернетесь в главное меню, вы потеряете 1 жизнь. Вы уверены, что хотите выйти?</string>
+    <string name="vazgec">Отмена</string>
 </resources>

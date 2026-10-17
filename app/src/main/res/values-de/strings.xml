@@ -101,4 +101,7 @@
     <string name="cark_odul_alindi_format">✅ Glücksrad abgeschlossen (+%1$d Münzen)</string>
     <string name="cark_tamamlandi">✅ Glücksrad abgeschlossen</string>
     <string name="topla">Einsammeln</string>
+    <string name="ana_menuye_don_baslik">Zurück zum Hauptmenü</string>
+    <string name="ana_menuye_don_can_kaybi_mesaj">Wenn du zum Hauptmenü zurückkehrst, verlierst du 1 Leben. Möchtest du wirklich das Spiel verlassen?</string>
+    <string name="vazgec">Abbrechen</string>
 </resources>

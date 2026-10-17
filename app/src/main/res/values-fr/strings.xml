@@ -101,4 +101,7 @@
     <string name="cark_odul_alindi_format">✅ Roue de la fortune terminée (+%1$d pièces)</string>
     <string name="cark_tamamlandi">✅ Roue de la fortune terminée</string>
     <string name="topla">Récupérer</string>
+    <string name="ana_menuye_don_baslik">Retour au menu principal</string>
+    <string name="ana_menuye_don_can_kaybi_mesaj">Si vous retournez au menu principal, vous perdrez 1 vie. Êtes-vous sûr de vouloir quitter ?</string>
+    <string name="vazgec">Annuler</string>
 </resources>
