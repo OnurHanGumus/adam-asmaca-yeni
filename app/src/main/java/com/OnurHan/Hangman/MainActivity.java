@@ -264,6 +264,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         FirebaseApp.initializeApp(this);
         AppCheckManager.init(this);
+        AdManager.init(this);
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
@@ -381,7 +382,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (!CurrencyManager.spendCoins(this, CurrencyManager.HINT_COST)) {
-            Toast.makeText(this, getString(R.string.yetersiz_altin_format, CurrencyManager.HINT_COST), Toast.LENGTH_SHORT).show();
+            InsufficientCoinsDialog.show(this, CurrencyManager.HINT_COST, this::guncelleCanVeAltinUI);
             return;
         }
 
@@ -419,7 +420,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (!CurrencyManager.spendCoins(this, CurrencyManager.REVEAL_LETTER_COST)) {
-            Toast.makeText(this, getString(R.string.yetersiz_altin_format, CurrencyManager.REVEAL_LETTER_COST), Toast.LENGTH_SHORT).show();
+            InsufficientCoinsDialog.show(this, CurrencyManager.REVEAL_LETTER_COST, this::guncelleCanVeAltinUI);
             return;
         }
 

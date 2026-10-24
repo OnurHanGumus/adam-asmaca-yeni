@@ -108,4 +108,9 @@
     <string name="gunluk_cark_bekleme_format">🎡 Daily Wheel (%1$s)</string>
     <string name="gunluk_cark_aciklama">Spin the daily fortune wheel and win free bonus coins!</string>
     <string name="gunluk_cark_toast_format">Next daily spin available in: %1$s</string>
+    <string name="yetersiz_altin_baslik">Not Enough Coins!</string>
+    <string name="yetersiz_altin_reklam_mesaj_format">You need %1$d Coins for this action.\n\nWould you like to watch a short ad to earn +%2$d Coins?</string>
+    <string name="reklam_izle_altin_kazan_format">🎬 Watch Ad (+%1$d Coins)</string>
+    <string name="reklam_odul_alindi_format">🎉 +%1$d Coins earned!</string>
+    <string name="reklam_hazir_degil">Ad is not ready yet, please try again in a moment.</string>
 </resources>

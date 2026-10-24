@@ -108,4 +108,9 @@
     <string name="gunluk_cark_bekleme_format">🎡 デイリールーレット (%1$s)</string>
     <string name="gunluk_cark_aciklama">デイリールーレットを回して無料ボーナスコインを獲得しましょう！</string>
     <string name="gunluk_cark_toast_format">次のデイリールーレットまで: %1$s</string>
+    <string name="yetersiz_altin_baslik">コインが足りません！</string>
+    <string name="yetersiz_altin_reklam_mesaj_format">この操作には%1$dコインが必要です。\n\n短い広告を見て+%2$dコインを獲得しますか？</string>
+    <string name="reklam_izle_altin_kazan_format">🎬 広告を見る (+%1$dコイン)</string>
+    <string name="reklam_odul_alindi_format">🎉 +%1$dコイン獲得！</string>
+    <string name="reklam_hazir_degil">広告の準備ができていません。少し待ってからもう一度お試しください。</string>
 </resources>

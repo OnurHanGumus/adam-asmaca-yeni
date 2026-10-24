@@ -108,4 +108,9 @@
     <string name="gunluk_cark_bekleme_format">🎡 Ежедневное колесо (%1$s)</string>
     <string name="gunluk_cark_aciklama">Крутите ежедневное колесо фортуны и получайте бесплатные монеты!</string>
     <string name="gunluk_cark_toast_format">Следующее вращение через: %1$s</string>
+    <string name="yetersiz_altin_baslik">Недостаточно монет!</string>
+    <string name="yetersiz_altin_reklam_mesaj_format">Для этого действия требуется %1$d монет.\n\nХотите посмотреть короткую рекламу и получить +%2$d монет?</string>
+    <string name="reklam_izle_altin_kazan_format">🎬 Смотреть рекламу (+%1$d монет)</string>
+    <string name="reklam_odul_alindi_format">🎉 Получено +%1$d монет!</string>
+    <string name="reklam_hazir_degil">Реклама еще не готова, попробуйте чуть позже.</string>
 </resources>

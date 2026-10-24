@@ -108,4 +108,9 @@
     <string name="gunluk_cark_bekleme_format">🎡 Ruleta Diaria (%1$s)</string>
     <string name="gunluk_cark_aciklama">¡Gira la ruleta diaria de la suerte y gana monedas gratis!</string>
     <string name="gunluk_cark_toast_format">Próximo giro diario disponible en: %1$s</string>
+    <string name="yetersiz_altin_baslik">¡Monedas insuficientes!</string>
+    <string name="yetersiz_altin_reklam_mesaj_format">Necesitas %1$d Monedas para esta acción.\n\n¿Quieres ver un anuncio corto para ganar +%2$d Monedas?</string>
+    <string name="reklam_izle_altin_kazan_format">🎬 Ver anuncio (+%1$d Monedas)</string>
+    <string name="reklam_odul_alindi_format">🎉 ¡+%1$d Monedas ganadas!</string>
+    <string name="reklam_hazir_degil">El anuncio aún no está listo, inténtalo de nuevo en un momento.</string>
 </resources>

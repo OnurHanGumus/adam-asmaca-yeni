@@ -39,7 +39,12 @@ public class OutOfLivesDialog {
                             ((Activity) context).finish();
                         }
                     } else {
-                        Toast.makeText(context, context.getString(R.string.yetersiz_altin_format, CurrencyManager.REFILL_LIFE_COST), Toast.LENGTH_SHORT).show();
+                        InsufficientCoinsDialog.show(context, CurrencyManager.REFILL_LIFE_COST, () -> {
+                            if (onLifePurchased != null) {
+                                onLifePurchased.run();
+                            }
+                            show(context, finishCurrentActivity, onLifePurchased);
+                        });
                     }
                 })
                 .setNeutralButton(R.string.pratik_modu, (dialog, which) -> {

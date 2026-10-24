@@ -108,4 +108,9 @@
     <string name="gunluk_cark_bekleme_format">🎡 Ruota Giornaliera (%1$s)</string>
     <string name="gunluk_cark_aciklama">Gira la ruota della fortuna giornaliera e vinci monete gratis!</string>
     <string name="gunluk_cark_toast_format">Prossimo giro giornaliero tra: %1$s</string>
+    <string name="yetersiz_altin_baslik">Monete insufficienti!</string>
+    <string name="yetersiz_altin_reklam_mesaj_format">Servono %1$d Monete per questa azione.\n\nVuoi guardare un breve annuncio per ottenere +%2$d Monete?</string>
+    <string name="reklam_izle_altin_kazan_format">🎬 Guarda annuncio (+%1$d Monete)</string>
+    <string name="reklam_odul_alindi_format">🎉 +%1$d Monete ottenute!</string>
+    <string name="reklam_hazir_degil">L\'annuncio non è ancora pronto, riprova tra poco.</string>
 </resources>

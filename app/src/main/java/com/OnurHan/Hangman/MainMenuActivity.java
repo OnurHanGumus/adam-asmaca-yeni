@@ -69,6 +69,7 @@ public class MainMenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         FirebaseApp.initializeApp(this);
         AppCheckManager.init(this);
+        AdManager.init(this);
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();

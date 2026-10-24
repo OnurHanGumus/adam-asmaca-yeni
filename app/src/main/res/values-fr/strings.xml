@@ -108,4 +108,9 @@
     <string name="gunluk_cark_bekleme_format">🎡 Roue Quotidienne (%1$s)</string>
     <string name="gunluk_cark_aciklama">Tournez la roue de la fortune quotidienne et gagnez des pièces gratuites !</string>
     <string name="gunluk_cark_toast_format">Prochain tour quotidien dans : %1$s</string>
+    <string name="yetersiz_altin_baslik">Pas assez de pièces !</string>
+    <string name="yetersiz_altin_reklam_mesaj_format">Vous avez besoin de %1$d pièces pour cette action.\n\nVoulez-vous regarder une courte publicité pour gagner +%2$d pièces ?</string>
+    <string name="reklam_izle_altin_kazan_format">🎬 Regarder une pub (+%1$d pièces)</string>
+    <string name="reklam_odul_alindi_format">🎉 +%1$d pièces gagnées !</string>
+    <string name="reklam_hazir_degil">La publicité n\'est pas encore prête, veuillez réessayer dans un instant.</string>
 </resources>

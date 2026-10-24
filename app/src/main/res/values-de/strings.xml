@@ -108,4 +108,9 @@
     <string name="gunluk_cark_bekleme_format">🎡 Tägliches Rad (%1$s)</string>
     <string name="gunluk_cark_aciklama">Drehe am täglichen Glücksrad und gewinne kostenlose Bonusmünzen!</string>
     <string name="gunluk_cark_toast_format">Nächster täglicher Dreh in: %1$s</string>
+    <string name="yetersiz_altin_baslik">Nicht genug Münzen!</string>
+    <string name="yetersiz_altin_reklam_mesaj_format">Für diese Aktion benötigst du %1$d Münzen.\n\nMöchtest du eine kurze Werbung ansehen, um +%2$d Münzen zu erhalten?</string>
+    <string name="reklam_izle_altin_kazan_format">🎬 Werbung ansehen (+%1$d Münzen)</string>
+    <string name="reklam_odul_alindi_format">🎉 +%1$d Münzen erhalten!</string>
+    <string name="reklam_hazir_degil">Werbung ist noch nicht bereit, bitte versuche es gleich noch einmal.</string>
 </resources>

@@ -14,6 +14,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AdamAsmacaOyunu">
 
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-4708991160900195~3490534231" />
+
         <activity
             android:name=".SonucActivity"
             android:screenOrientation="portrait"

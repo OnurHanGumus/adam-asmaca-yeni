@@ -13,6 +13,7 @@ public class CurrencyManager {
     public static final int REVEAL_LETTER_COST = 30;
     public static final int LEVEL_WIN_REWARD = 10;
     public static final int REFILL_LIFE_COST = 50;
+    public static final int REWARDED_AD_COINS = 60;
 
     public static int getCoins(Context context) {
         SharedPreferences prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
