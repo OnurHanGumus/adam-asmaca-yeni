@@ -31,8 +31,11 @@ import java.util.Random;
 public class FortuneWheelDialog {
 
     // 10 sectors matching the wheel graphic (starting from top 0° clockwise):
-    // 250 (x1), 50 (x2), 80 (x3), 25 (x2), 120 (x1), 150 (x1)
-    public static final int[] WHEEL_SECTOR_VALUES = {250, 50, 80, 25, 120, 80, 50, 150, 25, 80};
+    // 100 (x1), 15 (x2), 25 (x3), 10 (x2), 40 (x1), 50 (x1)
+    public static final int[] WHEEL_SECTOR_VALUES = {100, 15, 25, 10, 40, 25, 15, 50, 10, 25};
+    // Probability weights summing to 100:
+    // 10 (40% total), 15 (28% total), 25 (21% total), 40 (6%), 50 (4%), 100 (1%)
+    public static final int[] WHEEL_SECTOR_WEIGHTS = {1, 14, 7, 20, 6, 7, 14, 4, 20, 7};
     public static final int SECTOR_COUNT = 10;
     public static final float DEGREES_PER_SECTOR = 360f / SECTOR_COUNT;
 
@@ -41,6 +44,14 @@ public class FortuneWheelDialog {
     }
 
     public static AlertDialog show(Context context, int level, WheelCallback callback) {
+        return showInternal(context, level, false, callback);
+    }
+
+    public static AlertDialog showDaily(Context context, WheelCallback callback) {
+        return showInternal(context, 0, true, callback);
+    }
+
+    private static AlertDialog showInternal(Context context, int level, boolean isDaily, WheelCallback callback) {
         if (context instanceof Activity && ((Activity) context).isFinishing()) {
             return null;
         }
@@ -72,7 +83,11 @@ public class FortuneWheelDialog {
         ImageButton carkKapatBtn = dialogView.findViewById(R.id.carkKapatBtn);
         MaterialButton carkCevirBtn = dialogView.findViewById(R.id.carkCevirBtn);
 
-        carkAciklamaTxt.setText(context.getString(R.string.cark_aciklama_format, level));
+        if (isDaily) {
+            carkAciklamaTxt.setText(R.string.gunluk_cark_aciklama);
+        } else {
+            carkAciklamaTxt.setText(context.getString(R.string.cark_aciklama_format, level));
+        }
         carkSonucTxt.setText("");
 
         carkKapatBtn.setOnClickListener(v -> dialog.dismiss());
@@ -109,7 +124,7 @@ public class FortuneWheelDialog {
             carkCevirBtn.setText(R.string.cark_cevriliyor);
 
             Random random = new Random();
-            int targetSector = random.nextInt(SECTOR_COUNT);
+            int targetSector = pickWeightedSector(random);
             finalWonCoins[0] = WHEEL_SECTOR_VALUES[targetSector];
 
             // Jitter within [-9, +9] degrees to avoid landing dead on boundary (+/- 18)
@@ -157,7 +172,11 @@ public class FortuneWheelDialog {
 
                     // Add coins to user's currency
                     CurrencyManager.addCoins(context, finalWonCoins[0]);
-                    ProgressionManager.setLastWheelSpunLevel(context, level);
+                    if (isDaily) {
+                        ProgressionManager.recordDailyWheelSpin(context);
+                    } else {
+                        ProgressionManager.setLastWheelSpunLevel(context, level);
+                    }
 
                     // Victory vibration
                     playWinHaptic(context, vibrator);
@@ -184,6 +203,22 @@ public class FortuneWheelDialog {
 
         dialog.show();
         return dialog;
+    }
+
+    public static int pickWeightedSector(Random random) {
+        int totalWeight = 0;
+        for (int weight : WHEEL_SECTOR_WEIGHTS) {
+            totalWeight += weight;
+        }
+        int roll = random.nextInt(totalWeight);
+        int cumulative = 0;
+        for (int i = 0; i < SECTOR_COUNT; i++) {
+            cumulative += WHEEL_SECTOR_WEIGHTS[i];
+            if (roll < cumulative) {
+                return i;
+            }
+        }
+        return 0;
     }
 
     private static void playTickHaptic(Context context, Vibrator vibrator) {

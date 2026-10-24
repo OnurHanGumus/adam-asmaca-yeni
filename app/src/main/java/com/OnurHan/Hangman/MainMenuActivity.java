@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.switchmaterial.SwitchMaterial;
@@ -34,6 +35,7 @@ public class MainMenuActivity extends AppCompatActivity {
     private ImageView adamOzgurImg;
     private MaterialButton btnAnaOyun;
     private MaterialButton btnPratik;
+    private MaterialButton btnGunlukCark;
     private ImageButton btnAyarlar;
 
     private String aktifKategori = CategoryManager.CATEGORY_ALL;
@@ -66,6 +68,7 @@ public class MainMenuActivity extends AppCompatActivity {
         SplashScreen.installSplashScreen(this);
         super.onCreate(savedInstanceState);
         FirebaseApp.initializeApp(this);
+        AppCheckManager.init(this);
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
@@ -115,6 +118,7 @@ public class MainMenuActivity extends AppCompatActivity {
         adamOzgurImg = findViewById(R.id.adamOzgurImg);
         btnAnaOyun = findViewById(R.id.btnAnaOyun);
         btnPratik = findViewById(R.id.btnPratik);
+        btnGunlukCark = findViewById(R.id.btnGunlukCark);
         btnAyarlar = findViewById(R.id.btnAyarlar);
 
         aktifKategori = CategoryManager.getSelectedCategory(this);
@@ -125,8 +129,22 @@ public class MainMenuActivity extends AppCompatActivity {
 
         btnPratik.setOnClickListener(v -> pratikModuPaneliniGoster());
 
+        if (btnGunlukCark != null) {
+            btnGunlukCark.setOnClickListener(v -> onGunlukCarkTiklandi());
+        }
+
         if (btnAyarlar != null) {
             btnAyarlar.setOnClickListener(v -> ayarlarPaneliniGoster());
+        }
+    }
+
+    private void onGunlukCarkTiklandi() {
+        if (ProgressionManager.isDailyWheelAvailable(this)) {
+            FortuneWheelDialog.showDaily(this, wonCoins -> guncelleUI());
+        } else {
+            long remainingMillis = ProgressionManager.getRemainingMillisUntilDailyWheel(this);
+            String remainingStr = ProgressionManager.formatDailyWheelRemainingTime(remainingMillis);
+            Toast.makeText(this, getString(R.string.gunluk_cark_toast_format, remainingStr), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -175,6 +193,18 @@ public class MainMenuActivity extends AppCompatActivity {
                 long remainingMillis = LifeManager.getRemainingMillisUntilNextLife(this);
                 String remainingStr = LifeManager.formatRemainingTime(remainingMillis);
                 canTxt.setText(getString(R.string.can_sure_format, lives, LifeManager.MAX_LIVES, remainingStr));
+            }
+        }
+
+        if (btnGunlukCark != null) {
+            long dailyWheelRemaining = ProgressionManager.getRemainingMillisUntilDailyWheel(this);
+            if (dailyWheelRemaining <= 0L) {
+                btnGunlukCark.setText(R.string.gunluk_cark_hazir);
+                btnGunlukCark.setAlpha(1.0f);
+            } else {
+                String timeStr = ProgressionManager.formatDailyWheelRemainingTime(dailyWheelRemaining);
+                btnGunlukCark.setText(getString(R.string.gunluk_cark_bekleme_format, timeStr));
+                btnGunlukCark.setAlpha(0.75f);
             }
         }
     }

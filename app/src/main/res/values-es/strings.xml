@@ -104,4 +104,8 @@
     <string name="ana_menuye_don_baslik">Volver al menú principal</string>
     <string name="ana_menuye_don_can_kaybi_mesaj">Si vuelves al menú principal, perderás 1 vida. ¿Seguro que quieres salir?</string>
     <string name="vazgec">Cancelar</string>
+    <string name="gunluk_cark_hazir">🎡 Ruleta Diaria</string>
+    <string name="gunluk_cark_bekleme_format">🎡 Ruleta Diaria (%1$s)</string>
+    <string name="gunluk_cark_aciklama">¡Gira la ruleta diaria de la suerte y gana monedas gratis!</string>
+    <string name="gunluk_cark_toast_format">Próximo giro diario disponible en: %1$s</string>
 </resources>

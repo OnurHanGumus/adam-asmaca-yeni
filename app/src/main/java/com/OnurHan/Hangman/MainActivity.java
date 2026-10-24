@@ -263,6 +263,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FirebaseApp.initializeApp(this);
+        AppCheckManager.init(this);
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
@@ -1328,6 +1329,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
         ArrayList<String> basilanTuslar = state.getStringArrayList(STATE_BASILAN_TUSLAR);
+        basilanHarfler.clear();
+        if (basilanTuslar != null) {
+            basilanHarfler.addAll(basilanTuslar);
+        }
         for (MaterialButton btn : keyboardButtons) {
             boolean basildi = basilanTuslar != null && btn.getText() != null
                     && basilanTuslar.contains(btn.getText().toString());
@@ -1347,13 +1352,21 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    private boolean harfTahminEdildiMi() {
+        return !basilanHarfler.isEmpty();
+    }
+
     private void onGeriTiklandi() {
         if (roundGecisiYapiliyor) {
             return;
         }
 
         if (gameMode == GameMode.MAIN_GAME) {
-            cikisOnayDiyaloguGoster();
+            if (harfTahminEdildiMi()) {
+                cikisOnayDiyaloguGoster();
+            } else {
+                finish();
+            }
         } else {
             finish();
         }

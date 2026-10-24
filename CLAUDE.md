@@ -5,7 +5,7 @@ Guidance for AI coding assistants working in this repository.
 ## Project Overview
 
 **Tahtada Adam Asmaca / Hangman on the Board**: a single-module Android Hangman game written in **Java** (no Kotlin).
-Words and hints come from **Firebase Realtime Database**. If the network or Firebase fails, a small built-in fallback word list is used.
+Words and hints come from **Firebase Realtime Database**, and requests are protected by **Firebase App Check** (Play Integrity). If the network or Firebase fails, a small built-in fallback word list is used.
 The game supports **Turkish (default) and English**, set from inside the app.
 
 - Package / applicationId / namespace: `com.OnurHan.Hangman` (capital `O` and `H`)
@@ -17,12 +17,12 @@ The game supports **Turkish (default) and English**, set from inside the app.
 | Item | Value |
 |---|---|
 | Language | Java, source/target `1.8` (lambdas OK, no newer Java APIs) |
-| AGP / Gradle | `8.13.2` / `8.13` (wrapper) |
-| compileSdk / targetSdk / minSdk | 34 / 34 / **21** |
+| AGP / Gradle | `9.4.1` / `9.8.1` (wrapper). Gradle needs **JDK 17+**. If the terminal defaults to JDK 8, set `JAVA_HOME` to Android Studio's `jbr` folder. |
+| compileSdk / targetSdk / minSdk | 37 / 36 / **24** |
 | UI | XML layouts + `findViewById` (no ViewBinding, DataBinding, or Compose) |
-| Libraries | AppCompat 1.4.1, Material Components 1.5.0, ConstraintLayout 2.1.3, core-splashscreen 1.0.0-beta02, firebase-database 20.0.4 |
+| Libraries | AppCompat 1.8.0, Material Components 1.14.0, ConstraintLayout 2.2.2, core-splashscreen 1.2.0, firebase-database 23.0.0, firebase-appcheck-playintegrity / firebase-appcheck-debug 20.0.0 |
 | Theme | `Theme.MaterialComponents.DayNight.DarkActionBar` (Material 2, not M3) |
-| Build files | Groovy DSL (`build.gradle`), no version catalog |
+| Build files | Groovy DSL (`build.gradle`) with a version catalog at `gradle/libs.versions.toml`. Add new dependencies there and reference them as `libs.*`. `buildFeatures.buildConfig` is enabled (`BuildConfig.DEBUG` is used by `AppCheckManager`). Release builds use R8 (`minifyEnabled`, `shrinkResources`). |
 
 Commands (Windows / PowerShell, from the repo root):
 
@@ -63,6 +63,7 @@ MainMenuActivity (launcher, splash)
 | `LocaleHelper` | Stores the in-app language and wraps the context with that locale. |
 | `VibrationManager` | Vibration on/off preference and centralized haptic vibration helpers (`vibrateShort`, `vibrateLong`, `vibrateVictory`, etc.). |
 | `SoundManager` | SoundPool manager for chalk stroke audio effects on mistakes (`R.raw.stroke_on_chalk_board_long`, `stroke_on_chalk_board_short`). Progression: 1-long, 2-short, 3-long, 4-short, 5-short, 6-long. Also manages sound on/off preference (`ses_durumu`). |
+| `AppCheckManager` | Static, idempotent `init(context)` that installs the Firebase App Check provider: **Play Integrity** in release, **Debug** provider when `BuildConfig.DEBUG`. Called right after `FirebaseApp.initializeApp(this)` in both `MainMenuActivity` and `MainActivity` (the latter covers activity restore after process death). |
 
 ### Game rules & constants
 
@@ -76,6 +77,9 @@ MainMenuActivity (launcher, splash)
 ### Word source (Firebase)
 
 Data path: `words/{categoryKey}/{index 0..9}/{tr|en}/{word, hint}`. Disk persistence is turned on in `initComponentsFirebase()`.
+
+- **Security rules** (set in the Firebase Console, not in the repo): root and `/words` are not readable, all writes are denied, and only single leaf entries `words/$category/$index/$lang` are publicly readable. The app must keep reading **one entry at a time**. Reading a whole category or `/words` will be denied. The `categories` node exists in the database but is locked and unused by the app.
+- **App Check**: every database request must come from a genuine app build. Debug builds print a debug secret to Logcat (tag `DebugAppCheckProvider`), which must be registered in the Firebase Console under App Check → Manage debug tokens, or reads will fail once enforcement is on and the fallback words are used.
 
 - The code assumes **exactly 10 words (index 0–9) per category per language**.
 - Category keys (order matters for main-game progression):

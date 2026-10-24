@@ -9,10 +9,10 @@ public class CurrencyManager {
     private static final String KEY_COINS = "oyuncu_altin";
 
     public static final int INITIAL_COINS = 50;
-    public static final int HINT_COST = 15;
-    public static final int REVEAL_LETTER_COST = 10;
-    public static final int LEVEL_WIN_REWARD = 15;
-    public static final int REFILL_LIFE_COST = 10;
+    public static final int HINT_COST = 20;
+    public static final int REVEAL_LETTER_COST = 30;
+    public static final int LEVEL_WIN_REWARD = 10;
+    public static final int REFILL_LIFE_COST = 50;
 
     public static int getCoins(Context context) {
         SharedPreferences prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);

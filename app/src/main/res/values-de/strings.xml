@@ -104,4 +104,8 @@
     <string name="ana_menuye_don_baslik">Zurück zum Hauptmenü</string>
     <string name="ana_menuye_don_can_kaybi_mesaj">Wenn du zum Hauptmenü zurückkehrst, verlierst du 1 Leben. Möchtest du wirklich das Spiel verlassen?</string>
     <string name="vazgec">Abbrechen</string>
+    <string name="gunluk_cark_hazir">🎡 Tägliches Glücksrad</string>
+    <string name="gunluk_cark_bekleme_format">🎡 Tägliches Rad (%1$s)</string>
+    <string name="gunluk_cark_aciklama">Drehe am täglichen Glücksrad und gewinne kostenlose Bonusmünzen!</string>
+    <string name="gunluk_cark_toast_format">Nächster täglicher Dreh in: %1$s</string>
 </resources>

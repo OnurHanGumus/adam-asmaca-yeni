@@ -104,4 +104,8 @@
     <string name="ana_menuye_don_baslik">Ana Menüye Dön</string>
     <string name="ana_menuye_don_can_kaybi_mesaj">Ana menüye dönerseniz 1 can kaybedeceksiniz. Çıkmak istediğinizden emin misiniz?</string>
     <string name="vazgec">Vazgeç</string>
+    <string name="gunluk_cark_hazir">🎡 Günlük Şans Çarkı</string>
+    <string name="gunluk_cark_bekleme_format">🎡 Günlük Çark (%1$s)</string>
+    <string name="gunluk_cark_aciklama">Günlük şans çarkını çevir ve bedava altınları kazan!</string>
+    <string name="gunluk_cark_toast_format">Günlük çark için kalan süre: %1$s</string>
 </resources>

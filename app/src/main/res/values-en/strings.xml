@@ -104,4 +104,8 @@
     <string name="ana_menuye_don_baslik">Return to Main Menu</string>
     <string name="ana_menuye_don_can_kaybi_mesaj">If you return to the main menu, you will lose 1 life. Are you sure you want to leave?</string>
     <string name="vazgec">Cancel</string>
+    <string name="gunluk_cark_hazir">🎡 Daily Fortune Wheel</string>
+    <string name="gunluk_cark_bekleme_format">🎡 Daily Wheel (%1$s)</string>
+    <string name="gunluk_cark_aciklama">Spin the daily fortune wheel and win free bonus coins!</string>
+    <string name="gunluk_cark_toast_format">Next daily spin available in: %1$s</string>
 </resources>

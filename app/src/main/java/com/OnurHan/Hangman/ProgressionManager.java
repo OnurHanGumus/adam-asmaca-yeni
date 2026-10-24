@@ -3,6 +3,8 @@ package com.OnurHan.Hangman;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import java.util.Locale;
+
 public class ProgressionManager {
 
     private static final String PREF_NAME = "veriler";
@@ -12,6 +14,10 @@ public class ProgressionManager {
     private static final String KEY_SAVED_CATEGORY = "ana_oyun_kayitli_kategori";
     private static final String KEY_HINT_REVEALED = "ana_oyun_ipucu_acik";
     private static final String KEY_SAVED_LANGUAGE = "ana_oyun_kayitli_dil";
+    private static final String KEY_LAST_WHEEL_SPUN_LEVEL = "son_cark_cevrilen_seviye";
+    private static final String KEY_LAST_DAILY_WHEEL_TIME = "son_gunluk_cark_zamani";
+
+    public static final long DAILY_WHEEL_INTERVAL_MS = 24 * 60 * 60 * 1000L; // 24 hours
 
     public static int getLevel(Context context) {
         SharedPreferences prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
@@ -100,8 +106,6 @@ public class ProgressionManager {
                 .apply();
     }
 
-    private static final String KEY_LAST_WHEEL_SPUN_LEVEL = "son_cark_cevrilen_seviye";
-
     public static int getLastWheelSpunLevel(Context context) {
         SharedPreferences prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         return prefs.getInt(KEY_LAST_WHEEL_SPUN_LEVEL, 0);
@@ -114,5 +118,44 @@ public class ProgressionManager {
 
     public static boolean isWheelAvailableForLevel(Context context, int level) {
         return (level > 0) && (level % 5 == 0) && (getLastWheelSpunLevel(context) < level);
+    }
+
+    public static synchronized boolean isDailyWheelAvailable(Context context) {
+        return getRemainingMillisUntilDailyWheel(context) <= 0L;
+    }
+
+    public static synchronized long getRemainingMillisUntilDailyWheel(Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        long lastSpinTime = prefs.getLong(KEY_LAST_DAILY_WHEEL_TIME, 0L);
+        if (lastSpinTime <= 0L) {
+            return 0L;
+        }
+
+        long now = System.currentTimeMillis();
+        long elapsed = now - lastSpinTime;
+        if (elapsed < 0) {
+            // Clock was moved backwards; reset reference timestamp to now
+            prefs.edit().putLong(KEY_LAST_DAILY_WHEEL_TIME, now).apply();
+            return DAILY_WHEEL_INTERVAL_MS;
+        }
+
+        if (elapsed >= DAILY_WHEEL_INTERVAL_MS) {
+            return 0L;
+        }
+
+        return DAILY_WHEEL_INTERVAL_MS - elapsed;
+    }
+
+    public static synchronized void recordDailyWheelSpin(Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        prefs.edit().putLong(KEY_LAST_DAILY_WHEEL_TIME, System.currentTimeMillis()).apply();
+    }
+
+    public static String formatDailyWheelRemainingTime(long millis) {
+        long totalSeconds = Math.max(0L, millis) / 1000L;
+        long hours = totalSeconds / 3600L;
+        long minutes = (totalSeconds % 3600L) / 60L;
+        long seconds = totalSeconds % 60L;
+        return String.format(Locale.getDefault(), "%02d:%02d:%02d", hours, minutes, seconds);
     }
 }

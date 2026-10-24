@@ -104,4 +104,8 @@
     <string name="ana_menuye_don_baslik">Voltar ao Menu Principal</string>
     <string name="ana_menuye_don_can_kaybi_mesaj">Se você voltar ao menu principal, perderá 1 vida. Tem certeza de que deseja sair?</string>
     <string name="vazgec">Cancelar</string>
+    <string name="gunluk_cark_hazir">🎡 Roda Diária</string>
+    <string name="gunluk_cark_bekleme_format">🎡 Roda Diária (%1$s)</string>
+    <string name="gunluk_cark_aciklama">Gire a roda da fortuna diária e ganhe moedas grátis!</string>
+    <string name="gunluk_cark_toast_format">Próximo giro diário disponível em: %1$s</string>
 </resources>

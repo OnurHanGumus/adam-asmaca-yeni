@@ -22,10 +22,21 @@ public class ExampleUnitTest {
     @Test
     public void testCurrencyConstants() {
         assertEquals(50, CurrencyManager.INITIAL_COINS);
-        assertEquals(15, CurrencyManager.HINT_COST);
-        assertEquals(10, CurrencyManager.REVEAL_LETTER_COST);
-        assertEquals(15, CurrencyManager.LEVEL_WIN_REWARD);
-        assertEquals(10, CurrencyManager.REFILL_LIFE_COST);
+        assertEquals(20, CurrencyManager.HINT_COST);
+        assertEquals(30, CurrencyManager.REVEAL_LETTER_COST);
+        assertEquals(10, CurrencyManager.LEVEL_WIN_REWARD);
+        assertEquals(50, CurrencyManager.REFILL_LIFE_COST);
+    }
+
+    @Test
+    public void testFortuneWheelValuesAndWeights() {
+        assertEquals(FortuneWheelDialog.SECTOR_COUNT, FortuneWheelDialog.WHEEL_SECTOR_VALUES.length);
+        assertEquals(FortuneWheelDialog.SECTOR_COUNT, FortuneWheelDialog.WHEEL_SECTOR_WEIGHTS.length);
+        int totalWeight = 0;
+        for (int w : FortuneWheelDialog.WHEEL_SECTOR_WEIGHTS) {
+            totalWeight += w;
+        }
+        assertEquals(100, totalWeight);
     }
 
     @Test
@@ -63,5 +74,13 @@ public class ExampleUnitTest {
         assertFalse(SoundManager.isLongStroke(4));
         assertFalse(SoundManager.isLongStroke(5));
         assertTrue(SoundManager.isLongStroke(6));
+    }
+
+    @Test
+    public void testDailyWheelTimeFormatting() {
+        assertEquals("24:00:00", ProgressionManager.formatDailyWheelRemainingTime(ProgressionManager.DAILY_WHEEL_INTERVAL_MS));
+        assertEquals("00:00:00", ProgressionManager.formatDailyWheelRemainingTime(0L));
+        assertEquals("00:00:00", ProgressionManager.formatDailyWheelRemainingTime(-5000L));
+        assertEquals("01:02:03", ProgressionManager.formatDailyWheelRemainingTime(((1 * 3600) + (2 * 60) + 3) * 1000L));
     }
 }

@@ -104,4 +104,8 @@
     <string name="ana_menuye_don_baslik">Torna al menu principale</string>
     <string name="ana_menuye_don_can_kaybi_mesaj">Se torni al menu principale, perderai 1 vita. Sei sicuro di voler uscire?</string>
     <string name="vazgec">Annulla</string>
+    <string name="gunluk_cark_hazir">🎡 Ruota Giornaliera</string>
+    <string name="gunluk_cark_bekleme_format">🎡 Ruota Giornaliera (%1$s)</string>
+    <string name="gunluk_cark_aciklama">Gira la ruota della fortuna giornaliera e vinci monete gratis!</string>
+    <string name="gunluk_cark_toast_format">Prossimo giro giornaliero tra: %1$s</string>
 </resources>

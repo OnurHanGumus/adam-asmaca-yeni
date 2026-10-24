@@ -125,10 +125,28 @@
         android:textSize="18sp"
         android:textStyle="bold"
         app:cornerRadius="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/btnGunlukCark"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:strokeColor="@color/buton_outlined_kenarlik"
         tools:text="Pratik Modu" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnGunlukCark"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:fontFamily="@font/chalk_font"
+        android:paddingVertical="10dp"
+        android:textColor="@color/metin_ana"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:cornerRadius="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:strokeColor="@color/buton_outlined_kenarlik"
+        tools:text="🎡 Günlük Şans Çarkı" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

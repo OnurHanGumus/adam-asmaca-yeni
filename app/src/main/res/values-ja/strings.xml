@@ -104,4 +104,8 @@
     <string name="ana_menuye_don_baslik">メインメニューに戻る</string>
     <string name="ana_menuye_don_can_kaybi_mesaj">メインメニューに戻るとライフを1つ失います。本当に終了しますか？</string>
     <string name="vazgec">キャンセル</string>
+    <string name="gunluk_cark_hazir">🎡 デイリールーレット</string>
+    <string name="gunluk_cark_bekleme_format">🎡 デイリールーレット (%1$s)</string>
+    <string name="gunluk_cark_aciklama">デイリールーレットを回して無料ボーナスコインを獲得しましょう！</string>
+    <string name="gunluk_cark_toast_format">次のデイリールーレットまで: %1$s</string>
 </resources>
